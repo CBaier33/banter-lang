@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftPLUSMINUSleftTIMESDIVIDEleftCOMP_OPBE COMMA COMP_OP DIVIDE ELSE FALSE GOTO IF INSTRUCTION LET LP MINUS MNEUMONIC NUMBER PLUS RETURN RP STRING THEN TIMES TRUEprogram : statement\n               | program statementstatement : LET MNEUMONIC BE expressionstatement : IF comparison THEN statementstatement : IF comparison THEN statement ELSE statementstatement : RETURN expressionexpression : expression PLUS expression\n                  | expression MINUS expression\n                  | expression TIMES expression\n                  | expression DIVIDE expressionexpression : NUMBERexpression : MNEUMONICexpression : comparisoncomparison : expression COMP_OP expression'
+_lr_signature = 'leftPLUSMINUSleftTIMESDIVIDEleftCOMP_OPBE COMMA COMP_OP DIVIDE ELSE FALSE GOTO IF INSTRUCTION LET LP MINUS MNEUMONIC NUMBER PLUS RETURN RP STRING THEN TIMES TRUEprogram : statement\n               | program statement\n               | expressionstatement : LET MNEUMONIC BE expressionstatement : IF comparison COMMA THEN statementstatement : IF comparison COMMA THEN statement ELSE statementstatement : RETURN expressionexpression : expression PLUS expression\n                  | expression MINUS expression\n                  | expression TIMES expression\n                  | expression DIVIDE expressionexpression : NUMBERexpression : STRINGexpression : MNEUMONICexpression : LP expression RPexpression : comparisoncomparison : expression COMP_OP expression'
     
-_lr_action_items = {'LET':([0,1,2,6,10,11,12,13,15,21,22,23,24,25,26,27,28,29,],[3,3,-1,-2,-11,-12,-6,-13,3,-3,-4,-14,-7,-8,-9,-10,3,-5,]),'IF':([0,1,2,6,10,11,12,13,15,21,22,23,24,25,26,27,28,29,],[4,4,-1,-2,-11,-12,-6,-13,4,-3,-4,-14,-7,-8,-9,-10,4,-5,]),'RETURN':([0,1,2,6,10,11,12,13,15,21,22,23,24,25,26,27,28,29,],[5,5,-1,-2,-11,-12,-6,-13,5,-3,-4,-14,-7,-8,-9,-10,5,-5,]),'$end':([1,2,6,10,11,12,13,21,22,23,24,25,26,27,29,],[0,-1,-2,-11,-12,-6,-13,-3,-4,-14,-7,-8,-9,-10,-5,]),'MNEUMONIC':([3,4,5,14,16,17,18,19,20,],[7,11,11,11,11,11,11,11,11,]),'NUMBER':([4,5,14,16,17,18,19,20,],[10,10,10,10,10,10,10,10,]),'BE':([7,],[14,]),'THEN':([8,10,11,13,23,24,25,26,27,],[15,-11,-12,-13,-14,-7,-8,-9,-10,]),'COMP_OP':([8,9,10,11,12,13,21,23,24,25,26,27,],[-13,16,-11,-12,16,-13,16,-14,16,16,16,16,]),'PLUS':([8,9,10,11,12,13,21,23,24,25,26,27,],[-13,17,-11,-12,17,-13,17,-14,-7,-8,-9,-10,]),'MINUS':([8,9,10,11,12,13,21,23,24,25,26,27,],[-13,18,-11,-12,18,-13,18,-14,-7,-8,-9,-10,]),'TIMES':([8,9,10,11,12,13,21,23,24,25,26,27,],[-13,19,-11,-12,19,-13,19,-14,19,19,-9,-10,]),'DIVIDE':([8,9,10,11,12,13,21,23,24,25,26,27,],[-13,20,-11,-12,20,-13,20,-14,20,20,-9,-10,]),'ELSE':([10,11,12,13,21,22,23,24,25,26,27,29,],[-11,-12,-6,-13,-3,28,-14,-7,-8,-9,-10,-5,]),}
+_lr_action_items = {'LET':([0,1,2,3,5,7,9,10,12,21,23,24,25,26,27,30,31,32,33,34,35,],[4,4,-1,-3,-14,-16,-12,-13,-2,-7,-8,-9,-10,-11,-17,-15,-4,4,-5,4,-6,]),'IF':([0,1,2,3,5,7,9,10,12,21,23,24,25,26,27,30,31,32,33,34,35,],[6,6,-1,-3,-14,-16,-12,-13,-2,-7,-8,-9,-10,-11,-17,-15,-4,6,-5,6,-6,]),'RETURN':([0,1,2,3,5,7,9,10,12,21,23,24,25,26,27,30,31,32,33,34,35,],[8,8,-1,-3,-14,-16,-12,-13,-2,-7,-8,-9,-10,-11,-17,-15,-4,8,-5,8,-6,]),'NUMBER':([0,6,8,11,13,14,15,16,17,28,],[9,9,9,9,9,9,9,9,9,9,]),'STRING':([0,6,8,11,13,14,15,16,17,28,],[10,10,10,10,10,10,10,10,10,10,]),'MNEUMONIC':([0,4,6,8,11,13,14,15,16,17,28,],[5,18,5,5,5,5,5,5,5,5,5,]),'LP':([0,6,8,11,13,14,15,16,17,28,],[11,11,11,11,11,11,11,11,11,11,]),'$end':([1,2,3,5,7,9,10,12,21,23,24,25,26,27,30,31,33,35,],[0,-1,-3,-14,-16,-12,-13,-2,-7,-8,-9,-10,-11,-17,-15,-4,-5,-6,]),'PLUS':([3,5,7,9,10,19,20,21,22,23,24,25,26,27,30,31,],[13,-14,-16,-12,-13,-16,13,13,13,-8,-9,-10,-11,-17,-15,13,]),'MINUS':([3,5,7,9,10,19,20,21,22,23,24,25,26,27,30,31,],[14,-14,-16,-12,-13,-16,14,14,14,-8,-9,-10,-11,-17,-15,14,]),'TIMES':([3,5,7,9,10,19,20,21,22,23,24,25,26,27,30,31,],[15,-14,-16,-12,-13,-16,15,15,15,15,15,-10,-11,-17,-15,15,]),'DIVIDE':([3,5,7,9,10,19,20,21,22,23,24,25,26,27,30,31,],[16,-14,-16,-12,-13,-16,16,16,16,16,16,-10,-11,-17,-15,16,]),'COMP_OP':([3,5,7,9,10,19,20,21,22,23,24,25,26,27,30,31,],[17,-14,-16,-12,-13,-16,17,17,17,17,17,17,17,-17,-15,17,]),'ELSE':([5,7,9,10,21,23,24,25,26,27,30,31,33,35,],[-14,-16,-12,-13,-7,-8,-9,-10,-11,-17,-15,-4,34,-6,]),'RP':([5,7,9,10,22,23,24,25,26,27,30,],[-14,-16,-12,-13,30,-8,-9,-10,-11,-17,-15,]),'COMMA':([5,7,9,10,19,23,24,25,26,27,30,],[-14,-16,-12,-13,29,-8,-9,-10,-11,-17,-15,]),'BE':([18,],[28,]),'THEN':([29,],[32,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'program':([0,],[1,]),'statement':([0,1,15,28,],[2,6,22,29,]),'comparison':([4,5,14,16,17,18,19,20,],[8,13,13,13,13,13,13,13,]),'expression':([4,5,14,16,17,18,19,20,],[9,12,21,23,24,25,26,27,]),}
+_lr_goto_items = {'program':([0,],[1,]),'statement':([0,1,32,34,],[2,12,33,35,]),'expression':([0,6,8,11,13,14,15,16,17,28,],[3,20,21,22,23,24,25,26,27,31,]),'comparison':([0,6,8,11,13,14,15,16,17,28,],[7,19,7,7,7,7,7,7,7,7,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,18 +27,21 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> program","S'",1,None,None,None),
-  ('program -> statement','program',1,'p_program','sudolang.py',96),
-  ('program -> program statement','program',2,'p_program','sudolang.py',97),
-  ('statement -> LET MNEUMONIC BE expression','statement',4,'p_statement_let','sudolang.py',105),
-  ('statement -> IF comparison THEN statement','statement',4,'p_statement_if','sudolang.py',109),
-  ('statement -> IF comparison THEN statement ELSE statement','statement',6,'p_statement_if_else','sudolang.py',113),
-  ('statement -> RETURN expression','statement',2,'p_statement_return','sudolang.py',117),
-  ('expression -> expression PLUS expression','expression',3,'p_expression_binop','sudolang.py',122),
-  ('expression -> expression MINUS expression','expression',3,'p_expression_binop','sudolang.py',123),
-  ('expression -> expression TIMES expression','expression',3,'p_expression_binop','sudolang.py',124),
-  ('expression -> expression DIVIDE expression','expression',3,'p_expression_binop','sudolang.py',125),
-  ('expression -> NUMBER','expression',1,'p_expression_number','sudolang.py',129),
-  ('expression -> MNEUMONIC','expression',1,'p_expression_mneumonic','sudolang.py',133),
-  ('expression -> comparison','expression',1,'p_expression_comparison','sudolang.py',137),
-  ('comparison -> expression COMP_OP expression','comparison',3,'p_comparison','sudolang.py',141),
+  ('program -> statement','program',1,'p_program','sudolang.py',100),
+  ('program -> program statement','program',2,'p_program','sudolang.py',101),
+  ('program -> expression','program',1,'p_program','sudolang.py',102),
+  ('statement -> LET MNEUMONIC BE expression','statement',4,'p_statement_let','sudolang.py',112),
+  ('statement -> IF comparison COMMA THEN statement','statement',5,'p_statement_if','sudolang.py',116),
+  ('statement -> IF comparison COMMA THEN statement ELSE statement','statement',7,'p_statement_if_else','sudolang.py',120),
+  ('statement -> RETURN expression','statement',2,'p_statement_return','sudolang.py',124),
+  ('expression -> expression PLUS expression','expression',3,'p_expression_binop','sudolang.py',129),
+  ('expression -> expression MINUS expression','expression',3,'p_expression_binop','sudolang.py',130),
+  ('expression -> expression TIMES expression','expression',3,'p_expression_binop','sudolang.py',131),
+  ('expression -> expression DIVIDE expression','expression',3,'p_expression_binop','sudolang.py',132),
+  ('expression -> NUMBER','expression',1,'p_expression_number','sudolang.py',136),
+  ('expression -> STRING','expression',1,'p_expression_string','sudolang.py',140),
+  ('expression -> MNEUMONIC','expression',1,'p_expression_mneumonic','sudolang.py',144),
+  ('expression -> LP expression RP','expression',3,'p_expression_group','sudolang.py',148),
+  ('expression -> comparison','expression',1,'p_expression_comparison','sudolang.py',152),
+  ('comparison -> expression COMP_OP expression','comparison',3,'p_comparison','sudolang.py',156),
 ]

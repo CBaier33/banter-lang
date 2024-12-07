@@ -1,0 +1,35 @@
+let x be 5
+let y be 10
+let name be "Alice"
+return x + y
+
+let a be 3
+let b be 4
+if a < b, then return a
+if a == b, then return b
+if a > b, then return 10
+
+if a != b, then return "Not equal" else return "Equal"
+
+return "Hello, World!"
+
+let result be 3 * (5 + 2) / (4 - 1)
+return result
+
+let str1 be "Hello"
+let str2 be "World"
+return str1 + " " + str2
+
+let negative be -5
+let neg_result be -negative
+return neg_result
+
+if a < b, then if a == 3, then return "Inner if true" else return "Inner if false"
+else return "Outer if false"
+
+let a be 1
+let b be 2
+let c be 3
+if a == 1, then return "First statement"
+if b == 2, then return "Second statement"
+if c == 3, then return "Third statement"

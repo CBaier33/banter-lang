@@ -24,6 +24,8 @@ def eval_statement(statement, context):
         return eval_if_else_statement(statement, context)
     elif isinstance(statement, ReturnStatement):
         return eval_return_statement(statement, context)
+    elif isinstance(statement, (Mneumonic, Operation, Comparison)):
+        return eval_expression(statement, context)
     else:
         raise ValueError(f"Unknown statement type: {type(statement)}")
 
@@ -52,7 +54,7 @@ def eval_return_statement(statement, context):
     return eval_expression(statement.value, context)
 
 def eval_expression(expression, context):
-    if isinstance(expression, int) or isinstance(expression, float) or isinstance(expression, bool):
+    if isinstance(expression, (int, float, bool, str)):
         # Literal values (numbers or booleans)
         return expression
     elif isinstance(expression, Mneumonic):

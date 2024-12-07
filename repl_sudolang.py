@@ -20,13 +20,14 @@ def concrete2abstract(s: str, parser) -> Program:
             parser.parse(s)
             return sudolang.global_ast  # Assuming the parser stores the result in global_ast
         except Exception as e:
-            print("Unknown Error occurred (this is normally caused by a syntax error)")
-            raise e
+            start_repl(first=False)
     return None
 
-def start_repl():
-    print("Welcome to the SudoLang Interpreter!")
-    print("Type 'exit' to quit.")
+def start_repl(first=True):
+
+    if first:
+        print("Welcome to the SudoLang Interpreter!")
+        print("Type 'exit' to quit.")
     
     while True:
         try:
@@ -41,26 +42,30 @@ def start_repl():
             # Parse the input string into the ADT
             ast = concrete2abstract(input_string, sudolang.parser)
             
-            if ast:
+            if ast is None:
+                # Do not proceed to evaluation if parsing failed
+                continue
+            
+            try:
                 # Interpret the program and update variables
                 result = eval_program(ast, variables)
-                if result:
+                if result is not None:
                     print(result)
-            
-            else:
-                print(f'"{input_string}" is not a valid program.')
+            except Exception as e:
+                print(f"Evaluation Error: {e}")
         
         except KeyboardInterrupt:
             # Handle Ctrl+C: Cancel current input and continue the loop
+            print()
             continue
         
         except EOFError:
-            # Handle Ctrl+D: Exit the REPL
             print("\nExiting SudoLang.")
-            break
+            sys.exit(0)
         
         except Exception as e:
             print(f"Error: {e}")
+            continue  # Continue the loop after a general exception
 
 def main():
     """
@@ -69,16 +74,10 @@ def main():
     iFlag = False
     args = sys.argv[1:]
 
-    # Parse command-line arguments for -i option
-    for arg in args:
-        if arg == '-i':
-            iFlag = True
-        else:
-            print(f"Invalid option: {arg}")
-            sys.exit(1)
+    print("Welcome to the SudoLang Interpreter!")
+    print("Type 'exit' to quit.")
 
-    if len(sys.argv) == 2 and sys.argv[1] == '-i':
-        print('SudoLang> ', flush=True, end='')
+    print('>>> ', flush=True, end='')
 
     for line in sys.stdin:
         line = line.strip()  # Remove trailing newline
@@ -86,17 +85,20 @@ def main():
             # Parse the line into the ADT
             ast = concrete2abstract(line, sudolang.parser)
             
-            if ast:
+            if ast is None:
+                # Do not proceed to evaluation if parsing failed
+                continue
+            
+            try:
                 # Interpret the program and update variables
                 result = eval_program(ast, variables)
-                if result:
+                if result is not None:
                     print(result)
-            else:
-                print(f'"{line}" is not a program')
-
+            except Exception as e:
+                print(f"Evaluation Error: {e}")
+            
             # Keep the REPL prompt when in interactive mode (-i)
-            if len(sys.argv) == 2 and sys.argv[1] == '-i':
-                print('SudoLang> ', flush=True, end='')
+            print('>>> ', flush=True, end='')
 
         except SyntaxError:
             print(f'"{line}" contains lexical units which are not lexemes and is not a program.')

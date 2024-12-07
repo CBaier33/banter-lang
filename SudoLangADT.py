@@ -39,7 +39,7 @@ class Operation:
 @dataclass
 class Comparison:
     operator: str  # The comparison operator, e.g., '==', '!=', '>', '<', '>=', '<='
-    operands: List[Union[int, float, bool, 'Comparison']] = field(default_factory=list)
+    operands: List[Union[int, float, 'Comparison']] = field(default_factory=list)
 
     def __post_init__(self):
         # Validate that comparisons always have exactly two operands
@@ -57,7 +57,7 @@ class Comparison:
 @dataclass
 class LetStatement:
     mneumonic: str
-    value: Union[Operation, int, float, bool]
+    value: Union[Operation, int, float, bool, str]
 
 @dataclass
 class IfStatement:
@@ -79,7 +79,7 @@ class IfElseStatement:
 
 @dataclass
 class ReturnStatement:
-    value: Union[Operation, Mneumonic, int, float, bool]
+    value: Union[Operation, Mneumonic, int, float, bool, str]
 
     def __str__(self):
         return f"return {self.value}"
