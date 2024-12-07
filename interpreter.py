@@ -33,7 +33,7 @@ def eval_let_statement(statement, context):
     # Assign the evaluated value of the expression to the variable (mnemonic)
     value = eval_expression(statement.value, context)
     context[statement.mneumonic] = value
-    return value
+    return #value
 
 def eval_if_statement(statement, context):
     # Evaluate the comparison expression

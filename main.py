@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 import sys
 import re
 from SudoLangADT import *  # ADT definitions
@@ -33,7 +32,7 @@ def start_repl():
     while True:
         try:
             # Get user input
-            input_string = input(">>> ")
+            input_string = input("--> ")
             
             # Exit condition
             if input_string.lower() == 'exit':
@@ -110,8 +109,9 @@ def main():
 
 if __name__ == "__main__":
     # Call start_repl for interactive mode
-    if '-i' in sys.argv:
-        start_repl()
-    else:
-        # Call main function if not in interactive mode
-        main()
+    #if '-i' in sys.argv:
+    #    start_repl()
+    #else:
+    #    # Call main function if not in interactive mode
+    #    main()
+    start_repl()
