@@ -1,0 +1,7 @@
+let principal be 1000
+let rate be 5
+let time be 2
+
+let interest be (principal * rate * time) / 100
+
+return interest
