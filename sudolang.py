@@ -1,5 +1,6 @@
 import ply.lex as lex
 import ply.yacc as yacc
+from SudoLangADT import *
 
 #################### BEGIN Lexer/Scanner Specification ####################
 
@@ -84,174 +85,73 @@ lexer = lex.lex()
 
 #################### BEGIN Grammar Pattern-Action Rules ####################
 
-# Precedence rules for arithmetic operations
+# Define the precedence of operators
 precedence = (
     ('left', 'PLUS', 'MINUS'),
     ('left', 'TIMES', 'DIVIDE'),
-    ('nonassoc', 'COMP_OP'), # Comparison operators
+    ('left', 'COMP_OP'),
 )
 
-# Dictionary to hold variables (symbol table)
-variables = {}
+global_ast = ""
 
-# Global flag to halt execution after return
-execution_halted = False
-
+# Grammar rules
 def p_program(p):
     '''program : statement
-               | statement program'''
-    global execution_halted
-    if execution_halted:
-        return  # Skip further execution
-    pass
-
-def p_statement(p):
-    '''statement : let_statement
-                 | if_statement
-                 | if_else_statement
-                 | return_statement
-                 | goto_statement'''
-
-    global execution_halted
-    if execution_halted:
-        return  # Skip further execution
-    p[0] = p[1]
-
-def p_let_statement(p):
-    '''let_statement : LET MNEUMONIC BE arithmetic_expression'''
-    global execution_halted
-    if execution_halted:
-        return  # Skip further execution
-    variables[p[2]] = p[4]
-    print(f"Assigned {p[2]} to {p[4]}")
-
-def p_if_statement(p):
-    '''if_statement : IF comparison COMMA THEN block'''
-    print("DEBUG "+str(p[2]))
-    global execution_halted
-    if execution_halted:
-        return  # Skip further execution
-    if p[2]:  # Evaluate the condition
-        p[0] = p[5]  # Execute 'then' block
-
-def p_if_else_statement(p):
-    '''if_else_statement : IF comparison COMMA THEN block ELSE block'''
-    global execution_halted
-    if execution_halted:
-        return  # Skip further execution
-    if p[2]:  # Evaluate the condition
-        p[0] = p[5]  # Execute 'then' block
-    else:
-        p[0] = p[7]  # Execute 'else' block
-
-def p_return_statement(p):
-    '''return_statement : RETURN MNEUMONIC
-                        | RETURN NUMBER
-                        | RETURN STRING'''
-
-    global execution_halted
-    if execution_halted:
-        return  # Skip further execution
-
-    if isinstance(p[2], int):
-        print(p[2])
-    elif isinstance(p[2], str) and p[2].startswith('"'):
-        print(p[2][1:-1])  # Remove surrounding quotes
-    else:
-        print(variables.get(p[2], f"Undefined variable: {p[2]}"))
-
-    execution_halted = True  # Halt execution after return
-
-def p_goto_statement(p):
-    '''goto_statement : GOTO INSTRUCTION NUMBER'''
-    global execution_halted
-    if execution_halted:
-        return  # Skip further execution
-    print(f"Goto instruction {p[3]}")
-
-def p_block(p):
-    '''block : statement
-             | statement block'''
-    pass
-
-def p_arithmetic_expression(p):
-    '''arithmetic_expression : term
-                             | arithmetic_expression PLUS term
-                             | arithmetic_expression MINUS term'''
+               | program statement'''
+    global global_ast
     if len(p) == 2:
-        p[0] = p[1]
-    elif p[2] == '+':
-        p[0] = p[1] + p[3]
-    elif p[2] == '-':
-        p[0] = p[1] - p[3]
-
-def p_term(p):
-    '''term : factor
-            | term TIMES factor
-            | term DIVIDE factor'''
-    if len(p) == 2:
-        p[0] = p[1]
-    elif p[2] == '*':
-        p[0] = p[1] * p[3]
-    elif p[2] == '/':
-        p[0] = p[1] / p[3]
-
-def p_factor(p):
-    '''factor : MNEUMONIC
-              | NUMBER
-              | LP arithmetic_expression RP'''
-    if len(p) == 2:
-        if isinstance(p[1], int):
-            p[0] = p[1]
-        else:
-            p[0] = variables.get(p[1], f"Undefined variable: {p[1]}")
+        global_ast = [p[1]]  # Single statement, create a list
     else:
-        p[0] = p[2]
+        global_ast = p[1] + [p[2]]  # Multiple statements, concatenate lists
+    p[0] = global_ast
+
+# Statements
+def p_statement_let(p):
+    '''statement : LET MNEUMONIC BE expression'''
+    p[0] = LetStatement(mneumonic=p[2], value=p[4])
+
+def p_statement_if(p):
+    '''statement : IF comparison THEN statement'''
+    p[0] = IfStatement(expr=p[2], do=p[4])
+
+def p_statement_if_else(p):
+    '''statement : IF comparison THEN statement ELSE statement'''
+    p[0] = IfElseStatement(expr=p[2], do=p[4], alternate=p[6])
+
+def p_statement_return(p):
+    '''statement : RETURN expression'''
+    p[0] = ReturnStatement(value=p[2])
+
+# Expressions
+def p_expression_binop(p):
+    '''expression : expression PLUS expression
+                  | expression MINUS expression
+                  | expression TIMES expression
+                  | expression DIVIDE expression'''
+    p[0] = Operation(operator=p[2], operands=[p[1], p[3]])
+
+def p_expression_number(p):
+    '''expression : NUMBER'''
+    p[0] = p[1]  # Literal number
+
+def p_expression_mneumonic(p):
+    '''expression : MNEUMONIC'''
+    p[0] = Mneumonic(name=p[1], value=None)
+
+def p_expression_comparison(p):
+    '''expression : comparison'''
+    p[0] = p[1]  # Return the comparison
 
 def p_comparison(p):
-    '''comparison : arithmetic_expression COMP_OP arithmetic_expression'''
-    left = p[1]
-    operator = p[2]
-    right = p[3]
-    
-    if operator == '>':
-        p[0] = left > right
-    elif operator == '<':
-        p[0] = left < right
-    elif operator == '>=':
-        p[0] = left >= right
-    elif operator == '<=':
-        p[0] = left <= right
-    elif operator == '==':
-        p[0] = left == right
-    elif operator == '!=':
-        p[0] = left != right
-    else:
-        raise SyntaxError(f"Unknown operator: {operator}")
+    '''comparison : expression COMP_OP expression'''
+    p[0] = Comparison(operator=p[2], operands=[p[1], p[3]])
 
-# Error rule for syntax errors
+# Error handling
 def p_error(p):
-    print(f"Syntax error at '{p.value}'")
+    if p:
+        print(f"Syntax error at '{p.value}'")
+    else:
+        print("Syntax error at EOF")
 
 # Build the parser
 parser = yacc.yacc()
-
-####### TESTING
-
-data = '''
-let x be 4
-let y be 3
-let result be x + y
-if result > 15, then
-    return result
-'''
-
-# Tokenize and parse
-lexer.input(data)
-
-print("Tokens:")
-for token in lexer:
-    print(token)
-
-print("\nParsing:")
-parser.parse(data)

@@ -68,10 +68,10 @@ class IfStatement:
         return f"if {self.expr}, then:\n  {self.do}"
 
 @dataclass
-class IfElseStatement(Statement):
+class IfElseStatement:
     expr: Comparison  # The condition to evaluate
-    do: Statement       # Statement to execute if the condition is True
-    alternate: Optional[Statement] = None  # Statement to execute if False (optional)
+    do: 'Statement'       # Statement to execute if the condition is True
+    alternate: Optional['Statement'] = None  # Statement to execute if False (optional)
 
     def __str__(self):
         alternate_part = f"else\n   {self.alternate}" if self.alternate else ""
@@ -85,3 +85,5 @@ class ReturnStatement:
         return f"return {self.value}"
 
 Statement = Union[ReturnStatement, IfStatement, IfElseStatement, LetStatement]
+
+Program = Union[Statement, Operation, Comparison]
