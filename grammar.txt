@@ -1,0 +1,47 @@
+# EBNF grammar
+# <program> ::= <statement> | <statement> <program>
+# 
+# <statement> ::= <let_statement>
+#               | <if_statement>
+#               | <if_else_statement>
+#               | <return_statement>
+#               | <goto_statement>
+# 
+# <let_statement> ::= "let" <mnemonic> "be" <arithmetic_expression>
+# 
+# <if_statement> ::= "if" <comparison_expression>"," "then" <block>
+# 
+# <if_else_statement> ::= "if" <comparison_expression>"," "then" <block>
+#                         "else" <block>
+# 
+# <return_statement> ::= "return" <mnemonic>
+# 
+# <goto_statement> ::= "goto" "instruction" <number>
+# 
+# <block> ::= <statement> | <statement> <block>
+# 
+# <arithmetic_expression> ::= <term>
+#                           | <arithmetic_expression> "+" <term>
+#                           | <arithmetic_expression> "-" <term>
+# 
+# <term> ::= <factor>
+#          | <term> "*" <factor>
+#          | <term> "/" <factor>
+# 
+# <factor> ::= <mnemonic>
+#            | <number>
+#            | "(" <arithmetic_expression> ")"
+# 
+# <comparison_expression> ::= <arithmetic_expression> <comparison_operator> <arithmetic_expression>
+# 
+# <comparison_operator> ::= "<" | "<=" | ">" | ">=" | "==" | "!="
+# 
+# <mnemonic> ::= <identifier>
+# 
+# <identifier> ::= <letter> | <letter> <identifier>
+# 
+# <number> ::= <digit> | <digit> <number>
+# 
+# <letter> ::= "a" | "b" | "c" | ... | "z" | "A" | "B" | "C" | ... | "Z"
+# 
+# <digit> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
