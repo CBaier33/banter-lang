@@ -25,14 +25,19 @@ def concrete2abstract(s: str, parser) -> Program:
             raise e
     return None
 
+lineNumber = 1
+
 def start_repl():
+
     print("Welcome to the SudoLang Interpreter!")
     print("Type 'exit' to quit.")
+
+    global lineNumber
     
     while True:
         try:
             # Get user input
-            input_string = input("--> ")
+            input_string = input(f"-- {lineNumber}. ")
             
             # Exit condition
             if input_string.lower() == 'exit':
@@ -47,6 +52,7 @@ def start_repl():
                 result = eval_program(ast, variables)
                 if result:
                     print(result)
+                lineNumber += 1
             
             else:
                 print(f'"{input_string}" is not a valid program.')
