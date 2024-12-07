@@ -53,6 +53,7 @@ def start_repl():
         
         except KeyboardInterrupt:
             # Handle Ctrl+C: Cancel current input and continue the loop
+            print()
             continue
         
         except EOFError:

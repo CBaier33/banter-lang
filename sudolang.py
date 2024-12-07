@@ -65,8 +65,11 @@ def t_MNEUMONIC(t):
     return t
 
 def t_NUMBER(t):
-    r'\d+'
-    t.value = int(t.value)
+    r'\d+\.\d+|\d+'  # Match both floating-point and integer numbers
+    if '.' in t.value:
+        t.value = float(t.value)  # Convert to float if it contains a decimal point
+    else:
+        t.value = int(t.value)  # Otherwise, convert to integer
     return t
 
 # Ignored token with an action associated with it
