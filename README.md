@@ -8,7 +8,7 @@ The language is structured off a [simple language](https://augustine.myusa.cloud
 
 The reader may well say, "Just use Python, bro?"
 
-Well, bro, there a number of reasons why a student new students learning experience could be tainted by a language Python. The primary reason is that Python is a "hodgepodge of a language" and tries to be too many things at once. Students often will miss the entire point of an assignment designed to help them think algorithmically, focusing instead on some shiny and obscure "syntacic sugar", of which Python is chalked full. For instance, Sudo limits arithmetic operations to those between the same type, to avoid weird expressions like `"Hello" * 100`.
+Well, bro, there a number of reasons why a students learning experience could be tainted by a language like Python. The primary reason is that Python is a "hodgepodge of a language" and tries to be too many things at once. Students often will miss the entire point of an assignment designed to help them think algorithmically, focusing instead on some shiny and obscure "syntactic sugar", of which Python is chalked full. For instance, Sudo limits arithmetic operations to those between the same type, avoiding weird expressions like `"Hello" * 100` (This excludes of course floats and ints).
 
 Sudo removes this dangerous pitfall by providing a language stripped of any juicy language features, leaving a simple set of instructions to help new students formulate their ideas in to mechanical procedures.
 
@@ -29,11 +29,12 @@ let x be 5
 let interest_rate be 0.14
 let x be x + 1
 let ratio be (x + 5 / interest_rate)
+ratio
 ```
 
 ## If Statements
 
-The If Statement allows you to conditionally execute a line of code. The body of the statement will only execure if the expression simplifies to True.
+The If Statement allows you to conditionally execute a line of code. The body of the statement will only execute if the expression simplifies to True.
 
 Syntax -> `if <comparison expression>, then <statement(s)`
 
@@ -49,4 +50,6 @@ if a - 6 <= 7, then let limit be 2.17
 
 limit
 ```
+
+## If-Else Statements
 
