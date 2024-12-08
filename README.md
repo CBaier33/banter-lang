@@ -8,7 +8,7 @@ The language is structured off a [simple language](https://augustine.myusa.cloud
 
 The reader may well say, "Just use Python, bro?"
 
-Well, bro, there a number of reasons why a student new students learning experience could be tainted by a language Python. The primary reason is that Python is a "hodgepodge of a language" and tries to be too many things at once. Students often will miss the entire point of an assignment designed to help them think algorithmically, focusing instead on some shiny and obscure "syntacic sugar", of which Python is chalked full.
+Well, bro, there a number of reasons why a student new students learning experience could be tainted by a language Python. The primary reason is that Python is a "hodgepodge of a language" and tries to be too many things at once. Students often will miss the entire point of an assignment designed to help them think algorithmically, focusing instead on some shiny and obscure "syntacic sugar", of which Python is chalked full. For instance, Sudo limits arithmetic operations to those between the same type, to avoid weird expressions like `"Hello" * 100`.
 
 Sudo removes this dangerous pitfall by providing a language stripped of any juicy language features, leaving a simple set of instructions to help new students formulate their ideas in to mechanical procedures.
 
@@ -41,9 +41,12 @@ Examples:
 
 ```
 let a be 1
+
 if a + 6 > 7, then
     let limit be "not too far"
 
 if a - 6 <= 7, then let limit be 2.17
+
+limit
 ```
 

@@ -24,7 +24,7 @@ def eval_statement(statement, context):
         return eval_if_else_statement(statement, context)
     elif isinstance(statement, ReturnStatement):
         return eval_return_statement(statement, context)
-    elif isinstance(statement, (Mneumonic, Operation, Comparison)):
+    elif isinstance(statement, (Mneumonic, Operation, Comparison, bool, int, str)): 
         return eval_expression(statement, context)
     else:
         raise ValueError(f"Unknown statement type: {type(statement)}")
@@ -75,6 +75,15 @@ def eval_expression(expression, context):
 def eval_operation(operation, context):
     # Evaluate the operands first
     operands = [eval_expression(operand, context) for operand in operation.operands]
+
+    types = set([type(op) for op in operands])
+
+    if len(types) > 1:
+        if len(types) == 2 and type(1) in types and type(1.0) in types:
+            pass
+        else:
+            raise TypeError("Operands must have the same type.")
+
 
     if operation.operator == '+':
         return operands[0] + operands[1]

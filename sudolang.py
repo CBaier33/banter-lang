@@ -13,8 +13,8 @@ reserved = {
     'return': 'RETURN',
     'goto': 'GOTO',
     'instruction': 'INSTRUCTION',
-    'True': 'TRUE',
-    'False': 'FALSE'
+    'True': 'BOOL',
+    'False': 'BOOL'
 }
 
 # Token list
@@ -30,7 +30,7 @@ tokens = [
     'COMP_OP',
 
     # Punctuations
-    'COMMA', 'LP', 'RP'] + list(reserved.values())
+    'COMMA', 'LP', 'RP'] + list(set(reserved.values()))
 
 # Ignored characters
 t_ignore = ' \t'
@@ -42,8 +42,7 @@ t_GOTO = r'goto'
 t_INSTRUCTION = r'instruction'
 t_STRING = r'\"([^\\\n]|(\\.))*?\"'
 
-t_TRUE = r'True'
-t_FALSE = r'False'
+t_BOOL = r'True|False'
 t_IF = r'if'
 t_ELSE = r'else'
 t_THEN = r'then'
@@ -151,13 +150,20 @@ def p_expression_mneumonic(p):
     '''expression : MNEUMONIC'''
     p[0] = Mneumonic(name=p[1], value=None)
 
+def p_expression_bool(p):
+    '''expression : BOOL'''
+    if p[1] == 'True':
+        p[0] = True
+    elif p[1] == 'False':
+        p[0] = False
+
 def p_expression_group(p):
     '''expression : LP expression RP'''
     p[0] = p[2]  # Return the expression inside parentheses
 
-def p_expression_comparison(p):
-    '''expression : comparison'''
-    p[0] = Comparison(p[1])  # Return the comparison
+#def p_expression_comparison(p):
+#    '''expression : comparison'''
+#    p[0] = Comparison(p[1])  # Return the comparison
 
 def p_comparison(p):
     '''comparison : expression COMP_OP expression'''

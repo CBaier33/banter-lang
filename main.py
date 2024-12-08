@@ -37,7 +37,7 @@ def start_repl():
     while True:
         try:
             # Get user input
-            input_string = input(f"-- {lineNumber}. ")
+            input_string = input(f"--[ {lineNumber}. ")
             
             # Exit condition
             if input_string.lower() == 'exit':

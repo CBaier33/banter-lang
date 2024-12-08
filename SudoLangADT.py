@@ -39,7 +39,7 @@ class Operation:
 @dataclass
 class Comparison:
     operator: str  # The comparison operator, e.g., '==', '!=', '>', '<', '>=', '<='
-    operands: List[Union[int, float, 'Comparison']] = field(default_factory=list)
+    operands: List[Union[int, float, bool, 'Comparison']] = field(default_factory=list)
 
     def __post_init__(self):
         # Validate that comparisons always have exactly two operands
