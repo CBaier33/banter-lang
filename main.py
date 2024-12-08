@@ -27,10 +27,11 @@ def concrete2abstract(s: str, parser) -> Program:
 
 lineNumber = 1
 
-def start_repl():
+def start_repl(first=True):
 
-    print("Welcome to the SudoLang Interpreter!")
-    print("Type 'exit' to quit.")
+    if first:
+        print("Welcome to the SudoLang Interpreter!")
+        print("Type 'exit' to quit.")
 
     global lineNumber
     
@@ -42,6 +43,10 @@ def start_repl():
             # Exit condition
             if input_string.lower() == 'exit':
                 print("Exiting SudoLang.")
+                break
+
+            if input_string == "":
+                start_repl(first=False)
                 break
             
             # Parse the input string into the ADT

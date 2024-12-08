@@ -16,9 +16,10 @@ Sudo removes this dangerous pitfall by providing a language stripped of any juic
 
 If you're already familar with programming, you might find Sudo mildly infuriating. There are no loops, no functions, and only primitive data types. The whole language can be broken down into five basic rules.
 
-## Let Statements
+## 1. Let Statements
 
 The Let Statement allows you to assign the output of an expression to a particular mneumonic representation of the expression. 
+
 
 Syntax -> `let <mneumonic> be <expression>`
 
@@ -32,9 +33,10 @@ let ratio be (x + 5 / interest_rate)
 ratio
 ```
 
-## If Statements
+## 2. If Statements
 
-The If Statement allows you to conditionally execute a line of code. The body of the statement will only execute if the expression simplifies to True.
+The If Statement allows you to conditionally execute a line of code. The body of the statement will only execute if the expression evaluates to True.
+
 
 Syntax -> `if <comparison expression>, then <statement(s)`
 
@@ -51,5 +53,49 @@ if a - 6 <= 7, then let limit be 2.17
 limit
 ```
 
-## If-Else Statements
+## 3. If-Else Statements
+
+The If-Else Statement simply provides alternative execution case for when the condition from an If statement evaluates False. 
+
+
+Syntax -> `If <comparison expression>, then <statements(s)> else <statement(s)>`
+
+Examples:
+```
+let a be "not too far"
+let speed be 60
+let score be 73
+
+if limit != "not too far", then
+    if speed == 60, then
+        let score be 7009.56
+else
+    let answer be score - 75
+
+score
+answer
+```
+
+
+## 4. Return Statement
+
+Return statements are used to simply return the value of a statement or expression.
+
+
+Syntax -> `return <mneumonic`
+
+Examples:
+```
+let wrong be 3
+let right be 7
+
+if wrong + wrong == right, then 
+    return True
+else
+    return False
+```
+
+## 5. Goto Statements
+
+TBD
 
