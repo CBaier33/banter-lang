@@ -59,8 +59,6 @@ def start_repl(first=True, filename=None):
         print("Welcome to the SudoLang Interpreter!")
         print("Type 'exit' to quit.")
     
-    global lineNumber
-    
     # If a file is provided, read the file's content
     if filename:
         with open(filename, 'r') as file:
