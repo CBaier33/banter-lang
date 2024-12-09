@@ -7,6 +7,7 @@ from interpreter import eval_program  # Evaluation function
 
 # A dictionary to store variables and their values
 variables = {}
+context = {}
 
 translated_string = ""
 
@@ -25,13 +26,10 @@ def concrete2abstract(s: str, parser) -> Program:
             raise e
     return None
 
-lineNumber = 1
-
 def process_input(input_string):
     """
     Process the input (either from REPL or file) and evaluate.
     """
-    global lineNumber
     # Skip blank lines
     if input_string.strip() == "":
         return  # Skip blank lines
@@ -41,10 +39,9 @@ def process_input(input_string):
     
     if ast:
         # Interpret the program and update variables
-        result = eval_program(ast, variables)
+        result = eval_program(ast, variables, context)
         if result == False or result:
             print(result)
-        lineNumber += 1
     else:
         print(f'"{input_string}" is not a valid program.')
 
@@ -70,7 +67,7 @@ def start_repl(first=True, filename=None):
     while True:
         try:
             # Get user input
-            input_string = input(f"--[ {lineNumber}. ")
+            input_string = input(f"--[ ")
             
             # Exit condition
             if input_string.lower() == 'exit':

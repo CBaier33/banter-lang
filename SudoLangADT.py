@@ -84,6 +84,20 @@ class ReturnStatement:
     def __str__(self):
         return f"return {self.value}"
 
-Statement = Union[ReturnStatement, IfStatement, IfElseStatement, LetStatement]
+@dataclass
+class GotoStatement:
+    label: Union[int, float]
+
+    def __str__(self):
+        return f"goto instruction {self.label}"
+
+@dataclass
+class MarkerStatement:
+    label: Union[int, float]
+
+    def __str__(self):
+        return f"@ {self.label}"
+
+Statement = Union[ReturnStatement, IfStatement, IfElseStatement, LetStatement, GotoStatement, MarkerStatement]
 
 Program = Union[Statement, Operation, Comparison]

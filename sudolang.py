@@ -30,7 +30,7 @@ tokens = [
     'COMP_OP',
 
     # Punctuations
-    'COMMA', 'LP', 'RP'] + list(set(reserved.values()))
+    'COMMA', 'LP', 'RP', 'MARKER'] + list(set(reserved.values()))
 
 # Ignored characters
 t_ignore = ' \t'
@@ -40,6 +40,7 @@ t_BE = r'be'
 t_RETURN = r'return'
 t_GOTO = r'goto'
 t_INSTRUCTION = r'instruction'
+t_MARKER = r'@'
 t_STRING = r'\"([^\\\n]|(\\.))*?\"'
 
 t_BOOL = r'True|False'
@@ -129,6 +130,14 @@ def p_statement_if_else(p):
 def p_statement_return(p):
     '''statement : RETURN expression'''
     p[0] = ReturnStatement(value=p[2])
+
+def p_statement_goto(p):
+    '''statement : GOTO INSTRUCTION NUMBER'''
+    p[0] = GotoStatement(label=p[3])
+
+def p_statement_marker(p):
+    '''statement : MARKER NUMBER'''
+    p[0] = MarkerStatement(label=p[2])
 
 # Expressions
 def p_expression_binop(p):
