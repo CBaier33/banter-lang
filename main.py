@@ -42,7 +42,7 @@ def process_input(input_string):
     if ast:
         # Interpret the program and update variables
         result = eval_program(ast, variables)
-        if result:
+        if result == False or result:
             print(result)
         lineNumber += 1
     else:
