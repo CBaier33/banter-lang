@@ -6,7 +6,7 @@ def eval_program(program, variables=None, context=None):
         variables = {}  # Initialize an empty variables (a dictionary) for variable values
 
     if context is None:
-        context = {}
+        context = []
 
     if isinstance(program, list):
         # If the program is a list of statements, evaluate them one by one

@@ -7,7 +7,8 @@ from interpreter import eval_program  # Evaluation function
 
 # A dictionary to store variables and their values
 variables = {}
-context = {}
+context = []
+markers = {}
 
 translated_string = ""
 
@@ -26,6 +27,14 @@ def concrete2abstract(s: str, parser) -> Program:
             raise e
     return None
 
+#def preprocess_file(program):
+#
+#    if program.startswith("@"):
+#        markers["@1"] == len(context)+1
+#
+#    else:
+#        context.append(program)
+
 def process_input(input_string):
     """
     Process the input (either from REPL or file) and evaluate.
@@ -39,7 +48,7 @@ def process_input(input_string):
     
     if ast:
         # Interpret the program and update variables
-        result = eval_program(ast, variables, context)
+        result = eval_program(ast, variables, context) #, markers)
         if result == False or result:
             print(result)
     else:
@@ -56,6 +65,8 @@ def start_repl(first=True, filename=None):
     if filename:
         with open(filename, 'r') as file:
             content = file.read()
+            #for line in content.splitlines():
+            #    preprocess_file(line)
             for line in content.splitlines():
                 process_input(line)
         # If in -i mode, after the file is executed, show the prompt
