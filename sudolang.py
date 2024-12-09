@@ -161,9 +161,9 @@ def p_expression_group(p):
     '''expression : LP expression RP'''
     p[0] = p[2]  # Return the expression inside parentheses
 
-#def p_expression_comparison(p):
-#    '''expression : comparison'''
-#    p[0] = Comparison(p[1])  # Return the comparison
+def p_expression_comparison(p):
+    '''expression : comparison'''
+    p[0] = p[1]
 
 def p_comparison(p):
     '''comparison : expression COMP_OP expression'''

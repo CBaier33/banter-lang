@@ -27,14 +27,46 @@ def concrete2abstract(s: str, parser) -> Program:
 
 lineNumber = 1
 
-def start_repl(first=True):
+def process_input(input_string):
+    """
+    Process the input (either from REPL or file) and evaluate.
+    """
+    global lineNumber
+    # Skip blank lines
+    if input_string.strip() == "":
+        return  # Skip blank lines
+    
+    # Parse the input string into the ADT
+    ast = concrete2abstract(input_string, sudolang.parser)
+    
+    if ast:
+        # Interpret the program and update variables
+        result = eval_program(ast, variables)
+        if result:
+            print(result)
+        lineNumber += 1
+    else:
+        print(f'"{input_string}" is not a valid program.')
 
+def start_repl(first=True, filename=None):
     if first:
         print("Welcome to the SudoLang Interpreter!")
         print("Type 'exit' to quit.")
-
+    
     global lineNumber
     
+    # If a file is provided, read the file's content
+    if filename:
+        with open(filename, 'r') as file:
+            content = file.read()
+            for line in content.splitlines():
+                process_input(line)
+        # If in -i mode, after the file is executed, show the prompt
+        if '-i' in sys.argv:
+            print()
+            start_repl(first=False)
+        return  # Exit after processing the file if -i isn't set
+
     while True:
         try:
             # Get user input
@@ -45,22 +77,11 @@ def start_repl(first=True):
                 print("Exiting SudoLang.")
                 break
 
-            if input_string == "":
-                start_repl(first=False)
-                break
+            # Skip blank lines in REPL
+            if input_string.strip() == "":
+                continue
             
-            # Parse the input string into the ADT
-            ast = concrete2abstract(input_string, sudolang.parser)
-            
-            if ast:
-                # Interpret the program and update variables
-                result = eval_program(ast, variables)
-                if result:
-                    print(result)
-                lineNumber += 1
-            
-            else:
-                print(f'"{input_string}" is not a valid program.')
+            process_input(input_string)
         
         except KeyboardInterrupt:
             # Handle Ctrl+C: Cancel current input and continue the loop
@@ -75,55 +96,21 @@ def start_repl(first=True):
         except Exception as e:
             print(f"Error: {e}")
 
-def main():
-    """
-    Main function to handle command-line arguments for the SudoLang interpreter.
-    """
-    iFlag = False
-    args = sys.argv[1:]
-
-    # Parse command-line arguments for -i option
-    for arg in args:
-        if arg == '-i':
-            iFlag = True
-        else:
-            print(f"Invalid option: {arg}")
-            sys.exit(1)
-
-    if len(sys.argv) == 2 and sys.argv[1] == '-i':
-        print('SudoLang> ', flush=True, end='')
-
-    for line in sys.stdin:
-        line = line.strip()  # Remove trailing newline
-        try:
-            # Parse the line into the ADT
-            ast = concrete2abstract(line, sudolang.parser)
-            
-            if ast:
-                # Interpret the program and update variables
-                result = eval_program(ast, variables)
-                if result:
-                    print(result)
-            else:
-                print(f'"{line}" is not a program')
-
-            # Keep the REPL prompt when in interactive mode (-i)
-            if len(sys.argv) == 2 and sys.argv[1] == '-i':
-                print('SudoLang> ', flush=True, end='')
-
-        except SyntaxError:
-            print(f'"{line}" contains lexical units which are not lexemes and is not a program.')
-        except EOFError:
-            sys.exit(0)
-        except Exception as e:
-            print(f"Error: {e}")
-            sys.exit(-1)
-
 if __name__ == "__main__":
-    # Call start_repl for interactive mode
-    #if '-i' in sys.argv:
-    #    start_repl()
-    #else:
-    #    # Call main function if not in interactive mode
-    #    main()
-    start_repl()
+    # Check if '-i' is in sys.argv for interactive mode
+    if '-i' in sys.argv:
+        # If there's a filename provided along with -i, process the file first, then start REPL
+        if len(sys.argv) > 2:
+            filename = sys.argv[2]
+            start_repl(first=False, filename=filename)
+        else:
+            # If only -i is provided (no filename), start the REPL immediately
+            start_repl(first=True)
+    else:
+        # If no '-i', just process the filename and exit
+        if len(sys.argv) > 1:
+            filename = sys.argv[1]
+            start_repl(first=False, filename=filename)
+        else:
+            # If no arguments, run in interactive mode
+            start_repl(first=True)
