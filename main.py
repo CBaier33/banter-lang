@@ -40,7 +40,7 @@ def process_input(input_string):
     Process the input (either from REPL or file) and evaluate.
     """
     # Skip blank lines
-    if input_string.strip() == "":
+    if input_string.strip() == "" or input_string.strip().startswith('#'):
         return  # Skip blank lines
     
     # Parse the input string into the ADT

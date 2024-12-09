@@ -840,16 +840,15 @@ state 39
     (5) statement -> IF comparison COMMA THEN statement .
     (6) statement -> IF comparison COMMA THEN statement . ELSE statement
 
-  ! shift/reduce conflict for ELSE resolved as shift
     LET             reduce using rule 5 (statement -> IF comparison COMMA THEN statement .)
     IF              reduce using rule 5 (statement -> IF comparison COMMA THEN statement .)
     RETURN          reduce using rule 5 (statement -> IF comparison COMMA THEN statement .)
     GOTO            reduce using rule 5 (statement -> IF comparison COMMA THEN statement .)
     MARKER          reduce using rule 5 (statement -> IF comparison COMMA THEN statement .)
     $end            reduce using rule 5 (statement -> IF comparison COMMA THEN statement .)
-    ELSE            shift and go to state 40
+    ELSE            reduce using rule 5 (statement -> IF comparison COMMA THEN statement .)
 
-  ! ELSE            [ reduce using rule 5 (statement -> IF comparison COMMA THEN statement .) ]
+  ! ELSE            [ shift and go to state 40 ]
 
 
 state 40
@@ -882,7 +881,3 @@ state 41
     $end            reduce using rule 6 (statement -> IF comparison COMMA THEN statement ELSE statement .)
     ELSE            reduce using rule 6 (statement -> IF comparison COMMA THEN statement ELSE statement .)
 
-WARNING: 
-WARNING: Conflicts:
-WARNING: 
-WARNING: shift/reduce conflict for ELSE in state 39 resolved as shift
