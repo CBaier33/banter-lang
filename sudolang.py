@@ -72,9 +72,9 @@ def t_NUMBER(t):
     return t
 
 # Ignored token with an action associated with it
-def t_ignore_newline(t):
-    r'\n+'
-    t.lexer.lineno += t.value.count('\n')
+#def t_ignore_newline(t):
+#    r'\n+'
+#    t.lexer.lineno += t.value.count('\n')
 
 # Error handler for illegal characters
 def t_error(t):

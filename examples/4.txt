@@ -24,8 +24,7 @@ let negative be -5
 let neg_result be -negative
 return neg_result
 
-if a < b, then if a == 3, then return "Inner if true" else return "Inner if false"
-else return "Outer if false"
+if a < b, then if a == 3, then return "Inner if true" else return "Inner if false" else return "Outer if false"
 
 let a be 1
 let b be 2

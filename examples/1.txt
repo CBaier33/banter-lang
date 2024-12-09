@@ -1,7 +1,7 @@
 let x be 10
 let y be 20
 let result be x + y
-if result > 15 then
+if result > 15, then
     return "result is greater than 15"
 else
     return "result is less than or equal to 15"

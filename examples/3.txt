@@ -1,4 +1,7 @@
 let wrong be 3
 let right be 7
 
-if wrong + wrong == right, then return "Yes" else return "No"
+if wrong + wrong == right, then 
+  return "Yes" 
+else 
+  return "No"
