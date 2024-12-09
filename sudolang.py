@@ -24,13 +24,10 @@ tokens = [
     'MNEUMONIC', 'STRING', 'NUMBER',
 
     # Operators
-    'PLUS', 'MINUS', 'DIVIDE', 'TIMES', 
-
-    # Comparisions
-    'COMP_OP',
+    'PLUS', 'MINUS', 'DIVIDE', 'TIMES', 'COMP_OP',
 
     # Punctuations
-    'COMMA', 'LP', 'RP', 'MARKER' ] + list(set(reserved.values()))
+    'COMMA', 'LP', 'RP', 'MARKER', 'INDENT', 'DEDENT'] + list(set(reserved.values()))
 
 # Ignored characters
 t_ignore = ' \t'
@@ -79,7 +76,6 @@ def t_ignore_newline(t):
     r'\n+'
     t.lexer.lineno += t.value.count('\n')
 
-
 # Error handler for illegal characters
 def t_error(t):
     print(f'Illegal character {t.value[0]!r}')
@@ -94,11 +90,11 @@ lexer = lex.lex()
 
 # Define the precedence of operators
 precedence = (
-    ('nonassoc', 'ELSE'),
     ('nonassoc', 'THEN'),
+    ('nonassoc', 'ELSE'),
+    ('left', 'COMP_OP'),
     ('left', 'PLUS', 'MINUS'),
     ('left', 'TIMES', 'DIVIDE'),
-    ('left', 'COMP_OP'),
 )
 
 global_ast = ""
@@ -117,6 +113,7 @@ def p_program(p):
             global_ast = [p[1]]  # Single statement or expression, create a list
     else:
         global_ast = p[1] + [p[2]]  # Multiple statements, concatenate lists
+
     p[0] = global_ast
 
 # Statements

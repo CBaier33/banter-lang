@@ -1,5 +1,10 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
+Unused terminals:
+
+    DEDENT
+    INDENT
+
 Grammar
 
 Rule 0     S' -> program
@@ -30,10 +35,12 @@ BE                   : 4
 BOOL                 : 17
 COMMA                : 5 6
 COMP_OP              : 20
+DEDENT               : 
 DIVIDE               : 13
 ELSE                 : 6
 GOTO                 : 8
 IF                   : 5 6
+INDENT               : 
 INSTRUCTION          : 8
 LET                  : 4
 LP                   : 18
@@ -584,6 +591,7 @@ state 28
 
     PLUS            reduce using rule 10 (expression -> expression PLUS expression .)
     MINUS           reduce using rule 10 (expression -> expression PLUS expression .)
+    COMP_OP         reduce using rule 10 (expression -> expression PLUS expression .)
     LET             reduce using rule 10 (expression -> expression PLUS expression .)
     IF              reduce using rule 10 (expression -> expression PLUS expression .)
     RETURN          reduce using rule 10 (expression -> expression PLUS expression .)
@@ -595,13 +603,12 @@ state 28
     COMMA           reduce using rule 10 (expression -> expression PLUS expression .)
     TIMES           shift and go to state 18
     DIVIDE          shift and go to state 19
-    COMP_OP         shift and go to state 20
 
   ! TIMES           [ reduce using rule 10 (expression -> expression PLUS expression .) ]
   ! DIVIDE          [ reduce using rule 10 (expression -> expression PLUS expression .) ]
-  ! COMP_OP         [ reduce using rule 10 (expression -> expression PLUS expression .) ]
   ! PLUS            [ shift and go to state 16 ]
   ! MINUS           [ shift and go to state 17 ]
+  ! COMP_OP         [ shift and go to state 20 ]
 
 
 state 29
@@ -615,6 +622,7 @@ state 29
 
     PLUS            reduce using rule 11 (expression -> expression MINUS expression .)
     MINUS           reduce using rule 11 (expression -> expression MINUS expression .)
+    COMP_OP         reduce using rule 11 (expression -> expression MINUS expression .)
     LET             reduce using rule 11 (expression -> expression MINUS expression .)
     IF              reduce using rule 11 (expression -> expression MINUS expression .)
     RETURN          reduce using rule 11 (expression -> expression MINUS expression .)
@@ -626,13 +634,12 @@ state 29
     COMMA           reduce using rule 11 (expression -> expression MINUS expression .)
     TIMES           shift and go to state 18
     DIVIDE          shift and go to state 19
-    COMP_OP         shift and go to state 20
 
   ! TIMES           [ reduce using rule 11 (expression -> expression MINUS expression .) ]
   ! DIVIDE          [ reduce using rule 11 (expression -> expression MINUS expression .) ]
-  ! COMP_OP         [ reduce using rule 11 (expression -> expression MINUS expression .) ]
   ! PLUS            [ shift and go to state 16 ]
   ! MINUS           [ shift and go to state 17 ]
+  ! COMP_OP         [ shift and go to state 20 ]
 
 
 state 30
@@ -648,6 +655,7 @@ state 30
     MINUS           reduce using rule 12 (expression -> expression TIMES expression .)
     TIMES           reduce using rule 12 (expression -> expression TIMES expression .)
     DIVIDE          reduce using rule 12 (expression -> expression TIMES expression .)
+    COMP_OP         reduce using rule 12 (expression -> expression TIMES expression .)
     LET             reduce using rule 12 (expression -> expression TIMES expression .)
     IF              reduce using rule 12 (expression -> expression TIMES expression .)
     RETURN          reduce using rule 12 (expression -> expression TIMES expression .)
@@ -657,13 +665,12 @@ state 30
     ELSE            reduce using rule 12 (expression -> expression TIMES expression .)
     RP              reduce using rule 12 (expression -> expression TIMES expression .)
     COMMA           reduce using rule 12 (expression -> expression TIMES expression .)
-    COMP_OP         shift and go to state 20
 
-  ! COMP_OP         [ reduce using rule 12 (expression -> expression TIMES expression .) ]
   ! PLUS            [ shift and go to state 16 ]
   ! MINUS           [ shift and go to state 17 ]
   ! TIMES           [ shift and go to state 18 ]
   ! DIVIDE          [ shift and go to state 19 ]
+  ! COMP_OP         [ shift and go to state 20 ]
 
 
 state 31
@@ -679,6 +686,7 @@ state 31
     MINUS           reduce using rule 13 (expression -> expression DIVIDE expression .)
     TIMES           reduce using rule 13 (expression -> expression DIVIDE expression .)
     DIVIDE          reduce using rule 13 (expression -> expression DIVIDE expression .)
+    COMP_OP         reduce using rule 13 (expression -> expression DIVIDE expression .)
     LET             reduce using rule 13 (expression -> expression DIVIDE expression .)
     IF              reduce using rule 13 (expression -> expression DIVIDE expression .)
     RETURN          reduce using rule 13 (expression -> expression DIVIDE expression .)
@@ -688,13 +696,12 @@ state 31
     ELSE            reduce using rule 13 (expression -> expression DIVIDE expression .)
     RP              reduce using rule 13 (expression -> expression DIVIDE expression .)
     COMMA           reduce using rule 13 (expression -> expression DIVIDE expression .)
-    COMP_OP         shift and go to state 20
 
-  ! COMP_OP         [ reduce using rule 13 (expression -> expression DIVIDE expression .) ]
   ! PLUS            [ shift and go to state 16 ]
   ! MINUS           [ shift and go to state 17 ]
   ! TIMES           [ shift and go to state 18 ]
   ! DIVIDE          [ shift and go to state 19 ]
+  ! COMP_OP         [ shift and go to state 20 ]
 
 
 state 32
@@ -706,10 +713,6 @@ state 32
     (13) expression -> expression . DIVIDE expression
     (20) comparison -> expression . COMP_OP expression
 
-    PLUS            reduce using rule 20 (comparison -> expression COMP_OP expression .)
-    MINUS           reduce using rule 20 (comparison -> expression COMP_OP expression .)
-    TIMES           reduce using rule 20 (comparison -> expression COMP_OP expression .)
-    DIVIDE          reduce using rule 20 (comparison -> expression COMP_OP expression .)
     COMP_OP         reduce using rule 20 (comparison -> expression COMP_OP expression .)
     LET             reduce using rule 20 (comparison -> expression COMP_OP expression .)
     IF              reduce using rule 20 (comparison -> expression COMP_OP expression .)
@@ -720,11 +723,15 @@ state 32
     COMMA           reduce using rule 20 (comparison -> expression COMP_OP expression .)
     ELSE            reduce using rule 20 (comparison -> expression COMP_OP expression .)
     RP              reduce using rule 20 (comparison -> expression COMP_OP expression .)
+    PLUS            shift and go to state 16
+    MINUS           shift and go to state 17
+    TIMES           shift and go to state 18
+    DIVIDE          shift and go to state 19
 
-  ! PLUS            [ shift and go to state 16 ]
-  ! MINUS           [ shift and go to state 17 ]
-  ! TIMES           [ shift and go to state 18 ]
-  ! DIVIDE          [ shift and go to state 19 ]
+  ! PLUS            [ reduce using rule 20 (comparison -> expression COMP_OP expression .) ]
+  ! MINUS           [ reduce using rule 20 (comparison -> expression COMP_OP expression .) ]
+  ! TIMES           [ reduce using rule 20 (comparison -> expression COMP_OP expression .) ]
+  ! DIVIDE          [ reduce using rule 20 (comparison -> expression COMP_OP expression .) ]
   ! COMP_OP         [ shift and go to state 20 ]
 
 
@@ -846,9 +853,9 @@ state 39
     GOTO            reduce using rule 5 (statement -> IF comparison COMMA THEN statement .)
     MARKER          reduce using rule 5 (statement -> IF comparison COMMA THEN statement .)
     $end            reduce using rule 5 (statement -> IF comparison COMMA THEN statement .)
-    ELSE            reduce using rule 5 (statement -> IF comparison COMMA THEN statement .)
+    ELSE            shift and go to state 40
 
-  ! ELSE            [ shift and go to state 40 ]
+  ! ELSE            [ reduce using rule 5 (statement -> IF comparison COMMA THEN statement .) ]
 
 
 state 40
