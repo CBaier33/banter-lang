@@ -99,6 +99,8 @@ def eval_operation(operation, variables, context):
 
 
     if operation.operator == '+':
+        if isinstance(operands[0], str):
+            return operands[0][:-1] + operands[1][1:]
         return operands[0] + operands[1]
     elif operation.operator == '-':
         return operands[0] - operands[1]
@@ -108,7 +110,7 @@ def eval_operation(operation, variables, context):
         if operands[1] == 0:
             raise ValueError("Division by zero")
         return operands[0] / operands[1]
-    elif operation.operator == 'neg':
+    elif operation.operator == '-':
         return -operands[0]
     else:
         raise ValueError(f"Unknown operator: {operation.operator}")

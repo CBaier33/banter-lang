@@ -27,7 +27,7 @@ tokens = [
     'PLUS', 'MINUS', 'DIVIDE', 'TIMES', 'COMP_OP',
 
     # Punctuations
-    'COMMA', 'LP', 'RP', 'MARKER', 'INDENT', 'DEDENT'] + list(set(reserved.values()))
+    'COMMA', 'LP', 'RP', 'MARKER'] + list(set(reserved.values()))
 
 # Ignored characters
 t_ignore = ' \t'
@@ -56,7 +56,7 @@ t_LP = r'\('
 t_RP = r'\)'
 t_COMMA = r','
 
-t_ignore_COMMENT = r'\#.*'
+t_ignore_COMMENT = r'\#[^\n]*'
 
 def t_MNEUMONIC(t):
     r'[a-zA-Z_][a-zA-Z0-9_]*'
@@ -72,9 +72,9 @@ def t_NUMBER(t):
     return t
 
 # Ignored token with an action associated with it
-#def t_ignore_newline(t):
-#    r'\n+'
-#    t.lexer.lineno += t.value.count('\n')
+def t_ignore_newline(t):
+    r'\n+'
+    t.lexer.lineno += t.value.count('\n')
 
 # Error handler for illegal characters
 def t_error(t):
