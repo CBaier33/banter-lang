@@ -13,7 +13,7 @@ Rule 3     program -> expression
 Rule 4     statements -> statement
 Rule 5     statements -> statement statements
 Rule 6     block -> statement
-Rule 7     block -> NEWLINE INDENT statements NEWLINE DEDENT
+Rule 7     block -> INDENT statements DEDENT
 Rule 8     statement -> LET MNEUMONIC BE expression
 Rule 9     statement -> IF comparison COMMA THEN block
 Rule 10    statement -> IF comparison COMMA THEN block ELSE block
@@ -24,20 +24,21 @@ Rule 14    expression -> expression PLUS expression
 Rule 15    expression -> expression MINUS expression
 Rule 16    expression -> expression TIMES expression
 Rule 17    expression -> expression DIVIDE expression
-Rule 18    expression -> NUMBER
-Rule 19    expression -> STRING
-Rule 20    expression -> MNEUMONIC
-Rule 21    expression -> BOOL
-Rule 22    expression -> LP expression RP
-Rule 23    expression -> comparison
-Rule 24    comparison -> expression COMP_OP expression
+Rule 18    expression -> MINUS expression
+Rule 19    expression -> NUMBER
+Rule 20    expression -> STRING
+Rule 21    expression -> MNEUMONIC
+Rule 22    expression -> BOOL
+Rule 23    expression -> LP expression RP
+Rule 24    expression -> comparison
+Rule 25    comparison -> expression COMP_OP expression
 
 Terminals, with rules where they appear
 
 BE                   : 8
-BOOL                 : 21
+BOOL                 : 22
 COMMA                : 9 10
-COMP_OP              : 24
+COMP_OP              : 25
 DEDENT               : 7
 DIVIDE               : 17
 ELSE                 : 10
@@ -46,16 +47,15 @@ IF                   : 9 10
 INDENT               : 7
 INSTRUCTION          : 12
 LET                  : 8
-LP                   : 22
+LP                   : 23
 MARKER               : 13
-MINUS                : 15
-MNEUMONIC            : 8 20
-NEWLINE              : 7 7
-NUMBER               : 12 13 18
+MINUS                : 15 18
+MNEUMONIC            : 8 21
+NUMBER               : 12 13 19
 PLUS                 : 14
 RETURN               : 11
-RP                   : 22
-STRING               : 19
+RP                   : 23
+STRING               : 20
 THEN                 : 9 10
 TIMES                : 16
 WS                   : 
@@ -64,8 +64,8 @@ error                :
 Nonterminals, with rules where they appear
 
 block                : 9 10 10
-comparison           : 9 10 23
-expression           : 3 8 11 14 14 15 15 16 16 17 17 22 24 24
+comparison           : 9 10 24
+expression           : 3 8 11 14 14 15 15 16 16 17 17 18 23 25 25
 program              : 2 0
 statement            : 1 2 4 5 6
 statements           : 5 7
@@ -88,24 +88,26 @@ state 0
     (15) expression -> . expression MINUS expression
     (16) expression -> . expression TIMES expression
     (17) expression -> . expression DIVIDE expression
-    (18) expression -> . NUMBER
-    (19) expression -> . STRING
-    (20) expression -> . MNEUMONIC
-    (21) expression -> . BOOL
-    (22) expression -> . LP expression RP
-    (23) expression -> . comparison
-    (24) comparison -> . expression COMP_OP expression
+    (18) expression -> . MINUS expression
+    (19) expression -> . NUMBER
+    (20) expression -> . STRING
+    (21) expression -> . MNEUMONIC
+    (22) expression -> . BOOL
+    (23) expression -> . LP expression RP
+    (24) expression -> . comparison
+    (25) comparison -> . expression COMP_OP expression
 
     LET             shift and go to state 4
     IF              shift and go to state 6
     RETURN          shift and go to state 8
     GOTO            shift and go to state 9
     MARKER          shift and go to state 11
+    MINUS           shift and go to state 12
     NUMBER          shift and go to state 10
-    STRING          shift and go to state 12
+    STRING          shift and go to state 13
     MNEUMONIC       shift and go to state 5
-    BOOL            shift and go to state 13
-    LP              shift and go to state 14
+    BOOL            shift and go to state 14
+    LP              shift and go to state 15
 
     program                        shift and go to state 1
     statement                      shift and go to state 2
@@ -129,7 +131,7 @@ state 1
     GOTO            shift and go to state 9
     MARKER          shift and go to state 11
 
-    statement                      shift and go to state 15
+    statement                      shift and go to state 16
 
 state 2
 
@@ -150,7 +152,7 @@ state 3
     (15) expression -> expression . MINUS expression
     (16) expression -> expression . TIMES expression
     (17) expression -> expression . DIVIDE expression
-    (24) comparison -> expression . COMP_OP expression
+    (25) comparison -> expression . COMP_OP expression
 
     LET             reduce using rule 3 (program -> expression .)
     IF              reduce using rule 3 (program -> expression .)
@@ -158,85 +160,87 @@ state 3
     GOTO            reduce using rule 3 (program -> expression .)
     MARKER          reduce using rule 3 (program -> expression .)
     $end            reduce using rule 3 (program -> expression .)
-    PLUS            shift and go to state 16
-    MINUS           shift and go to state 17
-    TIMES           shift and go to state 18
-    DIVIDE          shift and go to state 19
-    COMP_OP         shift and go to state 20
+    PLUS            shift and go to state 17
+    MINUS           shift and go to state 18
+    TIMES           shift and go to state 19
+    DIVIDE          shift and go to state 20
+    COMP_OP         shift and go to state 21
 
 
 state 4
 
     (8) statement -> LET . MNEUMONIC BE expression
 
-    MNEUMONIC       shift and go to state 21
+    MNEUMONIC       shift and go to state 22
 
 
 state 5
 
-    (20) expression -> MNEUMONIC .
+    (21) expression -> MNEUMONIC .
 
-    PLUS            reduce using rule 20 (expression -> MNEUMONIC .)
-    MINUS           reduce using rule 20 (expression -> MNEUMONIC .)
-    TIMES           reduce using rule 20 (expression -> MNEUMONIC .)
-    DIVIDE          reduce using rule 20 (expression -> MNEUMONIC .)
-    COMP_OP         reduce using rule 20 (expression -> MNEUMONIC .)
-    LET             reduce using rule 20 (expression -> MNEUMONIC .)
-    IF              reduce using rule 20 (expression -> MNEUMONIC .)
-    RETURN          reduce using rule 20 (expression -> MNEUMONIC .)
-    GOTO            reduce using rule 20 (expression -> MNEUMONIC .)
-    MARKER          reduce using rule 20 (expression -> MNEUMONIC .)
-    $end            reduce using rule 20 (expression -> MNEUMONIC .)
-    ELSE            reduce using rule 20 (expression -> MNEUMONIC .)
-    NEWLINE         reduce using rule 20 (expression -> MNEUMONIC .)
-    RP              reduce using rule 20 (expression -> MNEUMONIC .)
-    COMMA           reduce using rule 20 (expression -> MNEUMONIC .)
+    PLUS            reduce using rule 21 (expression -> MNEUMONIC .)
+    MINUS           reduce using rule 21 (expression -> MNEUMONIC .)
+    TIMES           reduce using rule 21 (expression -> MNEUMONIC .)
+    DIVIDE          reduce using rule 21 (expression -> MNEUMONIC .)
+    COMP_OP         reduce using rule 21 (expression -> MNEUMONIC .)
+    LET             reduce using rule 21 (expression -> MNEUMONIC .)
+    IF              reduce using rule 21 (expression -> MNEUMONIC .)
+    RETURN          reduce using rule 21 (expression -> MNEUMONIC .)
+    GOTO            reduce using rule 21 (expression -> MNEUMONIC .)
+    MARKER          reduce using rule 21 (expression -> MNEUMONIC .)
+    $end            reduce using rule 21 (expression -> MNEUMONIC .)
+    ELSE            reduce using rule 21 (expression -> MNEUMONIC .)
+    DEDENT          reduce using rule 21 (expression -> MNEUMONIC .)
+    RP              reduce using rule 21 (expression -> MNEUMONIC .)
+    COMMA           reduce using rule 21 (expression -> MNEUMONIC .)
 
 
 state 6
 
     (9) statement -> IF . comparison COMMA THEN block
     (10) statement -> IF . comparison COMMA THEN block ELSE block
-    (24) comparison -> . expression COMP_OP expression
+    (25) comparison -> . expression COMP_OP expression
     (14) expression -> . expression PLUS expression
     (15) expression -> . expression MINUS expression
     (16) expression -> . expression TIMES expression
     (17) expression -> . expression DIVIDE expression
-    (18) expression -> . NUMBER
-    (19) expression -> . STRING
-    (20) expression -> . MNEUMONIC
-    (21) expression -> . BOOL
-    (22) expression -> . LP expression RP
-    (23) expression -> . comparison
+    (18) expression -> . MINUS expression
+    (19) expression -> . NUMBER
+    (20) expression -> . STRING
+    (21) expression -> . MNEUMONIC
+    (22) expression -> . BOOL
+    (23) expression -> . LP expression RP
+    (24) expression -> . comparison
 
+    MINUS           shift and go to state 12
     NUMBER          shift and go to state 10
-    STRING          shift and go to state 12
+    STRING          shift and go to state 13
     MNEUMONIC       shift and go to state 5
-    BOOL            shift and go to state 13
-    LP              shift and go to state 14
+    BOOL            shift and go to state 14
+    LP              shift and go to state 15
 
-    comparison                     shift and go to state 22
-    expression                     shift and go to state 23
+    comparison                     shift and go to state 23
+    expression                     shift and go to state 24
 
 state 7
 
-    (23) expression -> comparison .
+    (24) expression -> comparison .
 
-    PLUS            reduce using rule 23 (expression -> comparison .)
-    MINUS           reduce using rule 23 (expression -> comparison .)
-    TIMES           reduce using rule 23 (expression -> comparison .)
-    DIVIDE          reduce using rule 23 (expression -> comparison .)
-    COMP_OP         reduce using rule 23 (expression -> comparison .)
-    LET             reduce using rule 23 (expression -> comparison .)
-    IF              reduce using rule 23 (expression -> comparison .)
-    RETURN          reduce using rule 23 (expression -> comparison .)
-    GOTO            reduce using rule 23 (expression -> comparison .)
-    MARKER          reduce using rule 23 (expression -> comparison .)
-    $end            reduce using rule 23 (expression -> comparison .)
-    ELSE            reduce using rule 23 (expression -> comparison .)
-    NEWLINE         reduce using rule 23 (expression -> comparison .)
-    RP              reduce using rule 23 (expression -> comparison .)
-    COMMA           reduce using rule 23 (expression -> comparison .)
+    PLUS            reduce using rule 24 (expression -> comparison .)
+    MINUS           reduce using rule 24 (expression -> comparison .)
+    TIMES           reduce using rule 24 (expression -> comparison .)
+    DIVIDE          reduce using rule 24 (expression -> comparison .)
+    COMP_OP         reduce using rule 24 (expression -> comparison .)
+    LET             reduce using rule 24 (expression -> comparison .)
+    IF              reduce using rule 24 (expression -> comparison .)
+    RETURN          reduce using rule 24 (expression -> comparison .)
+    GOTO            reduce using rule 24 (expression -> comparison .)
+    MARKER          reduce using rule 24 (expression -> comparison .)
+    $end            reduce using rule 24 (expression -> comparison .)
+    ELSE            reduce using rule 24 (expression -> comparison .)
+    DEDENT          reduce using rule 24 (expression -> comparison .)
+    RP              reduce using rule 24 (expression -> comparison .)
+    COMMA           reduce using rule 24 (expression -> comparison .)
 
 
 state 8
@@ -246,125 +250,155 @@ state 8
     (15) expression -> . expression MINUS expression
     (16) expression -> . expression TIMES expression
     (17) expression -> . expression DIVIDE expression
-    (18) expression -> . NUMBER
-    (19) expression -> . STRING
-    (20) expression -> . MNEUMONIC
-    (21) expression -> . BOOL
-    (22) expression -> . LP expression RP
-    (23) expression -> . comparison
-    (24) comparison -> . expression COMP_OP expression
+    (18) expression -> . MINUS expression
+    (19) expression -> . NUMBER
+    (20) expression -> . STRING
+    (21) expression -> . MNEUMONIC
+    (22) expression -> . BOOL
+    (23) expression -> . LP expression RP
+    (24) expression -> . comparison
+    (25) comparison -> . expression COMP_OP expression
 
+    MINUS           shift and go to state 12
     NUMBER          shift and go to state 10
-    STRING          shift and go to state 12
+    STRING          shift and go to state 13
     MNEUMONIC       shift and go to state 5
-    BOOL            shift and go to state 13
-    LP              shift and go to state 14
+    BOOL            shift and go to state 14
+    LP              shift and go to state 15
 
-    expression                     shift and go to state 24
+    expression                     shift and go to state 25
     comparison                     shift and go to state 7
 
 state 9
 
     (12) statement -> GOTO . INSTRUCTION NUMBER
 
-    INSTRUCTION     shift and go to state 25
+    INSTRUCTION     shift and go to state 26
 
 
 state 10
 
-    (18) expression -> NUMBER .
+    (19) expression -> NUMBER .
 
-    PLUS            reduce using rule 18 (expression -> NUMBER .)
-    MINUS           reduce using rule 18 (expression -> NUMBER .)
-    TIMES           reduce using rule 18 (expression -> NUMBER .)
-    DIVIDE          reduce using rule 18 (expression -> NUMBER .)
-    COMP_OP         reduce using rule 18 (expression -> NUMBER .)
-    LET             reduce using rule 18 (expression -> NUMBER .)
-    IF              reduce using rule 18 (expression -> NUMBER .)
-    RETURN          reduce using rule 18 (expression -> NUMBER .)
-    GOTO            reduce using rule 18 (expression -> NUMBER .)
-    MARKER          reduce using rule 18 (expression -> NUMBER .)
-    $end            reduce using rule 18 (expression -> NUMBER .)
-    ELSE            reduce using rule 18 (expression -> NUMBER .)
-    NEWLINE         reduce using rule 18 (expression -> NUMBER .)
-    RP              reduce using rule 18 (expression -> NUMBER .)
-    COMMA           reduce using rule 18 (expression -> NUMBER .)
+    PLUS            reduce using rule 19 (expression -> NUMBER .)
+    MINUS           reduce using rule 19 (expression -> NUMBER .)
+    TIMES           reduce using rule 19 (expression -> NUMBER .)
+    DIVIDE          reduce using rule 19 (expression -> NUMBER .)
+    COMP_OP         reduce using rule 19 (expression -> NUMBER .)
+    LET             reduce using rule 19 (expression -> NUMBER .)
+    IF              reduce using rule 19 (expression -> NUMBER .)
+    RETURN          reduce using rule 19 (expression -> NUMBER .)
+    GOTO            reduce using rule 19 (expression -> NUMBER .)
+    MARKER          reduce using rule 19 (expression -> NUMBER .)
+    $end            reduce using rule 19 (expression -> NUMBER .)
+    ELSE            reduce using rule 19 (expression -> NUMBER .)
+    DEDENT          reduce using rule 19 (expression -> NUMBER .)
+    RP              reduce using rule 19 (expression -> NUMBER .)
+    COMMA           reduce using rule 19 (expression -> NUMBER .)
 
 
 state 11
 
     (13) statement -> MARKER . NUMBER
 
-    NUMBER          shift and go to state 26
+    NUMBER          shift and go to state 27
 
 
 state 12
 
-    (19) expression -> STRING .
-
-    PLUS            reduce using rule 19 (expression -> STRING .)
-    MINUS           reduce using rule 19 (expression -> STRING .)
-    TIMES           reduce using rule 19 (expression -> STRING .)
-    DIVIDE          reduce using rule 19 (expression -> STRING .)
-    COMP_OP         reduce using rule 19 (expression -> STRING .)
-    LET             reduce using rule 19 (expression -> STRING .)
-    IF              reduce using rule 19 (expression -> STRING .)
-    RETURN          reduce using rule 19 (expression -> STRING .)
-    GOTO            reduce using rule 19 (expression -> STRING .)
-    MARKER          reduce using rule 19 (expression -> STRING .)
-    $end            reduce using rule 19 (expression -> STRING .)
-    ELSE            reduce using rule 19 (expression -> STRING .)
-    NEWLINE         reduce using rule 19 (expression -> STRING .)
-    RP              reduce using rule 19 (expression -> STRING .)
-    COMMA           reduce using rule 19 (expression -> STRING .)
-
-
-state 13
-
-    (21) expression -> BOOL .
-
-    PLUS            reduce using rule 21 (expression -> BOOL .)
-    MINUS           reduce using rule 21 (expression -> BOOL .)
-    TIMES           reduce using rule 21 (expression -> BOOL .)
-    DIVIDE          reduce using rule 21 (expression -> BOOL .)
-    COMP_OP         reduce using rule 21 (expression -> BOOL .)
-    LET             reduce using rule 21 (expression -> BOOL .)
-    IF              reduce using rule 21 (expression -> BOOL .)
-    RETURN          reduce using rule 21 (expression -> BOOL .)
-    GOTO            reduce using rule 21 (expression -> BOOL .)
-    MARKER          reduce using rule 21 (expression -> BOOL .)
-    $end            reduce using rule 21 (expression -> BOOL .)
-    ELSE            reduce using rule 21 (expression -> BOOL .)
-    NEWLINE         reduce using rule 21 (expression -> BOOL .)
-    RP              reduce using rule 21 (expression -> BOOL .)
-    COMMA           reduce using rule 21 (expression -> BOOL .)
-
-
-state 14
-
-    (22) expression -> LP . expression RP
+    (18) expression -> MINUS . expression
     (14) expression -> . expression PLUS expression
     (15) expression -> . expression MINUS expression
     (16) expression -> . expression TIMES expression
     (17) expression -> . expression DIVIDE expression
-    (18) expression -> . NUMBER
-    (19) expression -> . STRING
-    (20) expression -> . MNEUMONIC
-    (21) expression -> . BOOL
-    (22) expression -> . LP expression RP
-    (23) expression -> . comparison
-    (24) comparison -> . expression COMP_OP expression
+    (18) expression -> . MINUS expression
+    (19) expression -> . NUMBER
+    (20) expression -> . STRING
+    (21) expression -> . MNEUMONIC
+    (22) expression -> . BOOL
+    (23) expression -> . LP expression RP
+    (24) expression -> . comparison
+    (25) comparison -> . expression COMP_OP expression
 
+    MINUS           shift and go to state 12
     NUMBER          shift and go to state 10
-    STRING          shift and go to state 12
+    STRING          shift and go to state 13
     MNEUMONIC       shift and go to state 5
-    BOOL            shift and go to state 13
-    LP              shift and go to state 14
+    BOOL            shift and go to state 14
+    LP              shift and go to state 15
 
-    expression                     shift and go to state 27
+    expression                     shift and go to state 28
     comparison                     shift and go to state 7
 
+state 13
+
+    (20) expression -> STRING .
+
+    PLUS            reduce using rule 20 (expression -> STRING .)
+    MINUS           reduce using rule 20 (expression -> STRING .)
+    TIMES           reduce using rule 20 (expression -> STRING .)
+    DIVIDE          reduce using rule 20 (expression -> STRING .)
+    COMP_OP         reduce using rule 20 (expression -> STRING .)
+    LET             reduce using rule 20 (expression -> STRING .)
+    IF              reduce using rule 20 (expression -> STRING .)
+    RETURN          reduce using rule 20 (expression -> STRING .)
+    GOTO            reduce using rule 20 (expression -> STRING .)
+    MARKER          reduce using rule 20 (expression -> STRING .)
+    $end            reduce using rule 20 (expression -> STRING .)
+    ELSE            reduce using rule 20 (expression -> STRING .)
+    DEDENT          reduce using rule 20 (expression -> STRING .)
+    RP              reduce using rule 20 (expression -> STRING .)
+    COMMA           reduce using rule 20 (expression -> STRING .)
+
+
+state 14
+
+    (22) expression -> BOOL .
+
+    PLUS            reduce using rule 22 (expression -> BOOL .)
+    MINUS           reduce using rule 22 (expression -> BOOL .)
+    TIMES           reduce using rule 22 (expression -> BOOL .)
+    DIVIDE          reduce using rule 22 (expression -> BOOL .)
+    COMP_OP         reduce using rule 22 (expression -> BOOL .)
+    LET             reduce using rule 22 (expression -> BOOL .)
+    IF              reduce using rule 22 (expression -> BOOL .)
+    RETURN          reduce using rule 22 (expression -> BOOL .)
+    GOTO            reduce using rule 22 (expression -> BOOL .)
+    MARKER          reduce using rule 22 (expression -> BOOL .)
+    $end            reduce using rule 22 (expression -> BOOL .)
+    ELSE            reduce using rule 22 (expression -> BOOL .)
+    DEDENT          reduce using rule 22 (expression -> BOOL .)
+    RP              reduce using rule 22 (expression -> BOOL .)
+    COMMA           reduce using rule 22 (expression -> BOOL .)
+
+
 state 15
+
+    (23) expression -> LP . expression RP
+    (14) expression -> . expression PLUS expression
+    (15) expression -> . expression MINUS expression
+    (16) expression -> . expression TIMES expression
+    (17) expression -> . expression DIVIDE expression
+    (18) expression -> . MINUS expression
+    (19) expression -> . NUMBER
+    (20) expression -> . STRING
+    (21) expression -> . MNEUMONIC
+    (22) expression -> . BOOL
+    (23) expression -> . LP expression RP
+    (24) expression -> . comparison
+    (25) comparison -> . expression COMP_OP expression
+
+    MINUS           shift and go to state 12
+    NUMBER          shift and go to state 10
+    STRING          shift and go to state 13
+    MNEUMONIC       shift and go to state 5
+    BOOL            shift and go to state 14
+    LP              shift and go to state 15
+
+    expression                     shift and go to state 29
+    comparison                     shift and go to state 7
+
+state 16
 
     (2) program -> program statement .
 
@@ -376,170 +410,180 @@ state 15
     $end            reduce using rule 2 (program -> program statement .)
 
 
-state 16
+state 17
 
     (14) expression -> expression PLUS . expression
     (14) expression -> . expression PLUS expression
     (15) expression -> . expression MINUS expression
     (16) expression -> . expression TIMES expression
     (17) expression -> . expression DIVIDE expression
-    (18) expression -> . NUMBER
-    (19) expression -> . STRING
-    (20) expression -> . MNEUMONIC
-    (21) expression -> . BOOL
-    (22) expression -> . LP expression RP
-    (23) expression -> . comparison
-    (24) comparison -> . expression COMP_OP expression
+    (18) expression -> . MINUS expression
+    (19) expression -> . NUMBER
+    (20) expression -> . STRING
+    (21) expression -> . MNEUMONIC
+    (22) expression -> . BOOL
+    (23) expression -> . LP expression RP
+    (24) expression -> . comparison
+    (25) comparison -> . expression COMP_OP expression
 
+    MINUS           shift and go to state 12
     NUMBER          shift and go to state 10
-    STRING          shift and go to state 12
+    STRING          shift and go to state 13
     MNEUMONIC       shift and go to state 5
-    BOOL            shift and go to state 13
-    LP              shift and go to state 14
+    BOOL            shift and go to state 14
+    LP              shift and go to state 15
 
-    expression                     shift and go to state 28
+    expression                     shift and go to state 30
     comparison                     shift and go to state 7
 
-state 17
+state 18
 
     (15) expression -> expression MINUS . expression
     (14) expression -> . expression PLUS expression
     (15) expression -> . expression MINUS expression
     (16) expression -> . expression TIMES expression
     (17) expression -> . expression DIVIDE expression
-    (18) expression -> . NUMBER
-    (19) expression -> . STRING
-    (20) expression -> . MNEUMONIC
-    (21) expression -> . BOOL
-    (22) expression -> . LP expression RP
-    (23) expression -> . comparison
-    (24) comparison -> . expression COMP_OP expression
+    (18) expression -> . MINUS expression
+    (19) expression -> . NUMBER
+    (20) expression -> . STRING
+    (21) expression -> . MNEUMONIC
+    (22) expression -> . BOOL
+    (23) expression -> . LP expression RP
+    (24) expression -> . comparison
+    (25) comparison -> . expression COMP_OP expression
 
+    MINUS           shift and go to state 12
     NUMBER          shift and go to state 10
-    STRING          shift and go to state 12
+    STRING          shift and go to state 13
     MNEUMONIC       shift and go to state 5
-    BOOL            shift and go to state 13
-    LP              shift and go to state 14
+    BOOL            shift and go to state 14
+    LP              shift and go to state 15
 
-    expression                     shift and go to state 29
+    expression                     shift and go to state 31
     comparison                     shift and go to state 7
 
-state 18
+state 19
 
     (16) expression -> expression TIMES . expression
     (14) expression -> . expression PLUS expression
     (15) expression -> . expression MINUS expression
     (16) expression -> . expression TIMES expression
     (17) expression -> . expression DIVIDE expression
-    (18) expression -> . NUMBER
-    (19) expression -> . STRING
-    (20) expression -> . MNEUMONIC
-    (21) expression -> . BOOL
-    (22) expression -> . LP expression RP
-    (23) expression -> . comparison
-    (24) comparison -> . expression COMP_OP expression
+    (18) expression -> . MINUS expression
+    (19) expression -> . NUMBER
+    (20) expression -> . STRING
+    (21) expression -> . MNEUMONIC
+    (22) expression -> . BOOL
+    (23) expression -> . LP expression RP
+    (24) expression -> . comparison
+    (25) comparison -> . expression COMP_OP expression
 
+    MINUS           shift and go to state 12
     NUMBER          shift and go to state 10
-    STRING          shift and go to state 12
+    STRING          shift and go to state 13
     MNEUMONIC       shift and go to state 5
-    BOOL            shift and go to state 13
-    LP              shift and go to state 14
+    BOOL            shift and go to state 14
+    LP              shift and go to state 15
 
-    expression                     shift and go to state 30
+    expression                     shift and go to state 32
     comparison                     shift and go to state 7
 
-state 19
+state 20
 
     (17) expression -> expression DIVIDE . expression
     (14) expression -> . expression PLUS expression
     (15) expression -> . expression MINUS expression
     (16) expression -> . expression TIMES expression
     (17) expression -> . expression DIVIDE expression
-    (18) expression -> . NUMBER
-    (19) expression -> . STRING
-    (20) expression -> . MNEUMONIC
-    (21) expression -> . BOOL
-    (22) expression -> . LP expression RP
-    (23) expression -> . comparison
-    (24) comparison -> . expression COMP_OP expression
+    (18) expression -> . MINUS expression
+    (19) expression -> . NUMBER
+    (20) expression -> . STRING
+    (21) expression -> . MNEUMONIC
+    (22) expression -> . BOOL
+    (23) expression -> . LP expression RP
+    (24) expression -> . comparison
+    (25) comparison -> . expression COMP_OP expression
 
+    MINUS           shift and go to state 12
     NUMBER          shift and go to state 10
-    STRING          shift and go to state 12
+    STRING          shift and go to state 13
     MNEUMONIC       shift and go to state 5
-    BOOL            shift and go to state 13
-    LP              shift and go to state 14
+    BOOL            shift and go to state 14
+    LP              shift and go to state 15
 
-    expression                     shift and go to state 31
-    comparison                     shift and go to state 7
-
-state 20
-
-    (24) comparison -> expression COMP_OP . expression
-    (14) expression -> . expression PLUS expression
-    (15) expression -> . expression MINUS expression
-    (16) expression -> . expression TIMES expression
-    (17) expression -> . expression DIVIDE expression
-    (18) expression -> . NUMBER
-    (19) expression -> . STRING
-    (20) expression -> . MNEUMONIC
-    (21) expression -> . BOOL
-    (22) expression -> . LP expression RP
-    (23) expression -> . comparison
-    (24) comparison -> . expression COMP_OP expression
-
-    NUMBER          shift and go to state 10
-    STRING          shift and go to state 12
-    MNEUMONIC       shift and go to state 5
-    BOOL            shift and go to state 13
-    LP              shift and go to state 14
-
-    expression                     shift and go to state 32
+    expression                     shift and go to state 33
     comparison                     shift and go to state 7
 
 state 21
 
-    (8) statement -> LET MNEUMONIC . BE expression
+    (25) comparison -> expression COMP_OP . expression
+    (14) expression -> . expression PLUS expression
+    (15) expression -> . expression MINUS expression
+    (16) expression -> . expression TIMES expression
+    (17) expression -> . expression DIVIDE expression
+    (18) expression -> . MINUS expression
+    (19) expression -> . NUMBER
+    (20) expression -> . STRING
+    (21) expression -> . MNEUMONIC
+    (22) expression -> . BOOL
+    (23) expression -> . LP expression RP
+    (24) expression -> . comparison
+    (25) comparison -> . expression COMP_OP expression
 
-    BE              shift and go to state 33
+    MINUS           shift and go to state 12
+    NUMBER          shift and go to state 10
+    STRING          shift and go to state 13
+    MNEUMONIC       shift and go to state 5
+    BOOL            shift and go to state 14
+    LP              shift and go to state 15
 
+    expression                     shift and go to state 34
+    comparison                     shift and go to state 7
 
 state 22
 
-    (9) statement -> IF comparison . COMMA THEN block
-    (10) statement -> IF comparison . COMMA THEN block ELSE block
-    (23) expression -> comparison .
+    (8) statement -> LET MNEUMONIC . BE expression
 
-    COMMA           shift and go to state 34
-    COMP_OP         reduce using rule 23 (expression -> comparison .)
-    PLUS            reduce using rule 23 (expression -> comparison .)
-    MINUS           reduce using rule 23 (expression -> comparison .)
-    TIMES           reduce using rule 23 (expression -> comparison .)
-    DIVIDE          reduce using rule 23 (expression -> comparison .)
+    BE              shift and go to state 35
 
 
 state 23
 
-    (24) comparison -> expression . COMP_OP expression
+    (9) statement -> IF comparison . COMMA THEN block
+    (10) statement -> IF comparison . COMMA THEN block ELSE block
+    (24) expression -> comparison .
+
+    COMMA           shift and go to state 36
+    COMP_OP         reduce using rule 24 (expression -> comparison .)
+    PLUS            reduce using rule 24 (expression -> comparison .)
+    MINUS           reduce using rule 24 (expression -> comparison .)
+    TIMES           reduce using rule 24 (expression -> comparison .)
+    DIVIDE          reduce using rule 24 (expression -> comparison .)
+
+
+state 24
+
+    (25) comparison -> expression . COMP_OP expression
     (14) expression -> expression . PLUS expression
     (15) expression -> expression . MINUS expression
     (16) expression -> expression . TIMES expression
     (17) expression -> expression . DIVIDE expression
 
-    COMP_OP         shift and go to state 20
-    PLUS            shift and go to state 16
-    MINUS           shift and go to state 17
-    TIMES           shift and go to state 18
-    DIVIDE          shift and go to state 19
+    COMP_OP         shift and go to state 21
+    PLUS            shift and go to state 17
+    MINUS           shift and go to state 18
+    TIMES           shift and go to state 19
+    DIVIDE          shift and go to state 20
 
 
-state 24
+state 25
 
     (11) statement -> RETURN expression .
     (14) expression -> expression . PLUS expression
     (15) expression -> expression . MINUS expression
     (16) expression -> expression . TIMES expression
     (17) expression -> expression . DIVIDE expression
-    (24) comparison -> expression . COMP_OP expression
+    (25) comparison -> expression . COMP_OP expression
 
     LET             reduce using rule 11 (statement -> RETURN expression .)
     IF              reduce using rule 11 (statement -> RETURN expression .)
@@ -548,22 +592,22 @@ state 24
     MARKER          reduce using rule 11 (statement -> RETURN expression .)
     $end            reduce using rule 11 (statement -> RETURN expression .)
     ELSE            reduce using rule 11 (statement -> RETURN expression .)
-    NEWLINE         reduce using rule 11 (statement -> RETURN expression .)
-    PLUS            shift and go to state 16
-    MINUS           shift and go to state 17
-    TIMES           shift and go to state 18
-    DIVIDE          shift and go to state 19
-    COMP_OP         shift and go to state 20
-
-
-state 25
-
-    (12) statement -> GOTO INSTRUCTION . NUMBER
-
-    NUMBER          shift and go to state 35
+    DEDENT          reduce using rule 11 (statement -> RETURN expression .)
+    PLUS            shift and go to state 17
+    MINUS           shift and go to state 18
+    TIMES           shift and go to state 19
+    DIVIDE          shift and go to state 20
+    COMP_OP         shift and go to state 21
 
 
 state 26
+
+    (12) statement -> GOTO INSTRUCTION . NUMBER
+
+    NUMBER          shift and go to state 37
+
+
+state 27
 
     (13) statement -> MARKER NUMBER .
 
@@ -574,34 +618,66 @@ state 26
     MARKER          reduce using rule 13 (statement -> MARKER NUMBER .)
     $end            reduce using rule 13 (statement -> MARKER NUMBER .)
     ELSE            reduce using rule 13 (statement -> MARKER NUMBER .)
-    NEWLINE         reduce using rule 13 (statement -> MARKER NUMBER .)
+    DEDENT          reduce using rule 13 (statement -> MARKER NUMBER .)
 
 
-state 27
+state 28
 
-    (22) expression -> LP expression . RP
+    (18) expression -> MINUS expression .
     (14) expression -> expression . PLUS expression
     (15) expression -> expression . MINUS expression
     (16) expression -> expression . TIMES expression
     (17) expression -> expression . DIVIDE expression
-    (24) comparison -> expression . COMP_OP expression
+    (25) comparison -> expression . COMP_OP expression
 
-    RP              shift and go to state 36
-    PLUS            shift and go to state 16
-    MINUS           shift and go to state 17
-    TIMES           shift and go to state 18
-    DIVIDE          shift and go to state 19
-    COMP_OP         shift and go to state 20
+    PLUS            reduce using rule 18 (expression -> MINUS expression .)
+    MINUS           reduce using rule 18 (expression -> MINUS expression .)
+    COMP_OP         reduce using rule 18 (expression -> MINUS expression .)
+    LET             reduce using rule 18 (expression -> MINUS expression .)
+    IF              reduce using rule 18 (expression -> MINUS expression .)
+    RETURN          reduce using rule 18 (expression -> MINUS expression .)
+    GOTO            reduce using rule 18 (expression -> MINUS expression .)
+    MARKER          reduce using rule 18 (expression -> MINUS expression .)
+    $end            reduce using rule 18 (expression -> MINUS expression .)
+    ELSE            reduce using rule 18 (expression -> MINUS expression .)
+    DEDENT          reduce using rule 18 (expression -> MINUS expression .)
+    RP              reduce using rule 18 (expression -> MINUS expression .)
+    COMMA           reduce using rule 18 (expression -> MINUS expression .)
+    TIMES           shift and go to state 19
+    DIVIDE          shift and go to state 20
+
+  ! TIMES           [ reduce using rule 18 (expression -> MINUS expression .) ]
+  ! DIVIDE          [ reduce using rule 18 (expression -> MINUS expression .) ]
+  ! PLUS            [ shift and go to state 17 ]
+  ! MINUS           [ shift and go to state 18 ]
+  ! COMP_OP         [ shift and go to state 21 ]
 
 
-state 28
+state 29
+
+    (23) expression -> LP expression . RP
+    (14) expression -> expression . PLUS expression
+    (15) expression -> expression . MINUS expression
+    (16) expression -> expression . TIMES expression
+    (17) expression -> expression . DIVIDE expression
+    (25) comparison -> expression . COMP_OP expression
+
+    RP              shift and go to state 38
+    PLUS            shift and go to state 17
+    MINUS           shift and go to state 18
+    TIMES           shift and go to state 19
+    DIVIDE          shift and go to state 20
+    COMP_OP         shift and go to state 21
+
+
+state 30
 
     (14) expression -> expression PLUS expression .
     (14) expression -> expression . PLUS expression
     (15) expression -> expression . MINUS expression
     (16) expression -> expression . TIMES expression
     (17) expression -> expression . DIVIDE expression
-    (24) comparison -> expression . COMP_OP expression
+    (25) comparison -> expression . COMP_OP expression
 
     PLUS            reduce using rule 14 (expression -> expression PLUS expression .)
     MINUS           reduce using rule 14 (expression -> expression PLUS expression .)
@@ -613,27 +689,27 @@ state 28
     MARKER          reduce using rule 14 (expression -> expression PLUS expression .)
     $end            reduce using rule 14 (expression -> expression PLUS expression .)
     ELSE            reduce using rule 14 (expression -> expression PLUS expression .)
-    NEWLINE         reduce using rule 14 (expression -> expression PLUS expression .)
+    DEDENT          reduce using rule 14 (expression -> expression PLUS expression .)
     RP              reduce using rule 14 (expression -> expression PLUS expression .)
     COMMA           reduce using rule 14 (expression -> expression PLUS expression .)
-    TIMES           shift and go to state 18
-    DIVIDE          shift and go to state 19
+    TIMES           shift and go to state 19
+    DIVIDE          shift and go to state 20
 
   ! TIMES           [ reduce using rule 14 (expression -> expression PLUS expression .) ]
   ! DIVIDE          [ reduce using rule 14 (expression -> expression PLUS expression .) ]
-  ! PLUS            [ shift and go to state 16 ]
-  ! MINUS           [ shift and go to state 17 ]
-  ! COMP_OP         [ shift and go to state 20 ]
+  ! PLUS            [ shift and go to state 17 ]
+  ! MINUS           [ shift and go to state 18 ]
+  ! COMP_OP         [ shift and go to state 21 ]
 
 
-state 29
+state 31
 
     (15) expression -> expression MINUS expression .
     (14) expression -> expression . PLUS expression
     (15) expression -> expression . MINUS expression
     (16) expression -> expression . TIMES expression
     (17) expression -> expression . DIVIDE expression
-    (24) comparison -> expression . COMP_OP expression
+    (25) comparison -> expression . COMP_OP expression
 
     PLUS            reduce using rule 15 (expression -> expression MINUS expression .)
     MINUS           reduce using rule 15 (expression -> expression MINUS expression .)
@@ -645,27 +721,27 @@ state 29
     MARKER          reduce using rule 15 (expression -> expression MINUS expression .)
     $end            reduce using rule 15 (expression -> expression MINUS expression .)
     ELSE            reduce using rule 15 (expression -> expression MINUS expression .)
-    NEWLINE         reduce using rule 15 (expression -> expression MINUS expression .)
+    DEDENT          reduce using rule 15 (expression -> expression MINUS expression .)
     RP              reduce using rule 15 (expression -> expression MINUS expression .)
     COMMA           reduce using rule 15 (expression -> expression MINUS expression .)
-    TIMES           shift and go to state 18
-    DIVIDE          shift and go to state 19
+    TIMES           shift and go to state 19
+    DIVIDE          shift and go to state 20
 
   ! TIMES           [ reduce using rule 15 (expression -> expression MINUS expression .) ]
   ! DIVIDE          [ reduce using rule 15 (expression -> expression MINUS expression .) ]
-  ! PLUS            [ shift and go to state 16 ]
-  ! MINUS           [ shift and go to state 17 ]
-  ! COMP_OP         [ shift and go to state 20 ]
+  ! PLUS            [ shift and go to state 17 ]
+  ! MINUS           [ shift and go to state 18 ]
+  ! COMP_OP         [ shift and go to state 21 ]
 
 
-state 30
+state 32
 
     (16) expression -> expression TIMES expression .
     (14) expression -> expression . PLUS expression
     (15) expression -> expression . MINUS expression
     (16) expression -> expression . TIMES expression
     (17) expression -> expression . DIVIDE expression
-    (24) comparison -> expression . COMP_OP expression
+    (25) comparison -> expression . COMP_OP expression
 
     PLUS            reduce using rule 16 (expression -> expression TIMES expression .)
     MINUS           reduce using rule 16 (expression -> expression TIMES expression .)
@@ -679,25 +755,25 @@ state 30
     MARKER          reduce using rule 16 (expression -> expression TIMES expression .)
     $end            reduce using rule 16 (expression -> expression TIMES expression .)
     ELSE            reduce using rule 16 (expression -> expression TIMES expression .)
-    NEWLINE         reduce using rule 16 (expression -> expression TIMES expression .)
+    DEDENT          reduce using rule 16 (expression -> expression TIMES expression .)
     RP              reduce using rule 16 (expression -> expression TIMES expression .)
     COMMA           reduce using rule 16 (expression -> expression TIMES expression .)
 
-  ! PLUS            [ shift and go to state 16 ]
-  ! MINUS           [ shift and go to state 17 ]
-  ! TIMES           [ shift and go to state 18 ]
-  ! DIVIDE          [ shift and go to state 19 ]
-  ! COMP_OP         [ shift and go to state 20 ]
+  ! PLUS            [ shift and go to state 17 ]
+  ! MINUS           [ shift and go to state 18 ]
+  ! TIMES           [ shift and go to state 19 ]
+  ! DIVIDE          [ shift and go to state 20 ]
+  ! COMP_OP         [ shift and go to state 21 ]
 
 
-state 31
+state 33
 
     (17) expression -> expression DIVIDE expression .
     (14) expression -> expression . PLUS expression
     (15) expression -> expression . MINUS expression
     (16) expression -> expression . TIMES expression
     (17) expression -> expression . DIVIDE expression
-    (24) comparison -> expression . COMP_OP expression
+    (25) comparison -> expression . COMP_OP expression
 
     PLUS            reduce using rule 17 (expression -> expression DIVIDE expression .)
     MINUS           reduce using rule 17 (expression -> expression DIVIDE expression .)
@@ -711,82 +787,84 @@ state 31
     MARKER          reduce using rule 17 (expression -> expression DIVIDE expression .)
     $end            reduce using rule 17 (expression -> expression DIVIDE expression .)
     ELSE            reduce using rule 17 (expression -> expression DIVIDE expression .)
-    NEWLINE         reduce using rule 17 (expression -> expression DIVIDE expression .)
+    DEDENT          reduce using rule 17 (expression -> expression DIVIDE expression .)
     RP              reduce using rule 17 (expression -> expression DIVIDE expression .)
     COMMA           reduce using rule 17 (expression -> expression DIVIDE expression .)
 
-  ! PLUS            [ shift and go to state 16 ]
-  ! MINUS           [ shift and go to state 17 ]
-  ! TIMES           [ shift and go to state 18 ]
-  ! DIVIDE          [ shift and go to state 19 ]
-  ! COMP_OP         [ shift and go to state 20 ]
+  ! PLUS            [ shift and go to state 17 ]
+  ! MINUS           [ shift and go to state 18 ]
+  ! TIMES           [ shift and go to state 19 ]
+  ! DIVIDE          [ shift and go to state 20 ]
+  ! COMP_OP         [ shift and go to state 21 ]
 
 
-state 32
+state 34
 
-    (24) comparison -> expression COMP_OP expression .
+    (25) comparison -> expression COMP_OP expression .
     (14) expression -> expression . PLUS expression
     (15) expression -> expression . MINUS expression
     (16) expression -> expression . TIMES expression
     (17) expression -> expression . DIVIDE expression
-    (24) comparison -> expression . COMP_OP expression
+    (25) comparison -> expression . COMP_OP expression
 
-    COMP_OP         reduce using rule 24 (comparison -> expression COMP_OP expression .)
-    LET             reduce using rule 24 (comparison -> expression COMP_OP expression .)
-    IF              reduce using rule 24 (comparison -> expression COMP_OP expression .)
-    RETURN          reduce using rule 24 (comparison -> expression COMP_OP expression .)
-    GOTO            reduce using rule 24 (comparison -> expression COMP_OP expression .)
-    MARKER          reduce using rule 24 (comparison -> expression COMP_OP expression .)
-    $end            reduce using rule 24 (comparison -> expression COMP_OP expression .)
-    COMMA           reduce using rule 24 (comparison -> expression COMP_OP expression .)
-    ELSE            reduce using rule 24 (comparison -> expression COMP_OP expression .)
-    NEWLINE         reduce using rule 24 (comparison -> expression COMP_OP expression .)
-    RP              reduce using rule 24 (comparison -> expression COMP_OP expression .)
-    PLUS            shift and go to state 16
-    MINUS           shift and go to state 17
-    TIMES           shift and go to state 18
-    DIVIDE          shift and go to state 19
+    COMP_OP         reduce using rule 25 (comparison -> expression COMP_OP expression .)
+    LET             reduce using rule 25 (comparison -> expression COMP_OP expression .)
+    IF              reduce using rule 25 (comparison -> expression COMP_OP expression .)
+    RETURN          reduce using rule 25 (comparison -> expression COMP_OP expression .)
+    GOTO            reduce using rule 25 (comparison -> expression COMP_OP expression .)
+    MARKER          reduce using rule 25 (comparison -> expression COMP_OP expression .)
+    $end            reduce using rule 25 (comparison -> expression COMP_OP expression .)
+    COMMA           reduce using rule 25 (comparison -> expression COMP_OP expression .)
+    ELSE            reduce using rule 25 (comparison -> expression COMP_OP expression .)
+    DEDENT          reduce using rule 25 (comparison -> expression COMP_OP expression .)
+    RP              reduce using rule 25 (comparison -> expression COMP_OP expression .)
+    PLUS            shift and go to state 17
+    MINUS           shift and go to state 18
+    TIMES           shift and go to state 19
+    DIVIDE          shift and go to state 20
 
-  ! PLUS            [ reduce using rule 24 (comparison -> expression COMP_OP expression .) ]
-  ! MINUS           [ reduce using rule 24 (comparison -> expression COMP_OP expression .) ]
-  ! TIMES           [ reduce using rule 24 (comparison -> expression COMP_OP expression .) ]
-  ! DIVIDE          [ reduce using rule 24 (comparison -> expression COMP_OP expression .) ]
-  ! COMP_OP         [ shift and go to state 20 ]
+  ! PLUS            [ reduce using rule 25 (comparison -> expression COMP_OP expression .) ]
+  ! MINUS           [ reduce using rule 25 (comparison -> expression COMP_OP expression .) ]
+  ! TIMES           [ reduce using rule 25 (comparison -> expression COMP_OP expression .) ]
+  ! DIVIDE          [ reduce using rule 25 (comparison -> expression COMP_OP expression .) ]
+  ! COMP_OP         [ shift and go to state 21 ]
 
 
-state 33
+state 35
 
     (8) statement -> LET MNEUMONIC BE . expression
     (14) expression -> . expression PLUS expression
     (15) expression -> . expression MINUS expression
     (16) expression -> . expression TIMES expression
     (17) expression -> . expression DIVIDE expression
-    (18) expression -> . NUMBER
-    (19) expression -> . STRING
-    (20) expression -> . MNEUMONIC
-    (21) expression -> . BOOL
-    (22) expression -> . LP expression RP
-    (23) expression -> . comparison
-    (24) comparison -> . expression COMP_OP expression
+    (18) expression -> . MINUS expression
+    (19) expression -> . NUMBER
+    (20) expression -> . STRING
+    (21) expression -> . MNEUMONIC
+    (22) expression -> . BOOL
+    (23) expression -> . LP expression RP
+    (24) expression -> . comparison
+    (25) comparison -> . expression COMP_OP expression
 
+    MINUS           shift and go to state 12
     NUMBER          shift and go to state 10
-    STRING          shift and go to state 12
+    STRING          shift and go to state 13
     MNEUMONIC       shift and go to state 5
-    BOOL            shift and go to state 13
-    LP              shift and go to state 14
+    BOOL            shift and go to state 14
+    LP              shift and go to state 15
 
-    expression                     shift and go to state 37
+    expression                     shift and go to state 39
     comparison                     shift and go to state 7
 
-state 34
+state 36
 
     (9) statement -> IF comparison COMMA . THEN block
     (10) statement -> IF comparison COMMA . THEN block ELSE block
 
-    THEN            shift and go to state 38
+    THEN            shift and go to state 40
 
 
-state 35
+state 37
 
     (12) statement -> GOTO INSTRUCTION NUMBER .
 
@@ -797,38 +875,38 @@ state 35
     MARKER          reduce using rule 12 (statement -> GOTO INSTRUCTION NUMBER .)
     $end            reduce using rule 12 (statement -> GOTO INSTRUCTION NUMBER .)
     ELSE            reduce using rule 12 (statement -> GOTO INSTRUCTION NUMBER .)
-    NEWLINE         reduce using rule 12 (statement -> GOTO INSTRUCTION NUMBER .)
+    DEDENT          reduce using rule 12 (statement -> GOTO INSTRUCTION NUMBER .)
 
 
-state 36
+state 38
 
-    (22) expression -> LP expression RP .
+    (23) expression -> LP expression RP .
 
-    PLUS            reduce using rule 22 (expression -> LP expression RP .)
-    MINUS           reduce using rule 22 (expression -> LP expression RP .)
-    TIMES           reduce using rule 22 (expression -> LP expression RP .)
-    DIVIDE          reduce using rule 22 (expression -> LP expression RP .)
-    COMP_OP         reduce using rule 22 (expression -> LP expression RP .)
-    LET             reduce using rule 22 (expression -> LP expression RP .)
-    IF              reduce using rule 22 (expression -> LP expression RP .)
-    RETURN          reduce using rule 22 (expression -> LP expression RP .)
-    GOTO            reduce using rule 22 (expression -> LP expression RP .)
-    MARKER          reduce using rule 22 (expression -> LP expression RP .)
-    $end            reduce using rule 22 (expression -> LP expression RP .)
-    ELSE            reduce using rule 22 (expression -> LP expression RP .)
-    NEWLINE         reduce using rule 22 (expression -> LP expression RP .)
-    RP              reduce using rule 22 (expression -> LP expression RP .)
-    COMMA           reduce using rule 22 (expression -> LP expression RP .)
+    PLUS            reduce using rule 23 (expression -> LP expression RP .)
+    MINUS           reduce using rule 23 (expression -> LP expression RP .)
+    TIMES           reduce using rule 23 (expression -> LP expression RP .)
+    DIVIDE          reduce using rule 23 (expression -> LP expression RP .)
+    COMP_OP         reduce using rule 23 (expression -> LP expression RP .)
+    LET             reduce using rule 23 (expression -> LP expression RP .)
+    IF              reduce using rule 23 (expression -> LP expression RP .)
+    RETURN          reduce using rule 23 (expression -> LP expression RP .)
+    GOTO            reduce using rule 23 (expression -> LP expression RP .)
+    MARKER          reduce using rule 23 (expression -> LP expression RP .)
+    $end            reduce using rule 23 (expression -> LP expression RP .)
+    ELSE            reduce using rule 23 (expression -> LP expression RP .)
+    DEDENT          reduce using rule 23 (expression -> LP expression RP .)
+    RP              reduce using rule 23 (expression -> LP expression RP .)
+    COMMA           reduce using rule 23 (expression -> LP expression RP .)
 
 
-state 37
+state 39
 
     (8) statement -> LET MNEUMONIC BE expression .
     (14) expression -> expression . PLUS expression
     (15) expression -> expression . MINUS expression
     (16) expression -> expression . TIMES expression
     (17) expression -> expression . DIVIDE expression
-    (24) comparison -> expression . COMP_OP expression
+    (25) comparison -> expression . COMP_OP expression
 
     LET             reduce using rule 8 (statement -> LET MNEUMONIC BE expression .)
     IF              reduce using rule 8 (statement -> LET MNEUMONIC BE expression .)
@@ -837,20 +915,20 @@ state 37
     MARKER          reduce using rule 8 (statement -> LET MNEUMONIC BE expression .)
     $end            reduce using rule 8 (statement -> LET MNEUMONIC BE expression .)
     ELSE            reduce using rule 8 (statement -> LET MNEUMONIC BE expression .)
-    NEWLINE         reduce using rule 8 (statement -> LET MNEUMONIC BE expression .)
-    PLUS            shift and go to state 16
-    MINUS           shift and go to state 17
-    TIMES           shift and go to state 18
-    DIVIDE          shift and go to state 19
-    COMP_OP         shift and go to state 20
+    DEDENT          reduce using rule 8 (statement -> LET MNEUMONIC BE expression .)
+    PLUS            shift and go to state 17
+    MINUS           shift and go to state 18
+    TIMES           shift and go to state 19
+    DIVIDE          shift and go to state 20
+    COMP_OP         shift and go to state 21
 
 
-state 38
+state 40
 
     (9) statement -> IF comparison COMMA THEN . block
     (10) statement -> IF comparison COMMA THEN . block ELSE block
     (6) block -> . statement
-    (7) block -> . NEWLINE INDENT statements NEWLINE DEDENT
+    (7) block -> . INDENT statements DEDENT
     (8) statement -> . LET MNEUMONIC BE expression
     (9) statement -> . IF comparison COMMA THEN block
     (10) statement -> . IF comparison COMMA THEN block ELSE block
@@ -858,17 +936,17 @@ state 38
     (12) statement -> . GOTO INSTRUCTION NUMBER
     (13) statement -> . MARKER NUMBER
 
-    NEWLINE         shift and go to state 41
+    INDENT          shift and go to state 43
     LET             shift and go to state 4
     IF              shift and go to state 6
     RETURN          shift and go to state 8
     GOTO            shift and go to state 9
     MARKER          shift and go to state 11
 
-    block                          shift and go to state 39
-    statement                      shift and go to state 40
+    block                          shift and go to state 41
+    statement                      shift and go to state 42
 
-state 39
+state 41
 
     (9) statement -> IF comparison COMMA THEN block .
     (10) statement -> IF comparison COMMA THEN block . ELSE block
@@ -879,13 +957,13 @@ state 39
     GOTO            reduce using rule 9 (statement -> IF comparison COMMA THEN block .)
     MARKER          reduce using rule 9 (statement -> IF comparison COMMA THEN block .)
     $end            reduce using rule 9 (statement -> IF comparison COMMA THEN block .)
-    NEWLINE         reduce using rule 9 (statement -> IF comparison COMMA THEN block .)
-    ELSE            shift and go to state 42
+    DEDENT          reduce using rule 9 (statement -> IF comparison COMMA THEN block .)
+    ELSE            shift and go to state 44
 
   ! ELSE            [ reduce using rule 9 (statement -> IF comparison COMMA THEN block .) ]
 
 
-state 40
+state 42
 
     (6) block -> statement .
 
@@ -896,41 +974,12 @@ state 40
     GOTO            reduce using rule 6 (block -> statement .)
     MARKER          reduce using rule 6 (block -> statement .)
     $end            reduce using rule 6 (block -> statement .)
-    NEWLINE         reduce using rule 6 (block -> statement .)
+    DEDENT          reduce using rule 6 (block -> statement .)
 
-
-state 41
-
-    (7) block -> NEWLINE . INDENT statements NEWLINE DEDENT
-
-    INDENT          shift and go to state 43
-
-
-state 42
-
-    (10) statement -> IF comparison COMMA THEN block ELSE . block
-    (6) block -> . statement
-    (7) block -> . NEWLINE INDENT statements NEWLINE DEDENT
-    (8) statement -> . LET MNEUMONIC BE expression
-    (9) statement -> . IF comparison COMMA THEN block
-    (10) statement -> . IF comparison COMMA THEN block ELSE block
-    (11) statement -> . RETURN expression
-    (12) statement -> . GOTO INSTRUCTION NUMBER
-    (13) statement -> . MARKER NUMBER
-
-    NEWLINE         shift and go to state 41
-    LET             shift and go to state 4
-    IF              shift and go to state 6
-    RETURN          shift and go to state 8
-    GOTO            shift and go to state 9
-    MARKER          shift and go to state 11
-
-    block                          shift and go to state 44
-    statement                      shift and go to state 40
 
 state 43
 
-    (7) block -> NEWLINE INDENT . statements NEWLINE DEDENT
+    (7) block -> INDENT . statements DEDENT
     (4) statements -> . statement
     (5) statements -> . statement statements
     (8) statement -> . LET MNEUMONIC BE expression
@@ -951,23 +1000,31 @@ state 43
 
 state 44
 
-    (10) statement -> IF comparison COMMA THEN block ELSE block .
+    (10) statement -> IF comparison COMMA THEN block ELSE . block
+    (6) block -> . statement
+    (7) block -> . INDENT statements DEDENT
+    (8) statement -> . LET MNEUMONIC BE expression
+    (9) statement -> . IF comparison COMMA THEN block
+    (10) statement -> . IF comparison COMMA THEN block ELSE block
+    (11) statement -> . RETURN expression
+    (12) statement -> . GOTO INSTRUCTION NUMBER
+    (13) statement -> . MARKER NUMBER
 
-    LET             reduce using rule 10 (statement -> IF comparison COMMA THEN block ELSE block .)
-    IF              reduce using rule 10 (statement -> IF comparison COMMA THEN block ELSE block .)
-    RETURN          reduce using rule 10 (statement -> IF comparison COMMA THEN block ELSE block .)
-    GOTO            reduce using rule 10 (statement -> IF comparison COMMA THEN block ELSE block .)
-    MARKER          reduce using rule 10 (statement -> IF comparison COMMA THEN block ELSE block .)
-    $end            reduce using rule 10 (statement -> IF comparison COMMA THEN block ELSE block .)
-    ELSE            reduce using rule 10 (statement -> IF comparison COMMA THEN block ELSE block .)
-    NEWLINE         reduce using rule 10 (statement -> IF comparison COMMA THEN block ELSE block .)
+    INDENT          shift and go to state 43
+    LET             shift and go to state 4
+    IF              shift and go to state 6
+    RETURN          shift and go to state 8
+    GOTO            shift and go to state 9
+    MARKER          shift and go to state 11
 
+    block                          shift and go to state 47
+    statement                      shift and go to state 42
 
 state 45
 
-    (7) block -> NEWLINE INDENT statements . NEWLINE DEDENT
+    (7) block -> INDENT statements . DEDENT
 
-    NEWLINE         shift and go to state 47
+    DEDENT          shift and go to state 48
 
 
 state 46
@@ -983,7 +1040,7 @@ state 46
     (12) statement -> . GOTO INSTRUCTION NUMBER
     (13) statement -> . MARKER NUMBER
 
-    NEWLINE         reduce using rule 4 (statements -> statement .)
+    DEDENT          reduce using rule 4 (statements -> statement .)
     LET             shift and go to state 4
     IF              shift and go to state 6
     RETURN          shift and go to state 8
@@ -991,32 +1048,39 @@ state 46
     MARKER          shift and go to state 11
 
     statement                      shift and go to state 46
-    statements                     shift and go to state 48
+    statements                     shift and go to state 49
 
 state 47
 
-    (7) block -> NEWLINE INDENT statements NEWLINE . DEDENT
+    (10) statement -> IF comparison COMMA THEN block ELSE block .
 
-    DEDENT          shift and go to state 49
+    LET             reduce using rule 10 (statement -> IF comparison COMMA THEN block ELSE block .)
+    IF              reduce using rule 10 (statement -> IF comparison COMMA THEN block ELSE block .)
+    RETURN          reduce using rule 10 (statement -> IF comparison COMMA THEN block ELSE block .)
+    GOTO            reduce using rule 10 (statement -> IF comparison COMMA THEN block ELSE block .)
+    MARKER          reduce using rule 10 (statement -> IF comparison COMMA THEN block ELSE block .)
+    $end            reduce using rule 10 (statement -> IF comparison COMMA THEN block ELSE block .)
+    ELSE            reduce using rule 10 (statement -> IF comparison COMMA THEN block ELSE block .)
+    DEDENT          reduce using rule 10 (statement -> IF comparison COMMA THEN block ELSE block .)
 
 
 state 48
 
-    (5) statements -> statement statements .
+    (7) block -> INDENT statements DEDENT .
 
-    NEWLINE         reduce using rule 5 (statements -> statement statements .)
+    ELSE            reduce using rule 7 (block -> INDENT statements DEDENT .)
+    LET             reduce using rule 7 (block -> INDENT statements DEDENT .)
+    IF              reduce using rule 7 (block -> INDENT statements DEDENT .)
+    RETURN          reduce using rule 7 (block -> INDENT statements DEDENT .)
+    GOTO            reduce using rule 7 (block -> INDENT statements DEDENT .)
+    MARKER          reduce using rule 7 (block -> INDENT statements DEDENT .)
+    $end            reduce using rule 7 (block -> INDENT statements DEDENT .)
+    DEDENT          reduce using rule 7 (block -> INDENT statements DEDENT .)
 
 
 state 49
 
-    (7) block -> NEWLINE INDENT statements NEWLINE DEDENT .
+    (5) statements -> statement statements .
 
-    ELSE            reduce using rule 7 (block -> NEWLINE INDENT statements NEWLINE DEDENT .)
-    LET             reduce using rule 7 (block -> NEWLINE INDENT statements NEWLINE DEDENT .)
-    IF              reduce using rule 7 (block -> NEWLINE INDENT statements NEWLINE DEDENT .)
-    RETURN          reduce using rule 7 (block -> NEWLINE INDENT statements NEWLINE DEDENT .)
-    GOTO            reduce using rule 7 (block -> NEWLINE INDENT statements NEWLINE DEDENT .)
-    MARKER          reduce using rule 7 (block -> NEWLINE INDENT statements NEWLINE DEDENT .)
-    $end            reduce using rule 7 (block -> NEWLINE INDENT statements NEWLINE DEDENT .)
-    NEWLINE         reduce using rule 7 (block -> NEWLINE INDENT statements NEWLINE DEDENT .)
+    DEDENT          reduce using rule 5 (statements -> statement statements .)
 

@@ -69,7 +69,10 @@ def start_repl(first=True, filename=None):
             while True:
                 # Determine the prompt based on indent level
                 #prompt = f"--[ {'  ' * indent_level}"
-                prompt = f"--[ "
+                if inConditional:
+                    prompt = f"... "
+                else:
+                    prompt = f"--[ "
                 
                 # Get user input
                 try:
@@ -77,15 +80,11 @@ def start_repl(first=True, filename=None):
 
                 except EOFError:
                     # Allow Ctrl+D to submit input
-                    print("\nExiting SudoLang.")
+                    print("\n\nExiting SudoLang.")
                     exit()
                 
                 # Empty line signals end of input
                 if line.strip() == "":
-                    break
-
-                if not line.startswith(('else', 'if', ' ')) and inConditional:
-                    process_input(line)
                     break
 
                 if line.lower() == 'exit':
@@ -93,7 +92,7 @@ def start_repl(first=True, filename=None):
                     exit()
                 
                 # Check for lines that increase indent level
-                if line.strip().endswith('then'):
+                if 'then' in line.strip():
                     indent_level += 1
                     inConditional = True
 
