@@ -79,7 +79,7 @@ answer
 
 ## 4. Return Statement
 
-Return statements are used to simply return the value of a statement or expression.
+Return statements are used to simply return the value of a statement or expression and terminate the evalutation.
 
 
 Syntax -> `return <mneumonic`
@@ -93,6 +93,8 @@ if wrong + wrong == right, then
     return True
 else
     return False
+
+return "this will never run"
 ```
 
 ## 5. Goto Statements
