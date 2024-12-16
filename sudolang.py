@@ -1,6 +1,5 @@
 import ply.lex as lex
 import ply.yacc as yacc
-import decimal
 from SudoLangADT import *
 
 #################### BEGIN Lexer/Scanner Specification ####################
@@ -30,7 +29,7 @@ tokens = [
     # Punctuations
     'COMMA', 'LP', 'RP', 'MARKER',
         
-    'INDENT', 'DEDENT', 'NEWLINE', 'ENDMARKER', 'WS'] + list(set(reserved.values()))
+    'INDENT', 'DEDENT', 'NEWLINE', 'WS'] + list(set(reserved.values()))
 
 t_LET = r'let'
 t_BE = r'be'
@@ -56,7 +55,7 @@ t_COMMA = r','
 
 t_ignore_COMMENT = r'\#[^\n]*'
 
-#t_ignore = '\t '
+t_ignore = '\n'
 
 def t_MNEUMONIC(t):
     r'[a-zA-Z_][a-zA-Z0-9_]*'
@@ -64,8 +63,11 @@ def t_MNEUMONIC(t):
     return t
 
 def t_NUMBER(t):
-    r"""(\d+(\.\d*)?|\.\d+)([eE][-+]? \d+)?"""
-    t.value = decimal.Decimal(t.value)
+    r'\d+\.\d+|\d+'  # Match both floating-point and integer numbers
+    if '.' in t.value:
+        t.value = float(t.value)  # Convert to float if it contains a decimal point
+    else:
+        t.value = int(t.value)  # Otherwise, convert to integer
     return t
 
 # Whitespace
@@ -177,7 +179,6 @@ def indentation_filter(tokens):
     token = None
     depth = 0
     prev_was_ws = False
-    global anyWS
     for token in tokens:
         # if 1:
         # print "Process", token,
@@ -260,18 +261,18 @@ def filter(lexer, add_endmarker=False):
     for token in indentation_filter(tokens):
         yield token
 
-    if add_endmarker:
-        lineno = 1
-        if token is not None:
-            lineno = token.lineno
-        yield _new_token("ENDMARKER", lineno, token.lexpos if token else 0)
+    #if add_endmarker:
+    #    lineno = 1
+    #    if token is not None:
+    #        lineno = token.lineno
+    #    yield _new_token("ENDMARKER", lineno, token.lexpos if token else 0)
 
 # Combine Ply and my filters into a new lexer
 
 
 class IndentLexer(object):
 
-    def __init__(self, debug=1, optimize=0, lextab='lextab', reflags=0):
+    def __init__(self, debug=0, optimize=0, lextab='lextab', reflags=0):
         self.lexer = lex.lex(debug=debug, optimize=optimize,
                              lextab=lextab, reflags=reflags)
         self.token_stream = None
@@ -295,22 +296,22 @@ class IndentLexer(object):
 
 lexer = IndentLexer()
 
-sample_input = """
-let wrong be 3
-let right be 7
+#sample_input = """
+#let wrong be 3
+#let right be 7
+#
+#if wrong + wrong == right, then
+#    return "Yes"
+#else 
+#    return "No"
+#"""
+#lexer.input(sample_input)
+#
+## Process tokens
+#for token in lexer.token_stream:
+#    print(token)
 
-if wrong + wrong == right, then
-    return "Yes"
-else 
-    return "No"
-"""
-lexer.input(sample_input)
-
-# Process tokens
-for token in lexer.token_stream:
-    print(token)
-
-exit()
+#exit()
 
 #################### BEGIN Grammar Pattern-Action Rules ####################
 
@@ -338,22 +339,38 @@ def p_program(p):
         else:
             global_ast = [p[1]]  # Single statement or expression, create a list
     else:
-        global_ast = p[1] + [p[2]]  # Multiple statements, concatenate lists
+        global_ast = p[1] + [p[2]] # Multiple statements, concatenate lists
 
     p[0] = global_ast
 
 # Statements
+def p_statements(p):
+    '''statements : statement
+                  | statement statements'''
+    if len(p) == 2:
+        p[0] = [p[1]]  # Single statement
+    else:
+        p[0] = [p[1]] + p[2]  # Multiple statements
+
+def p_block(p):
+    '''block : statement
+             | NEWLINE INDENT statements NEWLINE DEDENT'''
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = p[3]  # Return the list of statements
+
 def p_statement_let(p):
     '''statement : LET MNEUMONIC BE expression'''
     p[0] = LetStatement(mneumonic=p[2], value=p[4])
 
 def p_statement_if(p):
-    '''statement : IF comparison COMMA THEN INDENT statement DEDENT'''
-    p[0] = IfStatement(expr=p[2], do=p[5])
-
-def p_statement_if_else(p):
-    '''statement : IF comparison COMMA THEN INDENT statement DEDENT ELSE INDENT statement DEDENT'''
-    p[0] = IfElseStatement(expr=p[2], do=p[5], alternate=p[7])
+    '''statement : IF comparison COMMA THEN block
+                 | IF comparison COMMA THEN block ELSE block'''
+    if len(p) == 6:
+        p[0] = IfStatement(expr=p[2], do=p[5])
+    else:
+        p[0] = IfElseStatement(expr=p[2], do=p[5], alternate=p[7])
 
 def p_statement_return(p):
     '''statement : RETURN expression'''
@@ -415,4 +432,18 @@ def p_error(p):
     raise Exception
 
 # Build the parser
-parser = yacc.yacc()
+#parser = yacc.yacc()
+class SudoLangParser:
+
+    def __init__(self, lexer=None):
+        if lexer is None:
+            lexer = IndentLexer()
+        self.lexer = lexer
+        self.parser = yacc.yacc(start="program")
+
+    def parse(self, code):
+        self.lexer.input(code)
+        result = self.parser.parse(lexer=self.lexer, debug=False)
+        return result
+
+parser = SudoLangParser(lexer)

@@ -16,15 +16,14 @@ def concrete2abstract(s: str, parser) -> Program:
     """
     Convert a concrete program (string) into an abstract syntax tree (ADT).
     """
-    pattern = re.compile("[^ \t]+")
-    if pattern.search(s):
-        try:
-            # Use the parser to parse the string
-            parser.parse(s)
-            return sudolang.global_ast  # Assuming the parser stores the result in global_ast
-        except Exception as e:
-            print("Unknown Error occurred (this is normally caused by a syntax error)")
-            raise e
+    try:
+        # Use the parser to parse the string
+        parser.parse(s)
+        return sudolang.global_ast  # Assuming the parser stores the result in global_ast
+    except Exception as e:
+        print("Unknown Error occurred (this is normally caused by a syntax error)")
+        raise e
+
     return None
 
 #def preprocess_file(program):
@@ -45,7 +44,7 @@ def process_input(input_string):
     
     # Parse the input string into the ADT
     ast = concrete2abstract(input_string, sudolang.parser)
-    
+
     if ast:
         # Interpret the program and update variables
         result = eval_program(ast, variables, context) #, markers)
@@ -65,8 +64,7 @@ def start_repl(first=True, filename=None):
             content = file.read()
             #for line in content.splitlines():
             #    preprocess_file(line)
-            for line in content.splitlines():
-                process_input(line)
+            process_input(content)
         # If in -i mode, after the file is executed, show the prompt
         if '-i' in sys.argv:
             print()

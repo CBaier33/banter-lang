@@ -1,0 +1,11 @@
+let a be 2.1
+let b be 2.2
+
+if a < b, then
+  return "Yes"
+else
+  return "No"
+
+if a + b == 7, then
+   if a > b, then return "Would never reach"
+   else return "Should never reach"

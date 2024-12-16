@@ -1,6 +1,8 @@
 import sudolang
 from SudoLangADT import *
 
+returned = False
+
 def eval_program(program, variables=None, context=None):
     if variables is None:
         variables = {}  # Initialize an empty variables (a dictionary) for variable values
@@ -13,6 +15,8 @@ def eval_program(program, variables=None, context=None):
         result = None
         for stmt in program:
             result = eval_statement(stmt, variables, context)
+            if returned:
+                return result
         return result
     else:
         # If it's a single statement, evaluate it
@@ -58,6 +62,10 @@ def eval_if_else_statement(statement, variables, context):
 
 def eval_return_statement(statement, variables, context):
     # Simply return the value of the return expression
+
+    global returned
+    returned = True
+
     return eval_expression(statement.value, variables, context)
 
 def eval_goto_statement(statement, variables, context):

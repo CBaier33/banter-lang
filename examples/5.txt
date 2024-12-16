@@ -1,0 +1,15 @@
+let a be 2
+let b be 5
+
+let res be ""
+
+if a < b, then
+   let res be res + "Hello"
+else
+   let res be res + "wont run"
+
+if a + b == 7, then
+   if a > b, then let res be res + "fail"
+   else let res be res + " World"
+
+return res
