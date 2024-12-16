@@ -1,5 +1,13 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
+Unused terminals:
+
+    DEDENT
+    ENDMARKER
+    INDENT
+    NEWLINE
+    WS
+
 Grammar
 
 Rule 0     S' -> program
@@ -30,16 +38,20 @@ BE                   : 4
 BOOL                 : 17
 COMMA                : 5 6
 COMP_OP              : 20
+DEDENT               : 
 DIVIDE               : 13
 ELSE                 : 6
+ENDMARKER            : 
 GOTO                 : 8
 IF                   : 5 6
+INDENT               : 
 INSTRUCTION          : 8
 LET                  : 4
 LP                   : 18
 MARKER               : 9
 MINUS                : 11
 MNEUMONIC            : 4 16
+NEWLINE              : 
 NUMBER               : 8 9 14
 PLUS                 : 10
 RETURN               : 7
@@ -47,6 +59,7 @@ RP                   : 18
 STRING               : 15
 THEN                 : 5 6
 TIMES                : 12
+WS                   : 
 error                : 
 
 Nonterminals, with rules where they appear
