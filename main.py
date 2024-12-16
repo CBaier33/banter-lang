@@ -9,7 +9,6 @@ from interpreter import eval_program  # Evaluation function
 variables = {}
 context = []
 markers = {}
-
 translated_string = ""
 
 def concrete2abstract(s: str, parser) -> Program:
@@ -23,16 +22,7 @@ def concrete2abstract(s: str, parser) -> Program:
     except Exception as e:
         print("Unknown Error occurred (this is normally caused by a syntax error)")
         raise e
-
     return None
-
-#def preprocess_file(program):
-#
-#    if program.startswith("@"):
-#        markers["@1"] == len(context)+1
-#
-#    else:
-#        context.append(program)
 
 def process_input(input_string):
     """
@@ -47,7 +37,7 @@ def process_input(input_string):
 
     if ast:
         # Interpret the program and update variables
-        result = eval_program(ast, variables, context) #, markers)
+        result = eval_program(ast, variables, context)
         if result == False or result:
             print(result)
     else:
@@ -62,29 +52,67 @@ def start_repl(first=True, filename=None):
     if filename:
         with open(filename, 'r') as file:
             content = file.read()
-            #for line in content.splitlines():
-            #    preprocess_file(line)
             process_input(content)
         # If in -i mode, after the file is executed, show the prompt
         if '-i' in sys.argv:
             print()
             start_repl(first=False)
         return  # Exit after processing the file if -i isn't set
-
+    
     while True:
         try:
-            # Get user input
-            input_string = input(f"--[ ")
+            # Collect multi-line input
+            input_lines = []
+            indent_level = 0
+            inConditional = False
             
-            # Exit condition
-            if input_string.lower() == 'exit':
-                print("Exiting SudoLang.")
-                break
+            while True:
+                # Determine the prompt based on indent level
+                #prompt = f"--[ {'  ' * indent_level}"
+                prompt = f"--[ "
+                
+                # Get user input
+                try:
+                    line = input(prompt)
 
-            # Skip blank lines in REPL
-            if input_string.strip() == "":
-                continue
+                except EOFError:
+                    # Allow Ctrl+D to submit input
+                    print("\nExiting SudoLang.")
+                    exit()
+                
+                # Empty line signals end of input
+                if line.strip() == "":
+                    break
+
+                if not line.startswith(('else', 'if', ' ')) and inConditional:
+                    process_input(line)
+                    break
+
+                if line.lower() == 'exit':
+                    print("\nExiting SudoLang.")
+                    exit()
+                
+                # Check for lines that increase indent level
+                if line.strip().endswith('then'):
+                    indent_level += 1
+                    inConditional = True
+
+                elif not inConditional:
+                    process_input(line)
+                    break
+
+                
+                # Check for lines that decrease indent level
+                # Note: you might want to expand this list based on your language syntax
+#                if line.strip().startswith(('else')):
+#                    indent_level = max(0, indent_level - 1)
+                
+                input_lines.append(line)
             
+            # Join the lines
+            input_string = '\n'.join(input_lines)
+            
+            # Process the input
             process_input(input_string)
         
         except KeyboardInterrupt:
