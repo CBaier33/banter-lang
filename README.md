@@ -18,7 +18,7 @@ If you're already familar with programming, you might find Sudo mildly infuriati
 
 ## 1. Let Statements
 
-The Let Statement allows you to assign the output of an expression to a particular mneumonic representation of the expression. 
+The Let Statement allows you to assign the output of an expression to a particular mneumonic representation. 
 
 
 Syntax -> `let <mneumonic> be <expression>`
@@ -30,7 +30,8 @@ let x be 5
 let interest_rate be 0.14
 let x be x + 1
 let ratio be (x + 5 / interest_rate)
-ratio
+
+return ratio
 ```
 
 ## 2. If Statements
@@ -38,7 +39,7 @@ ratio
 The If Statement allows you to conditionally execute a line of code. The body of the statement will only execute if the expression evaluates to True.
 
 
-Syntax -> `if <comparison expression>, then <statement(s)`
+Syntax -> `if <comparison expression>, then <statement(s)>`
 
 Examples:
 
@@ -50,7 +51,7 @@ if a + 6 > 7, then
 
 if a - 6 <= 7, then let limit be 2.17
 
-limit
+return limit
 ```
 
 ## 3. If-Else Statements
@@ -72,8 +73,7 @@ if limit != "not too far", then
 else
     let answer be score - 75
 
-score
-answer
+return score
 ```
 
 
@@ -82,7 +82,7 @@ answer
 Return statements are used to simply return the value of a statement or expression and terminate the evalutation.
 
 
-Syntax -> `return <mneumonic`
+Syntax -> `return <mneumonic>`
 
 Examples:
 ```
