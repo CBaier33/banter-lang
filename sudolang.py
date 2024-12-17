@@ -28,7 +28,7 @@ tokens = [
     'PLUS', 'MINUS', 'DIVIDE', 'TIMES', 'COMP_OP',
 
     # Punctuations
-    'COMMA', 'LP', 'RP', 'MARKER',
+    'COMMA', 'LP', 'RP', 'MARKER', 'ENDMARKER',
         
     'INDENT', 'DEDENT', 'NEWLINE', 'WS'] + list(set(reserved.values()))
 
@@ -228,6 +228,12 @@ def filter(lexer, add_endmarker=False):
     for token in indentation_filter(tokens):
         yield token
 
+    if add_endmarker:
+        lineno = 1
+        if token is not None:
+            lineno = token.lineno
+        yield _new_token("ENDMARKER", lineno, 0)
+
 class IndentLexer(object):
 
     def __init__(self, debug=0, optimize=0, lextab='lextab', reflags=0):
@@ -248,28 +254,28 @@ class IndentLexer(object):
 
 lexer = IndentLexer()
 
-sample = '''
-let a be 3
-if 1 != 1, then
-   let a be 1
-   let b be 2
-
-return a
-'''
-
-lexer.input(sample)
-
-for tok in lexer.token_stream:
-    print(tok)
-
-exit()
+#sample = '''
+#let a be 3
+#if 1 != 1, then
+#   let a be 1
+#   let b be 2
+#else
+#   return a + 1
+#
+#return a
+#'''
+#
+#lexer.input(sample)
+#
+#for tok in lexer.token_stream:
+#    print(tok)
+#print()
+#exit()
 #################### BEGIN Grammar Pattern-Action Rules ####################
 
 
 # Define the precedence of operators
 precedence = (
-    ('nonassoc', 'THEN'),
-    ('nonassoc', 'ELSE'),
     ('left', 'COMP_OP'),
     ('left', 'PLUS', 'MINUS'),
     ('left', 'TIMES', 'DIVIDE'),
@@ -278,10 +284,16 @@ precedence = (
 global_ast = ""
 
 # Grammar rules
+def p_input(p):
+    '''input : program ENDMARKER'''
+    p[0] = p[1]
+
 def p_program(p):
-    '''program : statement
-               | program statement
+    '''program : program NEWLINE
+               | program command
+               | command
                | expression'''  # Add this line to allow expressions as valid programs
+
     global global_ast
     if len(p) == 2:
         if isinstance(p[1], list):  # Multiple statements
@@ -293,22 +305,31 @@ def p_program(p):
 
     p[0] = global_ast
 
-# Statements
-def p_statements(p):
-    '''statements : statement
-                  | statement statements'''
-    if len(p) == 2:
-        p[0] = [p[1]]  # Single statement
-    else:
-        p[0] = [p[1]] + p[2]  # Multiple statements
+def p_command(p):
+    '''command : stmt'''
+    p[0] = p[1]
 
-def p_block(p):
-    '''block : statement
-             | INDENT statements DEDENT'''
+# Statements
+def p_stmt(p):
+    '''stmt : statement NEWLINE
+            | statement'''
+    p[0] = p[1]
+
+def p_stmts(p):
+    '''stmts : stmts stmt
+             | stmt'''
     if len(p) == 2:
         p[0] = p[1]
     else:
-        p[0] = p[3]  # Return the list of statements
+        p[0] = [p[1]] + [p[2]]
+
+def p_block(p):
+    '''block : NEWLINE INDENT stmts DEDENT
+             | stmt'''
+    if len(p) == 2:  # Single-line block
+        p[0] = [p[1]]
+    else:  # Multi-line block
+        p[0] = p[3]
 
 def p_statement_let(p):
     '''statement : LET MNEUMONIC BE expression'''
@@ -390,7 +411,7 @@ class SudoLangParser:
         if lexer is None:
             lexer = IndentLexer()
         self.lexer = lexer
-        self.parser = yacc.yacc(start="program")
+        self.parser = yacc.yacc(start="input")
 
     def parse(self, code):
         self.lexer.input(code)
@@ -398,3 +419,5 @@ class SudoLangParser:
         return result
 
 parser = SudoLangParser(lexer)
+
+#print(parser.parse(sample))
