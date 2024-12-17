@@ -37,6 +37,9 @@ def eval_statement(statement, variables, context):
         return eval_marker_statement(statement, variables, context)
     elif isinstance(statement, (Mneumonic, Operation, Comparison, bool, int, str)): 
         return eval_expression(statement, variables, context)
+    elif isinstance(statement, list): # block
+        for stmt in statement:
+            eval_statement(stmt, variables, context)
     else:
         raise ValueError(f"Unknown statement type: {type(statement)}")
 
