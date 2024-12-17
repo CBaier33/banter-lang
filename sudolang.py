@@ -1,4 +1,5 @@
 import ply.lex as lex
+from ply.lex import LexToken
 import ply.yacc as yacc
 from SudoLangADT import *
 
@@ -29,7 +30,7 @@ tokens = [
     # Punctuations
     'COMMA', 'LP', 'RP', 'MARKER',
         
-    'INDENT', 'DEDENT', 'WS'] + list(set(reserved.values()))
+    'INDENT', 'DEDENT', 'NEWLINE', 'WS'] + list(set(reserved.values()))
 
 t_LET = r'let'
 t_BE = r'be'
@@ -55,8 +56,6 @@ t_COMMA = r','
 
 t_ignore_COMMENT = r'\#[^\n]*'
 
-t_ignore = '\n'
-
 def t_MNEUMONIC(t):
     r'[a-zA-Z_][a-zA-Z0-9_]*'
     t.type = reserved.get(t.value, 'MNEUMONIC')
@@ -75,6 +74,13 @@ def t_WS(t):
     #r' [ ]+ '
     r' +|\t+'
     if t.lexer.at_line_start and t.lexer.paren_count == 0:
+        return t
+
+def t_NEWLINE(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+    t.type = "NEWLINE"
+    if t.lexer.paren_count == 0:
         return t
 
 def t_LP(t):
@@ -111,6 +117,12 @@ def track_tokens_filter(lexer, tokens):
             indent = MAY_INDENT
             token.must_indent = False
 
+        elif token.type == "NEWLINE":
+            at_line_start = True
+            if indent == MAY_INDENT:
+                indent = MUST_INDENT
+            token.must_indent = False
+
         elif token.type == "WS":
             assert token.at_line_start == True
             at_line_start = True
@@ -129,7 +141,7 @@ def track_tokens_filter(lexer, tokens):
         lexer.at_line_start = at_line_start
 
 def _new_token(type, lineno, lexpos):
-    tok = lex.LexToken()
+    tok = LexToken()
     tok.type = type
     tok.value = None
     tok.lineno = lineno
@@ -157,6 +169,15 @@ def indentation_filter(tokens):
             depth += len(token.value)
             prev_was_ws = True
             # WS tokens are never passed to the parser
+            continue
+
+        if token.type == "NEWLINE":
+            depth = 0
+            if prev_was_ws or token.at_line_start:
+                # ignore blank lines
+                continue
+            # pass the other cases on through
+            yield token
             continue
 
         # then it must be a real token (not WS, not NEWLINE)
@@ -227,6 +248,21 @@ class IndentLexer(object):
 
 lexer = IndentLexer()
 
+sample = '''
+let a be 3
+if 1 != 1, then
+   let a be 1
+   let b be 2
+
+return a
+'''
+
+lexer.input(sample)
+
+for tok in lexer.token_stream:
+    print(tok)
+
+exit()
 #################### BEGIN Grammar Pattern-Action Rules ####################
 
 
