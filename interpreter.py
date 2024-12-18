@@ -131,10 +131,12 @@ def eval_return_statement(statement, variables, context):
     return eval_expression(statement.value, variables, context)
 
 def eval_print_statement(statement, variables, context):
-
-    res = eval_expression(statement.value, variables, context)
-
-    print(res)
+    
+    if statement.value is not None:
+        res = eval_expression(statement.value, variables, context)
+        print(res)
+    else:
+        print()
 
 def eval_expression(expression, variables, context):
     if isinstance(expression, (int, float, bool, str)):

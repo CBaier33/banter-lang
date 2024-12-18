@@ -352,8 +352,12 @@ def p_statement_return(p):
     p[0] = ReturnStatement(value=p[2])
 
 def p_statement_print(p):
-    '''statement : PRINT expression'''
-    p[0] = PrintStatement(value=p[2])
+    '''statement : PRINT expression
+                 | PRINT'''
+    if len(p) == 2:
+        p[0] = PrintStatement(value=None)
+    else:
+        p[0] = PrintStatement(value=p[2])
 
 def p_statement_goto(p):
     '''statement : GOTO INSTRUCTION NUMBER'''

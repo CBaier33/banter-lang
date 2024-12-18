@@ -79,7 +79,7 @@ return score
 
 ## 4. Return Statement
 
-Return statements are used to simply return the value of a statement or expression and terminate the evalutation.
+Return statements are used to simply return the value of a statement or expression and terminate the evalutation. Return statements cannot be null, you must return something.
 
 
 Syntax -> `return <mneumonic>`
@@ -94,10 +94,69 @@ if wrong + wrong == right, then
 else
     return False
 
-return "this will never run"
+return "this will never execute"
 ```
 
-## 5. Goto Statements
+## 5. Goto and Marker Statements
 
-TBD
+Goto Statements allow for continuous loops of instructions demarcated by Marker Statements.
+
+Marker Syntax -> `@ <digit>`
+
+Goto Syntax -> `goto instruction <digit>`
+
+Examples:
+
+```
+let n be 5
+let sum be 0
+@ 1
+if n > 0, then
+   let sum be sum + n
+   let n be n - 1
+   goto instruction 1
+return sum
+```
+
+Here's one that's a little more complex:
+```
+let sumEven be 0
+let sumOdd be 0
+let x be 1
+
+goto instruction 1
+
+@3
+print "at instruction 3"
+let sumOdd be sumOdd + 1
+goto instruction 1.2
+
+@2
+print "at instruction 2"
+let sumEven be sumEven + 1
+goto instruction 1.1
+
+@1
+print "at instruction 1"
+if x <= 10, then
+   goto instruction 2
+   @ 1.1
+   print "at instruction 1.1"
+   goto instruction 3
+   @ 1.2
+   print "at instruction 1.2"
+   let x be x + 1
+   goto instruction 1
+else
+   print
+   print sumEven 
+   print sumOdd
+```
+
+## Additional Syntax
+
+As demonstrated in the previous example, variables and expressions can be printed to the screen using 
+`print <expression>`, which simple displays the value without terminating the program. 
+
+Unlike `return`, `print` statements can be null, which print a new line.
 

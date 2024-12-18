@@ -1,0 +1,30 @@
+let n be 17
+let x be 2
+
+let isPrime be True
+
+@1
+if x * x <= n, then
+   
+   # integer division using substraction
+   let temp be 0
+   let quotient be 0
+
+   @1.1
+   if temp + x <= n, then
+      let temp be temp + x
+      let quotient be quotient + 1
+      goto instruction 1.1
+   
+   # check if divisible
+   let divisible be quotient * x
+   if divisible == n, then
+      let isPrime be False
+      goto instruction 2
+
+   else
+      let x be x + 1
+      goto instruction 1
+
+@2
+return isPrime
