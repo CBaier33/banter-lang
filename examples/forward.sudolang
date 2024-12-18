@@ -1,0 +1,32 @@
+let sumEven be 0
+let sumOdd be 0
+let x be 1
+
+goto instruction 1
+
+
+@4
+print "at instruction 4"
+let sumOdd be sumOdd + 1
+goto instruction 5
+
+@2
+print "at instruction 2"
+let sumEven be sumEven + 1
+goto instruction 3
+
+@1
+print "at instruction 1"
+if x < 10, then
+   goto instruction 2
+   @ 3
+   print "at instruction 3"
+   goto instruction 4
+   @5
+   print "at instruction 5"
+   let x be x + 1
+   goto instruction 1
+else
+   print sumEven 
+   print sumOdd
+   return 1

@@ -1,0 +1,19 @@
+let sum be 0
+
+let x be 1
+
+@1
+print "at instruction 1"
+if x <= 10, then
+   goto instruction 2
+   @ 3
+   print "at instruction 3"
+   let x be x + 1
+   goto instruction 1
+else
+   return sum
+
+@2
+print "at instruction 2"
+let sum be sum + 1
+goto instruction 3
