@@ -1,0 +1,8 @@
+let n be 5
+let sum be 0
+@ 1
+if n > 0, then
+   let sum be sum + n
+   let n be n - 1
+   goto instruction 1
+return sum

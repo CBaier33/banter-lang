@@ -5,56 +5,22 @@ returned = False
 
 def eval_program(program, variables=None, context=None):
     if variables is None:
-        variables = {}
+        variables = {}  # Initialize an empty variables (a dictionary) for variable values
 
     if context is None:
         context = []
-        
-    # Add program to context if not already present
-    if not context or context[0] != program:
-        context.insert(0, program)
-        
-    global returned
-    returned = False
-    
-    return eval_statement(program, variables, context)
 
-def find_marker_position(node, label, path=None):
-    """Recursively find the position of a marker in the syntax tree"""
-    if path is None:
-        path = []
-        
-    if isinstance(node, list):
-        for i, stmt in enumerate(node):
-            new_path = path + [i]
-            result = find_marker_position(stmt, label, new_path)
-            if result:
+    if isinstance(program, list):
+        # If the program is a list of statements, evaluate them one by one
+        result = None
+        for stmt in program:
+            result = eval_statement(stmt, variables, context)
+            if returned:
                 return result
-    elif isinstance(node, MarkerStatement) and node.label == label:
-        return path
-    elif isinstance(node, IfStatement):
-        result = find_marker_position(node.do, label, path + ['do'])
-        if result:
-            return result
-    elif isinstance(node, IfElseStatement):
-        result = find_marker_position(node.do, label, path + ['do'])
-        if result:
-            return result
-        if node.alternate:
-            result = find_marker_position(node.alternate, label, path + ['alternate'])
-            if result:
-                return result
-    return None
-
-def get_subtree_at_path(tree, path):
-    """Get the subtree at the specified path"""
-    current = tree
-    for p in path:
-        if isinstance(p, str):  # For 'do' or 'alternate'
-            current = getattr(current, p)
-        else:
-            current = current[p]
-    return current
+        return result
+    else:
+        # If it's a single statement, evaluate it
+        return eval_statement(program, variables, context)
 
 def eval_statement(statement, variables, context):
     if isinstance(statement, LetStatement):
@@ -66,35 +32,14 @@ def eval_statement(statement, variables, context):
     elif isinstance(statement, ReturnStatement):
         return eval_return_statement(statement, variables, context)
     elif isinstance(statement, GotoStatement):
-        # Get the full program from context
-        program = context[0]
-        # Find the marker's position in the tree
-        marker_path = find_marker_position(program, statement.label)
-        if marker_path:
-            # Get the subtree starting at the marker
-            subtree = get_subtree_at_path(program, marker_path)
-            # Continue evaluation from that point
-            if isinstance(subtree, MarkerStatement):
-                # If it's a marker, start from the next statement
-                parent_path = marker_path[:-1]
-                parent = get_subtree_at_path(program, parent_path)
-                if isinstance(parent, list):
-                    remaining = parent[marker_path[-1] + 1:]
-                    return eval_statement(remaining, variables, context)
-            return eval_statement(subtree, variables, context)
-        else:
-            raise ValueError(f"Marker {statement.label} not found")
-    elif isinstance(statement, MarkerStatement):
-        return None
+        return eval_goto_statement(statement, variables, context)
+    elif isinstance(statement, GotoStatement):
+        return eval_marker_statement(statement, variables, context)
     elif isinstance(statement, (Mneumonic, Operation, Comparison, bool, int, str)): 
         return eval_expression(statement, variables, context)
-    elif isinstance(statement, list):
-        result = None
+    elif isinstance(statement, list): # block
         for stmt in statement:
-            result = eval_statement(stmt, variables, context)
-            if returned:
-                break
-        return result
+            eval_statement(stmt, variables, context)
     else:
         raise ValueError(f"Unknown statement type: {type(statement)}")
 
@@ -125,6 +70,12 @@ def eval_return_statement(statement, variables, context):
     returned = True
 
     return eval_expression(statement.value, variables, context)
+
+def eval_goto_statement(statement, variables, context):
+    pass
+
+def eval_marker_statement(statement, variables, context):
+    pass
 
 def eval_expression(expression, variables, context):
     if isinstance(expression, (int, float, bool, str)):

@@ -1,0 +1,10 @@
+let x be 1
+
+@ 1
+if x < 5, then 
+   let x be x + 1 
+   goto instruction 1
+else
+   goto instruction 1.1
+
+return x

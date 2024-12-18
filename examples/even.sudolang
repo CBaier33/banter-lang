@@ -1,0 +1,9 @@
+let x be 0
+let count be 0
+@ 1
+if x < 10, then
+   let x be x + 1
+   if x % 2 == 0, then
+      let count be count + 1
+   goto instruction 1
+return count

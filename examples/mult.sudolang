@@ -1,0 +1,10 @@
+let x be 0
+@ 1
+let x be x + 1
+if x < 3, then
+   goto instruction 1
+@ 2
+let x be x * 2
+if x < 10, then
+   goto instruction 2
+return x
