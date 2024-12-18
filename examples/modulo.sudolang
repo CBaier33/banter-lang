@@ -1,0 +1,15 @@
+let a be 17
+let b be 2
+
+let mod be a
+let divisor be b
+
+if mod < 0, then
+    let divisor be -divisor  # Adjust for negative modulos
+
+@1
+if mod >= divisor, then
+    let mod be mod - divisor
+    goto instruction 1
+else
+    print mod  # This is the remainder

@@ -4,7 +4,6 @@ let x be 1
 
 goto instruction 1
 
-
 @4
 print "at instruction 4"
 let sumOdd be sumOdd + 1
@@ -17,7 +16,7 @@ goto instruction 3
 
 @1
 print "at instruction 1"
-if x < 10, then
+if x <= 10, then
    goto instruction 2
    @ 3
    print "at instruction 3"
@@ -29,4 +28,3 @@ if x < 10, then
 else
    print sumEven 
    print sumOdd
-   return 1
