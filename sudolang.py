@@ -16,7 +16,8 @@ reserved = {
     'goto': 'GOTO',
     'instruction': 'INSTRUCTION',
     'True': 'BOOL',
-    'False': 'BOOL'
+    'False': 'BOOL',
+    'print': 'PRINT'
 }
 
 # Token list
@@ -45,6 +46,8 @@ t_BOOL = r'True|False'
 t_IF = r'if'
 t_ELSE = r'else'
 t_THEN = r'then'
+
+t_PRINT = r'print'
 
 t_PLUS = r'\+'
 t_MINUS = r'-'
@@ -347,6 +350,10 @@ def p_statement_if(p):
 def p_statement_return(p):
     '''statement : RETURN expression'''
     p[0] = ReturnStatement(value=p[2])
+
+def p_statement_print(p):
+    '''statement : PRINT expression'''
+    p[0] = PrintStatement(value=p[2])
 
 def p_statement_goto(p):
     '''statement : GOTO INSTRUCTION NUMBER'''

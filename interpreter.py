@@ -65,6 +65,8 @@ def eval_statement(statement, variables, context):
         return eval_if_else_statement(statement, variables, context)
     elif isinstance(statement, ReturnStatement):
         return eval_return_statement(statement, variables, context)
+    elif isinstance(statement, PrintStatement):
+        return eval_print_statement(statement, variables, context)
     elif isinstance(statement, GotoStatement):
         # Get the full program from context
         program = context[0]
@@ -125,6 +127,12 @@ def eval_return_statement(statement, variables, context):
     returned = True
 
     return eval_expression(statement.value, variables, context)
+
+def eval_print_statement(statement, variables, context):
+
+    res = eval_expression(statement.value, variables, context)
+
+    print(res)
 
 def eval_expression(expression, variables, context):
     if isinstance(expression, (int, float, bool, str)):

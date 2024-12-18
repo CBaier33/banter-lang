@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'inputleftCOMP_OPleftPLUSMINUSleftTIMESDIVIDEBE BOOL COMMA COMP_OP DEDENT DIVIDE ELSE ENDMARKER GOTO IF INDENT INSTRUCTION LET LP MARKER MINUS MNEUMONIC NEWLINE NUMBER PLUS RETURN RP STRING THEN TIMES WSinput : program ENDMARKERprogram : program NEWLINE\n               | program command\n               | command\n               | expressioncommand : stmtstmt : statement NEWLINE\n            | statementstmts : stmts stmt\n             | stmtblock : NEWLINE INDENT stmts DEDENT\n             | stmtstatement : LET MNEUMONIC BE expressionstatement : IF comparison COMMA THEN block\n                 | IF comparison COMMA THEN block ELSE blockstatement : RETURN expressionstatement : GOTO INSTRUCTION NUMBERstatement : MARKER NUMBERexpression : expression PLUS expression\n                  | expression MINUS expression\n                  | expression TIMES expression\n                  | expression DIVIDE expression\n                  | MINUS expressionexpression : NUMBERexpression : STRINGexpression : MNEUMONICexpression : BOOLexpression : LP expression RPexpression : comparisoncomparison : expression COMP_OP expression'
+_lr_signature = 'inputleftCOMP_OPleftPLUSMINUSleftTIMESDIVIDEBE BOOL COMMA COMP_OP DEDENT DIVIDE ELSE ENDMARKER GOTO IF INDENT INSTRUCTION LET LP MARKER MINUS MNEUMONIC NEWLINE NUMBER PLUS PRINT RETURN RP STRING THEN TIMES WSinput : program ENDMARKERprogram : program NEWLINE\n               | program command\n               | command\n               | expressioncommand : stmtstmt : statement NEWLINE\n            | statementstmts : stmts stmt\n             | stmtblock : NEWLINE INDENT stmts DEDENT\n             | stmtstatement : LET MNEUMONIC BE expressionstatement : IF comparison COMMA THEN block\n                 | IF comparison COMMA THEN block ELSE blockstatement : RETURN expressionstatement : PRINT expressionstatement : GOTO INSTRUCTION NUMBERstatement : MARKER NUMBERexpression : expression PLUS expression\n                  | expression MINUS expression\n                  | expression TIMES expression\n                  | expression DIVIDE expression\n                  | MINUS expressionexpression : NUMBERexpression : STRINGexpression : MNEUMONICexpression : BOOLexpression : LP expression RPexpression : comparisoncomparison : expression COMP_OP expression'
     
-_lr_action_items = {'MINUS':([0,4,6,7,8,9,10,11,12,15,16,22,23,24,25,26,27,28,31,32,33,36,37,38,39,40,41,42,45,],[6,23,6,-24,-25,-26,-27,6,-29,6,6,6,6,6,6,6,-23,23,-29,23,23,-19,-20,-21,-22,23,-28,6,23,]),'NUMBER':([0,6,11,15,16,18,22,23,24,25,26,34,42,],[7,7,7,7,7,35,7,7,7,7,7,44,7,]),'STRING':([0,6,11,15,16,22,23,24,25,26,42,],[8,8,8,8,8,8,8,8,8,8,8,]),'MNEUMONIC':([0,6,11,14,15,16,22,23,24,25,26,42,],[9,9,9,30,9,9,9,9,9,9,9,9,]),'BOOL':([0,6,11,15,16,22,23,24,25,26,42,],[10,10,10,10,10,10,10,10,10,10,10,]),'LP':([0,6,11,15,16,22,23,24,25,26,42,],[11,11,11,11,11,11,11,11,11,11,11,]),'LET':([0,2,3,4,5,7,8,9,10,12,13,20,21,27,29,33,35,36,37,38,39,40,41,44,45,46,47,49,50,51,52,53,54,55,56,],[14,14,-4,-5,-6,-24,-25,-26,-27,-29,-8,-2,-3,-23,-7,-16,-18,-19,-20,-21,-22,-30,-28,-17,-13,14,-14,-12,14,14,-15,14,-10,-11,-9,]),'IF':([0,2,3,4,5,7,8,9,10,12,13,20,21,27,29,33,35,36,37,38,39,40,41,44,45,46,47,49,50,51,52,53,54,55,56,],[15,15,-4,-5,-6,-24,-25,-26,-27,-29,-8,-2,-3,-23,-7,-16,-18,-19,-20,-21,-22,-30,-28,-17,-13,15,-14,-12,15,15,-15,15,-10,-11,-9,]),'RETURN':([0,2,3,4,5,7,8,9,10,12,13,20,21,27,29,33,35,36,37,38,39,40,41,44,45,46,47,49,50,51,52,53,54,55,56,],[16,16,-4,-5,-6,-24,-25,-26,-27,-29,-8,-2,-3,-23,-7,-16,-18,-19,-20,-21,-22,-30,-28,-17,-13,16,-14,-12,16,16,-15,16,-10,-11,-9,]),'GOTO':([0,2,3,4,5,7,8,9,10,12,13,20,21,27,29,33,35,36,37,38,39,40,41,44,45,46,47,49,50,51,52,53,54,55,56,],[17,17,-4,-5,-6,-24,-25,-26,-27,-29,-8,-2,-3,-23,-7,-16,-18,-19,-20,-21,-22,-30,-28,-17,-13,17,-14,-12,17,17,-15,17,-10,-11,-9,]),'MARKER':([0,2,3,4,5,7,8,9,10,12,13,20,21,27,29,33,35,36,37,38,39,40,41,44,45,46,47,49,50,51,52,53,54,55,56,],[18,18,-4,-5,-6,-24,-25,-26,-27,-29,-8,-2,-3,-23,-7,-16,-18,-19,-20,-21,-22,-30,-28,-17,-13,18,-14,-12,18,18,-15,18,-10,-11,-9,]),'$end':([1,19,],[0,-1,]),'ENDMARKER':([2,3,4,5,7,8,9,10,12,13,20,21,27,29,33,35,36,37,38,39,40,41,44,45,47,49,52,55,],[19,-4,-5,-6,-24,-25,-26,-27,-29,-8,-2,-3,-23,-7,-16,-18,-19,-20,-21,-22,-30,-28,-17,-13,-14,-12,-15,-11,]),'NEWLINE':([2,3,4,5,7,8,9,10,12,13,20,21,27,29,33,35,36,37,38,39,40,41,44,45,46,47,49,50,52,55,],[20,-4,-5,-6,-24,-25,-26,-27,-29,29,-2,-3,-23,-7,-16,-18,-19,-20,-21,-22,-30,-28,-17,-13,48,-14,-12,48,-15,-11,]),'PLUS':([4,7,8,9,10,12,27,28,31,32,33,36,37,38,39,40,41,45,],[22,-24,-25,-26,-27,-29,-23,22,-29,22,22,-19,-20,-21,-22,22,-28,22,]),'TIMES':([4,7,8,9,10,12,27,28,31,32,33,36,37,38,39,40,41,45,],[24,-24,-25,-26,-27,-29,24,24,-29,24,24,24,24,-21,-22,24,-28,24,]),'DIVIDE':([4,7,8,9,10,12,27,28,31,32,33,36,37,38,39,40,41,45,],[25,-24,-25,-26,-27,-29,25,25,-29,25,25,25,25,-21,-22,25,-28,25,]),'COMP_OP':([4,7,8,9,10,12,27,28,31,32,33,36,37,38,39,40,41,45,],[26,-24,-25,-26,-27,-29,-23,26,-29,26,26,-19,-20,-21,-22,-30,-28,26,]),'RP':([7,8,9,10,12,27,28,36,37,38,39,40,41,],[-24,-25,-26,-27,-29,-23,41,-19,-20,-21,-22,-30,-28,]),'ELSE':([7,8,9,10,12,13,27,29,33,35,36,37,38,39,40,41,44,45,47,49,52,55,],[-24,-25,-26,-27,-29,-8,-23,-7,-16,-18,-19,-20,-21,-22,-30,-28,-17,-13,50,-12,-15,-11,]),'DEDENT':([7,8,9,10,12,13,27,29,33,35,36,37,38,39,40,41,44,45,47,49,52,53,54,55,56,],[-24,-25,-26,-27,-29,-8,-23,-7,-16,-18,-19,-20,-21,-22,-30,-28,-17,-13,-14,-12,-15,55,-10,-11,-9,]),'COMMA':([7,8,9,10,12,27,31,36,37,38,39,40,41,],[-24,-25,-26,-27,-29,-23,43,-19,-20,-21,-22,-30,-28,]),'INSTRUCTION':([17,],[34,]),'BE':([30,],[42,]),'THEN':([43,],[46,]),'INDENT':([48,],[51,]),}
+_lr_action_items = {'MINUS':([0,4,6,7,8,9,10,11,12,15,16,17,23,24,25,26,27,28,29,32,33,34,35,38,39,40,41,42,43,44,47,],[6,24,6,-25,-26,-27,-28,6,-30,6,6,6,6,6,6,6,6,-24,24,-30,24,24,24,-20,-21,-22,-23,24,-29,6,24,]),'NUMBER':([0,6,11,15,16,17,19,23,24,25,26,27,36,44,],[7,7,7,7,7,7,37,7,7,7,7,7,46,7,]),'STRING':([0,6,11,15,16,17,23,24,25,26,27,44,],[8,8,8,8,8,8,8,8,8,8,8,8,]),'MNEUMONIC':([0,6,11,14,15,16,17,23,24,25,26,27,44,],[9,9,9,31,9,9,9,9,9,9,9,9,9,]),'BOOL':([0,6,11,15,16,17,23,24,25,26,27,44,],[10,10,10,10,10,10,10,10,10,10,10,10,]),'LP':([0,6,11,15,16,17,23,24,25,26,27,44,],[11,11,11,11,11,11,11,11,11,11,11,11,]),'LET':([0,2,3,4,5,7,8,9,10,12,13,21,22,28,30,34,35,37,38,39,40,41,42,43,46,47,48,49,51,52,53,54,55,56,57,58,],[14,14,-4,-5,-6,-25,-26,-27,-28,-30,-8,-2,-3,-24,-7,-16,-17,-19,-20,-21,-22,-23,-31,-29,-18,-13,14,-14,-12,14,14,-15,14,-10,-11,-9,]),'IF':([0,2,3,4,5,7,8,9,10,12,13,21,22,28,30,34,35,37,38,39,40,41,42,43,46,47,48,49,51,52,53,54,55,56,57,58,],[15,15,-4,-5,-6,-25,-26,-27,-28,-30,-8,-2,-3,-24,-7,-16,-17,-19,-20,-21,-22,-23,-31,-29,-18,-13,15,-14,-12,15,15,-15,15,-10,-11,-9,]),'RETURN':([0,2,3,4,5,7,8,9,10,12,13,21,22,28,30,34,35,37,38,39,40,41,42,43,46,47,48,49,51,52,53,54,55,56,57,58,],[16,16,-4,-5,-6,-25,-26,-27,-28,-30,-8,-2,-3,-24,-7,-16,-17,-19,-20,-21,-22,-23,-31,-29,-18,-13,16,-14,-12,16,16,-15,16,-10,-11,-9,]),'PRINT':([0,2,3,4,5,7,8,9,10,12,13,21,22,28,30,34,35,37,38,39,40,41,42,43,46,47,48,49,51,52,53,54,55,56,57,58,],[17,17,-4,-5,-6,-25,-26,-27,-28,-30,-8,-2,-3,-24,-7,-16,-17,-19,-20,-21,-22,-23,-31,-29,-18,-13,17,-14,-12,17,17,-15,17,-10,-11,-9,]),'GOTO':([0,2,3,4,5,7,8,9,10,12,13,21,22,28,30,34,35,37,38,39,40,41,42,43,46,47,48,49,51,52,53,54,55,56,57,58,],[18,18,-4,-5,-6,-25,-26,-27,-28,-30,-8,-2,-3,-24,-7,-16,-17,-19,-20,-21,-22,-23,-31,-29,-18,-13,18,-14,-12,18,18,-15,18,-10,-11,-9,]),'MARKER':([0,2,3,4,5,7,8,9,10,12,13,21,22,28,30,34,35,37,38,39,40,41,42,43,46,47,48,49,51,52,53,54,55,56,57,58,],[19,19,-4,-5,-6,-25,-26,-27,-28,-30,-8,-2,-3,-24,-7,-16,-17,-19,-20,-21,-22,-23,-31,-29,-18,-13,19,-14,-12,19,19,-15,19,-10,-11,-9,]),'$end':([1,20,],[0,-1,]),'ENDMARKER':([2,3,4,5,7,8,9,10,12,13,21,22,28,30,34,35,37,38,39,40,41,42,43,46,47,49,51,54,57,],[20,-4,-5,-6,-25,-26,-27,-28,-30,-8,-2,-3,-24,-7,-16,-17,-19,-20,-21,-22,-23,-31,-29,-18,-13,-14,-12,-15,-11,]),'NEWLINE':([2,3,4,5,7,8,9,10,12,13,21,22,28,30,34,35,37,38,39,40,41,42,43,46,47,48,49,51,52,54,57,],[21,-4,-5,-6,-25,-26,-27,-28,-30,30,-2,-3,-24,-7,-16,-17,-19,-20,-21,-22,-23,-31,-29,-18,-13,50,-14,-12,50,-15,-11,]),'PLUS':([4,7,8,9,10,12,28,29,32,33,34,35,38,39,40,41,42,43,47,],[23,-25,-26,-27,-28,-30,-24,23,-30,23,23,23,-20,-21,-22,-23,23,-29,23,]),'TIMES':([4,7,8,9,10,12,28,29,32,33,34,35,38,39,40,41,42,43,47,],[25,-25,-26,-27,-28,-30,25,25,-30,25,25,25,25,25,-22,-23,25,-29,25,]),'DIVIDE':([4,7,8,9,10,12,28,29,32,33,34,35,38,39,40,41,42,43,47,],[26,-25,-26,-27,-28,-30,26,26,-30,26,26,26,26,26,-22,-23,26,-29,26,]),'COMP_OP':([4,7,8,9,10,12,28,29,32,33,34,35,38,39,40,41,42,43,47,],[27,-25,-26,-27,-28,-30,-24,27,-30,27,27,27,-20,-21,-22,-23,-31,-29,27,]),'RP':([7,8,9,10,12,28,29,38,39,40,41,42,43,],[-25,-26,-27,-28,-30,-24,43,-20,-21,-22,-23,-31,-29,]),'ELSE':([7,8,9,10,12,13,28,30,34,35,37,38,39,40,41,42,43,46,47,49,51,54,57,],[-25,-26,-27,-28,-30,-8,-24,-7,-16,-17,-19,-20,-21,-22,-23,-31,-29,-18,-13,52,-12,-15,-11,]),'DEDENT':([7,8,9,10,12,13,28,30,34,35,37,38,39,40,41,42,43,46,47,49,51,54,55,56,57,58,],[-25,-26,-27,-28,-30,-8,-24,-7,-16,-17,-19,-20,-21,-22,-23,-31,-29,-18,-13,-14,-12,-15,57,-10,-11,-9,]),'COMMA':([7,8,9,10,12,28,32,38,39,40,41,42,43,],[-25,-26,-27,-28,-30,-24,45,-20,-21,-22,-23,-31,-29,]),'INSTRUCTION':([18,],[36,]),'BE':([31,],[44,]),'THEN':([45,],[48,]),'INDENT':([50,],[53,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'input':([0,],[1,]),'program':([0,],[2,]),'command':([0,2,],[3,21,]),'expression':([0,6,11,15,16,22,23,24,25,26,42,],[4,27,28,32,33,36,37,38,39,40,45,]),'stmt':([0,2,46,50,51,53,],[5,5,49,49,54,56,]),'comparison':([0,6,11,15,16,22,23,24,25,26,42,],[12,12,12,31,12,12,12,12,12,12,12,]),'statement':([0,2,46,50,51,53,],[13,13,13,13,13,13,]),'block':([46,50,],[47,52,]),'stmts':([51,],[53,]),}
+_lr_goto_items = {'input':([0,],[1,]),'program':([0,],[2,]),'command':([0,2,],[3,22,]),'expression':([0,6,11,15,16,17,23,24,25,26,27,44,],[4,28,29,33,34,35,38,39,40,41,42,47,]),'stmt':([0,2,48,52,53,55,],[5,5,51,51,56,58,]),'comparison':([0,6,11,15,16,17,23,24,25,26,27,44,],[12,12,12,32,12,12,12,12,12,12,12,12,]),'statement':([0,2,48,52,53,55,],[13,13,13,13,13,13,]),'block':([48,52,],[49,54,]),'stmts':([53,],[55,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,34 +27,35 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> input","S'",1,None,None,None),
-  ('input -> program ENDMARKER','input',2,'p_input','sudolang.py',286),
-  ('program -> program NEWLINE','program',2,'p_program','sudolang.py',290),
-  ('program -> program command','program',2,'p_program','sudolang.py',291),
-  ('program -> command','program',1,'p_program','sudolang.py',292),
-  ('program -> expression','program',1,'p_program','sudolang.py',293),
-  ('command -> stmt','command',1,'p_command','sudolang.py',307),
-  ('stmt -> statement NEWLINE','stmt',2,'p_stmt','sudolang.py',312),
-  ('stmt -> statement','stmt',1,'p_stmt','sudolang.py',313),
-  ('stmts -> stmts stmt','stmts',2,'p_stmts','sudolang.py',317),
-  ('stmts -> stmt','stmts',1,'p_stmts','sudolang.py',318),
-  ('block -> NEWLINE INDENT stmts DEDENT','block',4,'p_block','sudolang.py',325),
-  ('block -> stmt','block',1,'p_block','sudolang.py',326),
-  ('statement -> LET MNEUMONIC BE expression','statement',4,'p_statement_let','sudolang.py',333),
-  ('statement -> IF comparison COMMA THEN block','statement',5,'p_statement_if','sudolang.py',337),
-  ('statement -> IF comparison COMMA THEN block ELSE block','statement',7,'p_statement_if','sudolang.py',338),
-  ('statement -> RETURN expression','statement',2,'p_statement_return','sudolang.py',345),
-  ('statement -> GOTO INSTRUCTION NUMBER','statement',3,'p_statement_goto','sudolang.py',349),
-  ('statement -> MARKER NUMBER','statement',2,'p_statement_marker','sudolang.py',353),
-  ('expression -> expression PLUS expression','expression',3,'p_expression_binop','sudolang.py',358),
-  ('expression -> expression MINUS expression','expression',3,'p_expression_binop','sudolang.py',359),
-  ('expression -> expression TIMES expression','expression',3,'p_expression_binop','sudolang.py',360),
-  ('expression -> expression DIVIDE expression','expression',3,'p_expression_binop','sudolang.py',361),
-  ('expression -> MINUS expression','expression',2,'p_expression_binop','sudolang.py',362),
-  ('expression -> NUMBER','expression',1,'p_expression_number','sudolang.py',369),
-  ('expression -> STRING','expression',1,'p_expression_string','sudolang.py',373),
-  ('expression -> MNEUMONIC','expression',1,'p_expression_mneumonic','sudolang.py',377),
-  ('expression -> BOOL','expression',1,'p_expression_bool','sudolang.py',381),
-  ('expression -> LP expression RP','expression',3,'p_expression_group','sudolang.py',388),
-  ('expression -> comparison','expression',1,'p_expression_comparison','sudolang.py',392),
-  ('comparison -> expression COMP_OP expression','comparison',3,'p_comparison','sudolang.py',396),
+  ('input -> program ENDMARKER','input',2,'p_input','sudolang.py',290),
+  ('program -> program NEWLINE','program',2,'p_program','sudolang.py',294),
+  ('program -> program command','program',2,'p_program','sudolang.py',295),
+  ('program -> command','program',1,'p_program','sudolang.py',296),
+  ('program -> expression','program',1,'p_program','sudolang.py',297),
+  ('command -> stmt','command',1,'p_command','sudolang.py',311),
+  ('stmt -> statement NEWLINE','stmt',2,'p_stmt','sudolang.py',316),
+  ('stmt -> statement','stmt',1,'p_stmt','sudolang.py',317),
+  ('stmts -> stmts stmt','stmts',2,'p_stmts','sudolang.py',321),
+  ('stmts -> stmt','stmts',1,'p_stmts','sudolang.py',322),
+  ('block -> NEWLINE INDENT stmts DEDENT','block',4,'p_block','sudolang.py',329),
+  ('block -> stmt','block',1,'p_block','sudolang.py',330),
+  ('statement -> LET MNEUMONIC BE expression','statement',4,'p_statement_let','sudolang.py',337),
+  ('statement -> IF comparison COMMA THEN block','statement',5,'p_statement_if','sudolang.py',341),
+  ('statement -> IF comparison COMMA THEN block ELSE block','statement',7,'p_statement_if','sudolang.py',342),
+  ('statement -> RETURN expression','statement',2,'p_statement_return','sudolang.py',349),
+  ('statement -> PRINT expression','statement',2,'p_statement_print','sudolang.py',353),
+  ('statement -> GOTO INSTRUCTION NUMBER','statement',3,'p_statement_goto','sudolang.py',357),
+  ('statement -> MARKER NUMBER','statement',2,'p_statement_marker','sudolang.py',361),
+  ('expression -> expression PLUS expression','expression',3,'p_expression_binop','sudolang.py',366),
+  ('expression -> expression MINUS expression','expression',3,'p_expression_binop','sudolang.py',367),
+  ('expression -> expression TIMES expression','expression',3,'p_expression_binop','sudolang.py',368),
+  ('expression -> expression DIVIDE expression','expression',3,'p_expression_binop','sudolang.py',369),
+  ('expression -> MINUS expression','expression',2,'p_expression_binop','sudolang.py',370),
+  ('expression -> NUMBER','expression',1,'p_expression_number','sudolang.py',377),
+  ('expression -> STRING','expression',1,'p_expression_string','sudolang.py',381),
+  ('expression -> MNEUMONIC','expression',1,'p_expression_mneumonic','sudolang.py',385),
+  ('expression -> BOOL','expression',1,'p_expression_bool','sudolang.py',389),
+  ('expression -> LP expression RP','expression',3,'p_expression_group','sudolang.py',396),
+  ('expression -> comparison','expression',1,'p_expression_comparison','sudolang.py',400),
+  ('comparison -> expression COMP_OP expression','comparison',3,'p_comparison','sudolang.py',404),
 ]

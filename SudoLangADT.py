@@ -84,6 +84,13 @@ class ReturnStatement:
     def __str__(self):
         return f"return {self.value}"
 
+@dataclass 
+class PrintStatement:
+    value: Union[Operation, Mneumonic, int, float, bool, str]
+
+    def __str__(self):
+        return f"print {self.value}"
+
 @dataclass
 class GotoStatement:
     label: Union[int, float]
