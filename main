@@ -46,7 +46,7 @@ def process_input(input_string):
 def start_repl(first=True, filename=None):
     if first:
         print("Welcome to the SudoLang Interpreter!")
-        print("Type 'exit' to quit.")
+        print("Type 'exit' to quit.\n")
     
     # If a file is provided, read the file's content
     if filename:
@@ -100,12 +100,6 @@ def start_repl(first=True, filename=None):
                     process_input(line)
                     break
 
-                
-                # Check for lines that decrease indent level
-                # Note: you might want to expand this list based on your language syntax
-#                if line.strip().startswith(('else')):
-#                    indent_level = max(0, indent_level - 1)
-                
                 input_lines.append(line)
             
             # Join the lines

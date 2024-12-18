@@ -72,7 +72,7 @@ def t_NUMBER(t):
 
 # Whitespace
 def t_WS(t):
-    r' [ ]+|\t+'
+    r' +|\t+'
     if t.lexer.at_line_start and t.lexer.paren_count == 0:
         return t
 
