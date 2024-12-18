@@ -32,9 +32,13 @@ def find_marker_position(node, label, path=None):
     elif isinstance(node, MarkerStatement) and node.label == label:
         return path
     elif hasattr(node, 'do'):  # Handle IfStatement and IfElseStatement
-        result = find_marker_position(node.do, label, path + ['do'])
-        if result:
-            return result
+        do = find_marker_position(node.do, label, path + ['do'])
+        if do:
+            return do
+        if hasattr(node, 'alternate'):
+            alt = find_marker_position(node.alternate, label, path + ['alternate'])
+            if alt:
+                return alt
     elif hasattr(node, 'alternate'):  # Handle IfElseStatement alternate branch
         result = find_marker_position(node.alternate, label, path + ['alternate'])
         if result:
