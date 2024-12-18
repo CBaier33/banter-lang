@@ -5,6 +5,7 @@ from SudoLangADT import *
 
 #################### BEGIN Lexer/Scanner Specification ####################
 
+# Reserved Words
 reserved = {
     'let': 'LET',
     'be': 'BE',
@@ -71,8 +72,7 @@ def t_NUMBER(t):
 
 # Whitespace
 def t_WS(t):
-    #r' [ ]+ '
-    r' +|\t+'
+    r' [ ]+|\t+'
     if t.lexer.at_line_start and t.lexer.paren_count == 0:
         return t
 
@@ -99,7 +99,8 @@ def t_error(t):
     t.lexer.skip(1)
 
 
-### Indentation Post-Processing Filtration
+### Indentation Post-Processing Filtration 
+### This has been adapted from the GardenSnake language implementation found in the ply repository.
 
 NO_INDENT = 0
 MAY_INDENT = 1
