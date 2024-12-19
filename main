@@ -1,141 +1,191 @@
 #!/usr/bin/env python3
 import sys
 import re
-from SudoLangADT import *  # ADT definitions
-import sudolang  # Import lexer and parser specifications from sudolang
-from interpreter import eval_program  # Evaluation function
+import readline
+import atexit
+import os
+from SudoLangADT import *
+import sudolang
+from interpreter import eval_program
 
-# A dictionary to store variables and their values
+# Global state
 variables = {}
 context = []
 markers = {}
-translated_string = ""
+program_history = []  # Store complete program history
+executed_commands = set()  # Track which commands have been executed
+
+# Set up readline history file
+HISTORY_FILE = os.path.expanduser('~/.sudolang_history')
+
+def init_readline():
+    """Initialize readline with history support"""
+    # Create history file if it doesn't exist
+    if not os.path.exists(HISTORY_FILE):
+        try:
+            open(HISTORY_FILE, 'w').close()
+        except IOError:
+            pass
+
+    # Read the history file
+    try:
+        readline.read_history_file(HISTORY_FILE)
+    except IOError:
+        pass
+
+    # Set history length
+    readline.set_history_length(1000)
+
+    # Save history on exit
+    atexit.register(readline.write_history_file, HISTORY_FILE)
 
 def concrete2abstract(s: str, parser) -> Program:
-    """
-    Convert a concrete program (string) into an abstract syntax tree (ADT).
-    """
     try:
-        # Use the parser to parse the string
         parser.parse(s)
-        return sudolang.global_ast  # Assuming the parser stores the result in global_ast
+        return sudolang.global_ast
     except Exception as e:
         print("Unknown Error occurred (this is normally caused by a syntax error)")
         raise e
     return None
 
-def process_input(input_string):
-    """
-    Process the input (either from REPL or file) and evaluate.
-    """
-    # Skip blank lines
+def process_input(input_string, from_history=False):
+    """Process the input and evaluate, maintaining program context."""
     if input_string.strip() == "" or input_string.strip().startswith('#'):
-        return  # Skip blank lines
-    
-    # Parse the input string into the ADT
-    ast = concrete2abstract(input_string, sudolang.parser)
+        return
 
+    # Generate a hash of the input to track execution
+    command_hash = hash(input_string)
+    
+    # Skip execution if this command was already run and it's from history
+    if from_history and command_hash in executed_commands:
+        return
+
+    ast = concrete2abstract(input_string, sudolang.parser)
+    
     if ast:
-        # Interpret the program and update variables
-        result = eval_program(ast, variables, context)
+        # Add new statements to program history
+        if isinstance(ast, list):
+            program_history.extend(ast)
+        else:
+            program_history.append(ast)
+            
+        # Create full program context
+        if not context or context[0] != program_history:
+            context.clear()
+            context.insert(0, program_history)
+            
+        # Evaluate with full program context
+        result = eval_program(program_history, variables, context)
         if result == False or result:
             print(result)
+            
+        # Mark this command as executed
+        executed_commands.add(command_hash)
     else:
         print(f'"{input_string}" is not a valid program.')
 
 def start_repl(first=True, filename=None):
+    # Initialize readline
+    init_readline()
+
     if first:
-        print("Welcome to the SudoLang Interpreter!")
-        print("Type 'exit' to quit.\n")
+        print("Welcome to the SudoLang Interpreter!\n")
+        print("Type 'exit' to quit.")
+        print("Type 'clear' to reset program context.")
+        print("Use up/down arrows to navigate command history.\n")
     
-    # If a file is provided, read the file's content
+    # Handle file input
     if filename:
         with open(filename, 'r') as file:
             content = file.read()
             process_input(content)
-        # If in -i mode, after the file is executed, show the prompt
         if '-i' in sys.argv:
             print()
             start_repl(first=False)
-        return  # Exit after processing the file if -i isn't set
-    
+        return
+
+    last_command = None  # Track the last command for history navigation
+
     while True:
         try:
-            # Collect multi-line input
             input_lines = []
             indent_level = 0
-            inConditional = False
+            in_conditional = False
             
             while True:
-                # Determine the prompt based on indent level
-                #prompt = f"--[ {'  ' * indent_level}"
-                if inConditional:
-                    prompt = f"... "
+                # Determine prompt based on context
+                if in_conditional:
+                    prompt = "... "
                 else:
-                    prompt = f"--[ "
+                    prompt = "--[ "
                 
-                # Get user input
                 try:
                     line = input(prompt)
-
+                    
+                    # Check if this is from history
+                    current_command = line.strip()
+                    from_history = (current_command == last_command)
+                    last_command = current_command
+                    
+                    # Add non-empty lines to readline history
+                    if line.strip():
+                        readline.add_history(line)
                 except EOFError:
-                    # Allow Ctrl+D to submit input
                     print("\n\nExiting SudoLang.")
                     exit()
                 
-                # Empty line signals end of input
-                if line.strip() == "":
-                    break
-
-                if line.lower() == 'exit':
+                # Handle special commands
+                if line.strip().lower() == 'exit':
                     print("\nExiting SudoLang.")
                     exit()
+                elif line.strip().lower() == 'clear':
+                    program_history.clear()
+                    context.clear()
+                    variables.clear()
+                    executed_commands.clear()  # Clear execution history too
+                    print("Program context cleared.")
+                    break
                 
-                # Check for lines that increase indent level
+                # Empty line handling
+                if line.strip() == "":
+                    if input_lines:  # Only break if we have collected lines
+                        break
+                    continue  # Otherwise, just skip the empty line
+                
+                # Track indent level for multi-line input
                 if 'then' in line.strip():
                     indent_level += 1
-                    inConditional = True
-
-                elif not inConditional:
-                    process_input(line)
+                    in_conditional = True
+                elif not in_conditional:
+                    process_input(line, from_history)
                     break
 
                 input_lines.append(line)
             
-            # Join the lines
-            input_string = '\n'.join(input_lines)
-            
-            # Process the input
-            process_input(input_string)
+            # Process collected multi-line input
+            if input_lines:
+                input_string = '\n'.join(input_lines)
+                process_input(input_string, from_history)
         
         except KeyboardInterrupt:
-            # Handle Ctrl+C: Cancel current input and continue the loop
             print()
             continue
-        
         except EOFError:
-            # Handle Ctrl+D: Exit the REPL
             print("\nExiting SudoLang.")
             break
-        
         except Exception as e:
             print(f"Error: {e}")
 
 if __name__ == "__main__":
-    # Check if '-i' is in sys.argv for interactive mode
     if '-i' in sys.argv:
-        # If there's a filename provided along with -i, process the file first, then start REPL
         if len(sys.argv) > 2:
             filename = sys.argv[2]
             start_repl(first=False, filename=filename)
         else:
-            # If only -i is provided (no filename), start the REPL immediately
             start_repl(first=True)
     else:
-        # If no '-i', just process the filename and exit
         if len(sys.argv) > 1:
             filename = sys.argv[1]
             start_repl(first=False, filename=filename)
         else:
-            # If no arguments, run in interactive mode
             start_repl(first=True)
