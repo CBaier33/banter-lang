@@ -108,59 +108,57 @@ Goto Syntax -> `goto instruction <digit>`
 Examples:
 
 ```
-let n be 5
-let result be 1
-@ 1
-if n > 0, then
-   let result be result * n
-   let n be n - 1
+let x be 0
+let n be 100
+
+let a be 0 
+let b be 1
+
+@1
+if x < n, then
+   print a
+
+   let temp be a + b
+   let a be b
+   let b be temp
+
+   let x be x + 1
+
    goto instruction 1
-return result
 ```
 
 Here's one that's a little more complex:
+
 ```
-let maxPrimes be 20
-let primesSeen be 0
-let n be 2  # Start with the first prime
+let x be 1
 
 @1 # Main Loop
-if primesSeen < maxPrimes, then
-   let isPrime be True
-   let x be 2
-   
-   @1.1 # Divisor check loop
-   if x * x <= n, then
-      if isPrime == True, then  # Separate the AND into nested if
-         let temp be 0
-         let quotient be 0
-         
-         @1.2 # Division calculation loop
-         if temp + x <= n, then
-            let temp be temp + x
-            let quotient be quotient + 1
-            goto instruction 1.2
-         
-         let divisible be quotient * x
-         if divisible == n, then
-            let isPrime be False
-            goto instruction 1.3  # Skip to after divisor checks
-         
-         let x be x + 1
-         goto instruction 1.1
-      goto instruction 1.1  # If not prime anymore, keep checking until x*x > n
-   
-   @1.3  # After divisor checks
-   if isPrime == True, then
-      print n
-      let primesSeen be primesSeen + 1
-   
-   if n == 2, then
-      let n be 3  # After checking 2, skip to 3
-   else
-      let n be n + 2  # Skip even numbers
-   
+if x < 11, then
+   let even be False
+   goto instruction 2
+
+   @ 1.1
+   if even == True, then
+      print x
+
+   let x be x + 1
+
    goto instruction 1
+
+else return "DONE"
+
+@2
+let y be x
+
+@2.1
+if y > 0, then
+   let y be y - 2
+   goto instruction 2.1
+
+if y == 0, then 
+   let even be True
+
+goto instruction 1.1
 ```
 
 ## Additional Syntax

@@ -3,7 +3,6 @@ let x be 1
 @1 # Main Loop
 if x < 11, then
    let even be False
-
    goto instruction 2
 
    @ 1.1
@@ -14,7 +13,7 @@ if x < 11, then
 
    goto instruction 1
 
-else return 0
+else return "DONE"
 
 @2
 let y be x
@@ -26,4 +25,5 @@ if y > 0, then
 
 if y == 0, then 
    let even be True
-   goto instruction 1.1
+
+goto instruction 1.1

@@ -42,7 +42,6 @@ def find_marker_position(node, label, path=None):
 
     return None
 
-
 def get_subtree_at_path(tree, path):
     """Get the subtree at the specified path"""
     current = tree
@@ -187,6 +186,14 @@ def eval_comparison(comparison, variables, context):
     # Evaluate the operands of the comparison
     operand1 = eval_expression(comparison.operands[0], variables, context)
     operand2 = eval_expression(comparison.operands[1], variables, context)
+
+    operands = [eval_expression(operand, variables, context) for operand in comparison.operands]
+
+    types = set([type(op) for op in operands])
+
+    if len(types) > 1:
+        if bool in types and int in types:
+            return False
 
     if comparison.operator == '==':
         return operand1 == operand2

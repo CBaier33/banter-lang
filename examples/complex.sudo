@@ -1,0 +1,31 @@
+let sumOne be 0
+let sumTwo be 0
+let x be 1
+
+
+@1
+print "at instruction 1"
+if x <= 10, then
+   goto instruction 2
+   @ 1.1
+   print "at instruction 1.1"
+   goto instruction 3
+   @ 1.2
+   print "at instruction 1.2"
+   let x be x + 1
+   goto instruction 1
+else
+   print
+   print sumOne 
+   print sumTwo
+   return "END"
+
+@2
+print "at instruction 2"
+let sumOne be sumOne + 1
+goto instruction 1.1
+
+@3
+print "at instruction 3"
+let sumTwo be sumTwo + 1
+goto instruction 1.2

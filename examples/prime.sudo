@@ -1,41 +1,47 @@
-let maxPrimes be 20
+let maxPrimes be 8
 let primesSeen be 0
-let n be 2  # Start with the first prime
+let n be 23           # Start from the first prime
+let x be 2           # Divisor for checking primality
+let isPrime be True  # Flag for primality check
+let temp be 0        # Used to simulate modulus
 
-@1 # Main Loop
-if primesSeen < maxPrimes, then
-   let isPrime be True
-   let x be 2
-   
-   @1.1 # Divisor check loop
-   if x * x <= n, then
-      if isPrime == True, then  # Separate the AND into nested if
-         let temp be 0
-         let quotient be 0
-         
-         @1.2 # Division calculation loop
-         if temp + x <= n, then
-            let temp be temp + x
-            let quotient be quotient + 1
-            goto instruction 1.2
-         
-         let divisible be quotient * x
-         if divisible == n, then
-            let isPrime be False
-            goto instruction 1.3  # Skip to after divisor checks
-         
-         let x be x + 1
-         goto instruction 1.1
-      goto instruction 1.1  # If not prime anymore, keep checking until x*x > n
-   
-   @1.3  # After divisor checks
-   if isPrime == True, then
-      print n
-      let primesSeen be primesSeen + 1
-   
-   if n == 2, then
-      let n be 3  # After checking 2, skip to 3
-   else
-      let n be n + 2  # Skip even numbers
-   
-   goto instruction 1
+@1  # Start of the outer loop
+if primesSeen >= maxPrimes, then
+   goto instruction 10
+
+# Assume n is prime
+let isPrime be True
+let x be 2
+
+@2  # Check divisors for the current n
+if x * x > n, then
+    goto instruction 7  # No more divisors to check
+
+# Simulate modulus (n % x)
+let temp be n
+@3  # Start subtracting x from n
+if temp < x, then
+    goto instruction 4  # If remainder, check the result
+let temp be temp - x
+goto instruction 3  # Keep subtracting
+
+@4  # Check the remainder
+if temp == 0, then  # If no remainder, n is divisible by x
+    let isPrime be False
+    goto instruction 7  # No need to check further
+
+# Move to the next divisor
+let x be x + 1
+goto instruction 2  # Recheck with the next divisor
+
+@7  # End of prime check for current n
+if isPrime == True, then
+    print n  # Print the prime number
+    let primesSeen be primesSeen + 1
+
+# Move to the next number
+let n be n + 1
+goto instruction 1  # Check the next number
+
+@10
+return 0
