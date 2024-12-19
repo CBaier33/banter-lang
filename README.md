@@ -173,3 +173,11 @@ Unlike `return`, `print` statements can be null, which print a new line.
 
 Additionally, comments, can be written using the `#` symbol.
 
+# Using SudoLang
+
+The interpreter gives user the ability to interact with a sudolang program live in an "interactive" mode, as well as regular execution of a script. 
+
+Pass a file to the interpreter using `./main file.sudo` 
+
+
+To remain in interactive mode, add the `-i` flag -> `./main -i file.sudo`
