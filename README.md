@@ -109,31 +109,31 @@ Examples:
 
 ```
 let n be 5
-let sum be 0
+let result be 1
 @ 1
 if n > 0, then
-   let sum be sum + n
+   let result be result * n
    let n be n - 1
    goto instruction 1
-return sum
+return result
 ```
 
 Here's one that's a little more complex:
 ```
-let sumEven be 0
-let sumOdd be 0
+let sumOne be 0
+let sumTwo be 0
 let x be 1
 
 goto instruction 1
 
 @3
 print "at instruction 3"
-let sumOdd be sumOdd + 1
+let sumTwo be sumTwo + 1
 goto instruction 1.2
 
 @2
 print "at instruction 2"
-let sumEven be sumEven + 1
+let sumOne be sumOne + 1
 goto instruction 1.1
 
 @1
@@ -149,8 +149,8 @@ if x <= 10, then
    goto instruction 1
 else
    print
-   print sumEven 
-   print sumOdd
+   print sumOne 
+   print sumTwo
 ```
 
 ## Additional Syntax
@@ -159,4 +159,7 @@ As demonstrated in the previous example, variables and expressions can be printe
 `print <expression>`, which simple displays the value without terminating the program. 
 
 Unlike `return`, `print` statements can be null, which print a new line.
+
+
+Additionally, comments, can be written using the `#` symbol.
 
