@@ -1,0 +1,46 @@
+let maxPrimes be 20
+let primesSeen be 0
+let n be 2           # Start from the first prime
+let x be 2           # Divisor for checking primality
+let isPrime be True  # Flag for primality check
+let temp be 0        # Used to simulate modulus
+
+@1  # Start of the outer loop
+if primesSeen >= maxPrimes, then
+    goto instruction 10  # Stop when enough primes are found
+
+# Assume n is prime
+let isPrime be True
+let x be 2
+
+@2  # Check divisors for the current n
+if x * x > n, then
+    goto instruction 7  # No more divisors to check
+
+# Simulate modulus (n % x)
+let temp be n
+@3  # Start subtracting x from n
+if temp < x, then
+    goto instruction 4  # If remainder, check the result
+let temp be temp - x
+goto instruction 3  # Keep subtracting
+
+@4  # Check the remainder
+if temp == 0, then  # If no remainder, n is divisible by x
+    let isPrime be False
+    goto instruction 7  # No need to check further
+
+# Move to the next divisor
+let x be x + 1
+goto instruction 2  # Recheck with the next divisor
+
+@7  # End of prime check for current n
+if isPrime == True, then
+    print n  # Print the prime number
+    let primesSeen be primesSeen + 1
+
+# Move to the next number
+let n be n + 1
+goto instruction 1  # Check the next number
+
+@10  # End of the program

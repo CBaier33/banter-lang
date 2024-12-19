@@ -1,0 +1,15 @@
+let x be True
+let a be 0
+
+@1
+if a < 5, then
+  @2
+  print a
+  print x
+  let x be False
+  let a be a + 1
+  goto instruction 1
+
+if a < 7, then
+  print x
+  goto instruction 2

@@ -39,10 +39,6 @@ def find_marker_position(node, label, path=None):
             alt = find_marker_position(node.alternate, label, path + ['alternate'])
             if alt:
                 return alt
-    elif hasattr(node, 'alternate'):  # Handle IfElseStatement alternate branch
-        result = find_marker_position(node.alternate, label, path + ['alternate'])
-        if result:
-            return result
 
     return None
 
