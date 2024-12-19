@@ -32,22 +32,23 @@ tokens = [
     # Punctuations
     'COMMA', 'LP', 'RP', 'MARKER', 'ENDMARKER',
         
+    # Indentation
     'INDENT', 'DEDENT', 'NEWLINE', 'WS'] + list(set(reserved.values()))
 
 t_LET = r'let'
 t_BE = r'be'
+t_IF = r'if'
+t_COMMA = r','
+t_THEN = r'then'
+t_ELSE = r'else'
 t_RETURN = r'return'
 t_GOTO = r'goto'
 t_INSTRUCTION = r'instruction'
 t_MARKER = r'@'
-t_STRING = r'\"([^\\\n]|(\\.))*?\"'
-
-t_BOOL = r'True|False'
-t_IF = r'if'
-t_ELSE = r'else'
-t_THEN = r'then'
-
 t_PRINT = r'print'
+
+t_STRING = r'\"([^\\\n]|(\\.))*?\"'
+t_BOOL = r'True|False'
 
 t_PLUS = r'\+'
 t_MINUS = r'-'
@@ -55,8 +56,6 @@ t_TIMES = r'\*'
 t_DIVIDE = r'/'
 
 t_COMP_OP = r'<=|>=|==|!=|<|>'
-
-t_COMMA = r','
 
 t_ignore_COMMENT = r'\#[^\n]*'
 
@@ -75,7 +74,7 @@ def t_NUMBER(t):
 
 # Whitespace
 def t_WS(t):
-    r' +|\t+'
+    r' +|\t+' # this appears to work conditionally on different systems??
     if t.lexer.at_line_start and t.lexer.paren_count == 0:
         return t
 
@@ -258,25 +257,7 @@ class IndentLexer(object):
 
 lexer = IndentLexer()
 
-#sample = '''
-#let a be 3
-#if 1 != 1, then
-#   let a be 1
-#   let b be 2
-#else
-#   return a + 1
-#
-#return a
-#'''
-#
-#lexer.input(sample)
-#
-#for tok in lexer.token_stream:
-#    print(tok)
-#print()
-#exit()
 #################### BEGIN Grammar Pattern-Action Rules ####################
-
 
 # Define the precedence of operators
 precedence = (
@@ -288,6 +269,7 @@ precedence = (
 global_ast = ""
 
 # Grammar rules
+# View parser.out for a more comprehensive understanding of the grammar
 def p_input(p):
     '''input : program ENDMARKER'''
     p[0] = p[1]
@@ -431,5 +413,3 @@ class SudoLangParser:
         return result
 
 parser = SudoLangParser(lexer)
-
-#print(parser.parse(sample))
