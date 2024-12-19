@@ -1,0 +1,29 @@
+let x be 1
+
+@1 # Main Loop
+if x < 11, then
+   let even be False
+
+   goto instruction 2
+
+   @ 1.1
+   if even == True, then
+      print x
+
+   let x be x + 1
+
+   goto instruction 1
+
+else return 0
+
+@2
+let y be x
+
+@2.1
+if y > 0, then
+   let y be y - 2
+   goto instruction 2.1
+
+if y == 0, then 
+   let even be True
+   goto instruction 1.1

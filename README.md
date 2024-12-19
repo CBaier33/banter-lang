@@ -120,37 +120,47 @@ return result
 
 Here's one that's a little more complex:
 ```
-let sumOne be 0
-let sumTwo be 0
-let x be 1
+let maxPrimes be 20
+let primesSeen be 0
+let n be 2  # Start with the first prime
 
-goto instruction 1
-
-@3
-print "at instruction 3"
-let sumTwo be sumTwo + 1
-goto instruction 1.2
-
-@2
-print "at instruction 2"
-let sumOne be sumOne + 1
-goto instruction 1.1
-
-@1
-print "at instruction 1"
-if x <= 10, then
-   goto instruction 2
-   @ 1.1
-   print "at instruction 1.1"
-   goto instruction 3
-   @ 1.2
-   print "at instruction 1.2"
-   let x be x + 1
+@1 # Main Loop
+if primesSeen < maxPrimes, then
+   let isPrime be True
+   let x be 2
+   
+   @1.1 # Divisor check loop
+   if x * x <= n, then
+      if isPrime == True, then  # Separate the AND into nested if
+         let temp be 0
+         let quotient be 0
+         
+         @1.2 # Division calculation loop
+         if temp + x <= n, then
+            let temp be temp + x
+            let quotient be quotient + 1
+            goto instruction 1.2
+         
+         let divisible be quotient * x
+         if divisible == n, then
+            let isPrime be False
+            goto instruction 1.3  # Skip to after divisor checks
+         
+         let x be x + 1
+         goto instruction 1.1
+      goto instruction 1.1  # If not prime anymore, keep checking until x*x > n
+   
+   @1.3  # After divisor checks
+   if isPrime == True, then
+      print n
+      let primesSeen be primesSeen + 1
+   
+   if n == 2, then
+      let n be 3  # After checking 2, skip to 3
+   else
+      let n be n + 2  # Skip even numbers
+   
    goto instruction 1
-else
-   print
-   print sumOne 
-   print sumTwo
 ```
 
 ## Additional Syntax
