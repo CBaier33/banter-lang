@@ -11,32 +11,24 @@ from interpreter import eval_program
 # Global state
 variables = {}
 context = []
-markers = {}
-program_history = []  # Store complete program history
-executed_commands = set()  # Track which commands have been executed
+program_history = []  # Store only valid commands
+executed_commands = set()
 
-# Set up readline history file
 HISTORY_FILE = os.path.expanduser('~/.sudolang_history')
 
 def init_readline():
-    """Initialize readline with history support"""
-    # Create history file if it doesn't exist
     if not os.path.exists(HISTORY_FILE):
         try:
             open(HISTORY_FILE, 'w').close()
         except IOError:
             pass
 
-    # Read the history file
     try:
         readline.read_history_file(HISTORY_FILE)
     except IOError:
         pass
 
-    # Set history length
     readline.set_history_length(1000)
-
-    # Save history on exit
     atexit.register(readline.write_history_file, HISTORY_FILE)
 
 def concrete2abstract(s: str, parser) -> Program:
@@ -44,67 +36,86 @@ def concrete2abstract(s: str, parser) -> Program:
         parser.parse(s)
         return sudolang.global_ast
     except Exception as e:
-        print("Unknown Error occurred (this is normally caused by a syntax error)")
-        raise e
-    return None
+        print("Syntax error in input")
+        return None
 
 def process_input(input_string, from_history=False):
     """Process the input and evaluate, maintaining program context."""
     if input_string.strip() == "" or input_string.strip().startswith('#'):
         return
 
-    # Generate a hash of the input to track execution
     command_hash = hash(input_string)
     
-    # Skip execution if this command was already run and it's from history
     if from_history and command_hash in executed_commands:
         return
 
-    ast = concrete2abstract(input_string, sudolang.parser)
-    
-    if ast:
-        # Add new statements to program history
+    try:
+        ast = concrete2abstract(input_string, sudolang.parser)
+        
+        if ast is None:
+            return False  # Indicate parsing failure
+            
+        # Try evaluating the new statement(s) in isolation first
+        temp_context = []
+        temp_vars = variables.copy()
+        
         if isinstance(ast, list):
-            program_history.extend(ast)
+            test_program = ast
         else:
-            program_history.append(ast)
+            test_program = [ast]
             
-        # Create full program context
-        if not context or context[0] != program_history:
-            context.clear()
-            context.insert(0, program_history)
+        try:
+            if not filename:
+                eval_program(test_program, temp_vars, temp_context, test=True)
             
-        # Evaluate with full program context
-        result = eval_program(program_history, variables, context)
-        if result == False or result:
-            print(result)
+            # If evaluation succeeded, add to program history
+            if isinstance(ast, list):
+                program_history.extend(ast)
+            else:
+                program_history.append(ast)
+                
+            # Update actual program state
+            if not context or context[0] != program_history:
+                context.clear()
+                context.insert(0, program_history)
+                
+            # Now evaluate the full program
+            result = eval_program(program_history, variables, context)
+            if result is not None:
+                print(result)
+                
+            executed_commands.add(command_hash)
+            return True
             
-        # Mark this command as executed
-        executed_commands.add(command_hash)
-    else:
-        print(f'"{input_string}" is not a valid program.')
+        except Exception as e:
+            print(f"Execution error: {str(e)}")
+            return False
+            
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        return False
 
 def start_repl(first=True, filename=None):
-    # Initialize readline
     init_readline()
 
     if first:
         print("Welcome to the SudoLang Interpreter!\n")
         print("Type 'exit' to quit.")
         print("Type 'clear' to reset program context.")
-        print("Use up/down arrows to navigate command history.\n")
+        print("Type 'history' to view valid command history.\n")
     
-    # Handle file input
     if filename:
-        with open(filename, 'r') as file:
-            content = file.read()
-            process_input(content)
-        if '-i' in sys.argv:
-            print()
-            start_repl(first=False)
-        return
-
-    last_command = None  # Track the last command for history navigation
+        try:
+            with open(filename, 'r') as file:
+                content = file.read()
+                process_input(content)
+            if '-i' in sys.argv:
+                print()
+                start_repl(first=False)
+            return
+        except Exception as e:
+            print(f"Error loading file: {str(e)}")
+            return
 
     while True:
         try:
@@ -113,21 +124,10 @@ def start_repl(first=True, filename=None):
             in_conditional = False
             
             while True:
-                # Determine prompt based on context
-                if in_conditional:
-                    prompt = "... "
-                else:
-                    prompt = "--[ "
+                prompt = "... " if in_conditional else "--[ "
                 
                 try:
                     line = input(prompt)
-                    
-                    # Check if this is from history
-                    current_command = line.strip()
-                    from_history = (current_command == last_command)
-                    last_command = current_command
-                    
-                    # Add non-empty lines to readline history
                     if line.strip():
                         readline.add_history(line)
                 except EOFError:
@@ -142,30 +142,34 @@ def start_repl(first=True, filename=None):
                     program_history.clear()
                     context.clear()
                     variables.clear()
-                    executed_commands.clear()  # Clear execution history too
+                    executed_commands.clear()
                     print("Program context cleared.")
                     break
+                elif line.strip().lower() == 'history':
+                    print("\nValid command history:")
+                    for i, cmd in enumerate(program_history, 1):
+                        print(f"{i}. {cmd}")
+                    break
                 
-                # Empty line handling
                 if line.strip() == "":
-                    if input_lines:  # Only break if we have collected lines
+                    if input_lines:
                         break
-                    continue  # Otherwise, just skip the empty line
+                    continue
                 
-                # Track indent level for multi-line input
                 if 'then' in line.strip():
                     indent_level += 1
                     in_conditional = True
                 elif not in_conditional:
-                    process_input(line, from_history)
+                    success = process_input(line)
+                    if not success:
+                        break
                     break
 
                 input_lines.append(line)
             
-            # Process collected multi-line input
             if input_lines:
                 input_string = '\n'.join(input_lines)
-                process_input(input_string, from_history)
+                process_input(input_string)
         
         except KeyboardInterrupt:
             print()
@@ -174,7 +178,7 @@ def start_repl(first=True, filename=None):
             print("\nExiting SudoLang.")
             break
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"Error: {str(e)}")
 
 if __name__ == "__main__":
     if '-i' in sys.argv:

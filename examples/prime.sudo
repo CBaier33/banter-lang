@@ -1,6 +1,6 @@
-let maxPrimes be 8
+let maxPrimes be 50
 let primesSeen be 0
-let n be 23           # Start from the first prime
+let n be 2           # Start from the first prime
 let x be 2           # Divisor for checking primality
 let isPrime be True  # Flag for primality check
 let temp be 0        # Used to simulate modulus
@@ -44,4 +44,3 @@ let n be n + 1
 goto instruction 1  # Check the next number
 
 @10
-return 0

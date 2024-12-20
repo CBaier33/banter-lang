@@ -1,24 +1,106 @@
 import sudolang
 from SudoLangADT import *
+from collections import deque
 
-returned = False
-
-def eval_program(program, variables=None, context=None):
+def eval_program(program, variables=None, context=None, test=False):
     if variables is None:
         variables = {}
-
     if context is None:
         context = []
-        
-    # Add program to context if not already present
+    
     if not context or context[0] != program:
         context.insert(0, program)
-        
-    global returned
-    returned = False
     
-    return eval_statement(program, variables, context)
+    # Convert program to flat list of statements
+    execution_queue = deque()
+    if isinstance(program, list):
+        execution_queue.extend(program)
+    else:
+        execution_queue.append(program)
+    
+    result = None
+    while execution_queue:
+        stmt = execution_queue.popleft()
+        result = eval_statement_iter(stmt, variables, context, execution_queue, test=test)
+        if isinstance(result, ReturnValue):  # Special wrapper for return values
+            return result.value
+    return result
 
+class ReturnValue:
+    """Wrapper class to distinguish return values from regular evaluation results"""
+    def __init__(self, value):
+        self.value = value
+
+def eval_statement_iter(statement, variables, context, execution_queue, test=False):
+    if isinstance(statement, LetStatement):
+        value = eval_expression(statement.value, variables, context)
+        variables[statement.mneumonic] = value
+        return None
+    
+    elif isinstance(statement, IfStatement):
+        if eval_comparison(statement.expr, variables, context):
+            if isinstance(statement.do, list):
+                execution_queue.extendleft(reversed(statement.do))
+            else:
+                execution_queue.appendleft(statement.do)
+        return None
+    
+    elif isinstance(statement, IfElseStatement):
+        if eval_comparison(statement.expr, variables, context):
+            if isinstance(statement.do, list):
+                execution_queue.extendleft(reversed(statement.do))
+            else:
+                execution_queue.appendleft(statement.do)
+        elif statement.alternate:
+            if isinstance(statement.alternate, list):
+                execution_queue.extendleft(reversed(statement.alternate))
+            else:
+                execution_queue.appendleft(statement.alternate)
+        return None
+    
+    elif isinstance(statement, ReturnStatement):
+        value = eval_expression(statement.value, variables, context)
+        return ReturnValue(value)  # Wrap return values
+    
+    elif isinstance(statement, PrintStatement):
+        if statement.value is not None:
+            res = eval_expression(statement.value, variables, context)
+            if not test:
+                print(res)
+            #return res
+        else:
+            if not test:
+                print()
+    
+    elif isinstance(statement, GotoStatement):
+        program = context[0]
+        marker_path = find_marker_position(program, statement.label)
+        if marker_path:
+            parent_path = marker_path[:-1]
+            parent = get_subtree_at_path(program, parent_path)
+            marker_index = marker_path[-1]
+            
+            if isinstance(parent, list):
+                # Clear the current queue and add remaining statements after marker
+                execution_queue.clear()
+                execution_queue.extend(parent[marker_index + 1:])
+            else:
+                raise ValueError("Marker's parent is not a list")
+        else:
+            raise ValueError(f"Marker {statement.label} not found")
+        return None
+    
+    elif isinstance(statement, MarkerStatement):
+        return None
+    
+    elif isinstance(statement, (Mneumonic, Operation, Comparison, bool, int, str)):
+        return eval_expression(statement, variables, context)
+    
+    elif isinstance(statement, list):
+        execution_queue.extendleft(reversed(statement))
+        return None
+
+# Keep the existing helper functions unchanged
 def find_marker_position(node, label, path=None):
     """Recursively find the position of a marker in the syntax tree."""
     if path is None:
@@ -31,7 +113,7 @@ def find_marker_position(node, label, path=None):
                 return result
     elif isinstance(node, MarkerStatement) and node.label == label:
         return path
-    elif hasattr(node, 'do'):  # Handle IfStatement and IfElseStatement
+    elif hasattr(node, 'do'):
         do = find_marker_position(node.do, label, path + ['do'])
         if do:
             return do
@@ -39,99 +121,17 @@ def find_marker_position(node, label, path=None):
             alt = find_marker_position(node.alternate, label, path + ['alternate'])
             if alt:
                 return alt
-
     return None
 
 def get_subtree_at_path(tree, path):
     """Get the subtree at the specified path"""
     current = tree
     for p in path:
-        if isinstance(p, str):  # For 'do' or 'alternate'
+        if isinstance(p, str):
             current = getattr(current, p)
         else:
             current = current[p]
     return current
-
-def eval_statement(statement, variables, context):
-    if isinstance(statement, LetStatement):
-        return eval_let_statement(statement, variables, context)
-    elif isinstance(statement, IfStatement):
-        return eval_if_statement(statement, variables, context)
-    elif isinstance(statement, IfElseStatement):
-        return eval_if_else_statement(statement, variables, context)
-    elif isinstance(statement, ReturnStatement):
-        return eval_return_statement(statement, variables, context)
-    elif isinstance(statement, PrintStatement):
-        return eval_print_statement(statement, variables, context)
-    elif isinstance(statement, GotoStatement):
-        # Get the full program from context
-        program = context[0]
-        # Find the marker's position in the tree
-        marker_path = find_marker_position(program, statement.label)
-        if marker_path:
-            # Get the parent of the marker
-            parent_path = marker_path[:-1]
-            parent = get_subtree_at_path(program, parent_path)
-            marker_index = marker_path[-1]
-
-            # Ensure we skip the marker itself and resume from the next statement
-            if isinstance(parent, list):
-                remaining_statements = parent[marker_index + 1:]
-                return eval_statement(remaining_statements, variables, context)
-            else:
-                raise ValueError("Marker's parent is not a list")
-        else:
-            raise ValueError(f"Marker {statement.label} not found")
-
-    elif isinstance(statement, MarkerStatement):
-        return None
-    elif isinstance(statement, (Mneumonic, Operation, Comparison, bool, int, str)): 
-        return eval_expression(statement, variables, context)
-    elif isinstance(statement, list):
-        result = None
-        for stmt in statement:
-            result = eval_statement(stmt, variables, context)
-            if returned:  # Stop evaluation if a return occurs
-                break
-            if isinstance(stmt, GotoStatement):  # Restart context after a goto
-                break
-        return result
-
-def eval_let_statement(statement, variables, context):
-    # Assign the evaluated value of the expression to the variable (mnemonic)
-    value = eval_expression(statement.value, variables, context)
-    variables[statement.mneumonic] = value
-    return #value
-
-def eval_if_statement(statement, variables, context):
-    # Evaluate the comparison expression
-    if eval_comparison(statement.expr, variables, context):
-        return eval_statement(statement.do, variables, context)
-    return None
-
-def eval_if_else_statement(statement, variables, context):
-    # Evaluate the comparison expression
-    if eval_comparison(statement.expr, variables, context):
-        return eval_statement(statement.do, variables, context)
-    elif statement.alternate:
-        return eval_statement(statement.alternate, variables, context)
-    return None
-
-def eval_return_statement(statement, variables, context):
-    # Simply return the value of the return expression
-
-    global returned
-    returned = True
-
-    return eval_expression(statement.value, variables, context)
-
-def eval_print_statement(statement, variables, context):
-    
-    if statement.value is not None:
-        res = eval_expression(statement.value, variables, context)
-        print(res)
-    else:
-        print()
 
 def eval_expression(expression, variables, context):
     if isinstance(expression, (int, float, bool, str)):
@@ -162,12 +162,12 @@ def eval_operation(operation, variables, context):
         if len(types) == 2 and type(1) in types and type(1.0) in types:
             pass
         else:
-            raise TypeError("Operands must have the same type.")
+            raise TypeError("Operands must have the same type.") # None of that!
 
 
     if operation.operator == '+':
         if isinstance(operands[0], str):
-            return operands[0][:-1] + operands[1][1:]
+            return operands[0][:-1] + operands[1][1:] # string concat'n is a little jank
         return operands[0] + operands[1]
     elif operation.operator == '-':
         return operands[0] - operands[1]
@@ -191,7 +191,7 @@ def eval_comparison(comparison, variables, context):
 
     types = set([type(op) for op in operands])
 
-    if len(types) > 1:
+    if len(types) > 1: 
         if bool in types and int in types:
             return False
 

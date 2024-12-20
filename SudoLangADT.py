@@ -103,7 +103,7 @@ class MarkerStatement:
     label: Union[int, float]
 
     def __str__(self):
-        return f"@ {self.label}"
+        return f"@{self.label}"
 
 Statement = Union[ReturnStatement, IfStatement, IfElseStatement, LetStatement, GotoStatement, MarkerStatement]
 
