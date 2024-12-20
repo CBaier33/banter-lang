@@ -1,3 +1,5 @@
+### Print Evens
+
 let x be 1
 
 @1 # Main Loop
@@ -13,9 +15,9 @@ if x < 11, then
 
    goto instruction 1
 
-else return "DONE"
+else return "END"
 
-@2
+@2 # Check If Even
 let y be x
 
 @2.1

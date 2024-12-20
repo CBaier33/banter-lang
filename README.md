@@ -108,28 +108,8 @@ Goto Syntax -> `goto instruction <digit>`
 Examples:
 
 ```
-let x be 0
-let n be 100
+### Print Evens
 
-let a be 0 
-let b be 1
-
-@1
-if x < n, then
-   print a
-
-   let temp be a + b
-   let a be b
-   let b be temp
-
-   let x be x + 1
-
-   goto instruction 1
-```
-
-Here's one that's a little more complex:
-
-```
 let x be 1
 
 @1 # Main Loop
@@ -145,9 +125,9 @@ if x < 11, then
 
    goto instruction 1
 
-else return "DONE"
+else return "END"
 
-@2
+@2 # Check If Even
 let y be x
 
 @2.1

@@ -2,7 +2,8 @@ import banter
 from BanterADT import *
 from collections import deque
 
-def eval_program(program, variables=None, context=None, test=False):
+def eval_program(program, variables=None, context=None):
+
     if variables is None:
         variables = {}
     if context is None:
@@ -21,7 +22,7 @@ def eval_program(program, variables=None, context=None, test=False):
     result = None
     while execution_queue:
         stmt = execution_queue.popleft()
-        result = eval_statement_iter(stmt, variables, context, execution_queue, test=test)
+        result = eval_statement_iter(stmt, variables, context, execution_queue)
         if isinstance(result, ReturnValue):  # Special wrapper for return values
             return result.value
     return result
@@ -31,14 +32,14 @@ class ReturnValue:
     def __init__(self, value):
         self.value = value
 
-def eval_statement_iter(statement, variables, context, execution_queue, test=False):
+def eval_statement_iter(statement, variables, context, execution_queue):
     if isinstance(statement, LetStatement):
-        value = eval_expression(statement.value, variables, context)
+        value = eval_expression(statement.value, variables)
         variables[statement.mneumonic] = value
         return None
     
     elif isinstance(statement, IfStatement):
-        if eval_comparison(statement.expr, variables, context):
+        if eval_comparison(statement.expr, variables):
             if isinstance(statement.do, list):
                 execution_queue.extendleft(reversed(statement.do))
             else:
@@ -46,7 +47,7 @@ def eval_statement_iter(statement, variables, context, execution_queue, test=Fal
         return None
     
     elif isinstance(statement, IfElseStatement):
-        if eval_comparison(statement.expr, variables, context):
+        if eval_comparison(statement.expr, variables):
             if isinstance(statement.do, list):
                 execution_queue.extendleft(reversed(statement.do))
             else:
@@ -59,18 +60,15 @@ def eval_statement_iter(statement, variables, context, execution_queue, test=Fal
         return None
     
     elif isinstance(statement, ReturnStatement):
-        value = eval_expression(statement.value, variables, context)
+        value = eval_expression(statement.value, variables)
         return ReturnValue(value)  # Wrap return values
     
     elif isinstance(statement, PrintStatement):
         if statement.value is not None:
-            res = eval_expression(statement.value, variables, context)
-            if not test:
-                print(res)
-            #return res
+            res = eval_expression(statement.value, variables)
+            print(res)
         else:
-            if not test:
-                print()
+            print()
     
     elif isinstance(statement, GotoStatement):
         program = context[0]
@@ -94,7 +92,7 @@ def eval_statement_iter(statement, variables, context, execution_queue, test=Fal
         return None
     
     elif isinstance(statement, (Mneumonic, Operation, Comparison, bool, int, str)):
-        return eval_expression(statement, variables, context)
+        return eval_expression(statement, variables)
     
     elif isinstance(statement, list):
         execution_queue.extendleft(reversed(statement))
@@ -133,7 +131,7 @@ def get_subtree_at_path(tree, path):
             current = current[p]
     return current
 
-def eval_expression(expression, variables, context):
+def eval_expression(expression, variables):
     if isinstance(expression, (int, float, bool, str)):
         # Literal values (numbers or booleans)
         return expression
@@ -145,16 +143,16 @@ def eval_expression(expression, variables, context):
             raise ValueError(f"Variable {expression.name} not defined")
     elif isinstance(expression, Operation):
         # Perform the operation based on the operator
-        return eval_operation(expression, variables, context)
+        return eval_operation(expression, variables)
     elif isinstance(expression, Comparison):
         # Evaluate the comparison expression
-        return eval_comparison(expression, variables, context)
+        return eval_comparison(expression, variables)
     else:
         raise ValueError(f"Unknown expression type: {type(expression)}")
 
-def eval_operation(operation, variables, context):
+def eval_operation(operation, variables):
     # Evaluate the operands first
-    operands = [eval_expression(operand, variables, context) for operand in operation.operands]
+    operands = [eval_expression(operand, variables) for operand in operation.operands]
 
     types = set([type(op) for op in operands])
 
@@ -182,12 +180,12 @@ def eval_operation(operation, variables, context):
     else:
         raise ValueError(f"Unknown operator: {operation.operator}")
 
-def eval_comparison(comparison, variables, context):
+def eval_comparison(comparison, variables):
     # Evaluate the operands of the comparison
-    operand1 = eval_expression(comparison.operands[0], variables, context)
-    operand2 = eval_expression(comparison.operands[1], variables, context)
+    operand1 = eval_expression(comparison.operands[0], variables)
+    operand2 = eval_expression(comparison.operands[1], variables)
 
-    operands = [eval_expression(operand, variables, context) for operand in comparison.operands]
+    operands = [eval_expression(operand, variables) for operand in comparison.operands]
 
     types = set([type(op) for op in operands])
 

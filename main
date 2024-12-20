@@ -4,6 +4,7 @@ import re
 import readline
 import atexit
 import os
+
 from BanterADT import *
 import banter
 from interpreter import eval_program
@@ -12,7 +13,6 @@ from interpreter import eval_program
 variables = {}
 context = []
 program_history = []  # Store only valid commands
-executed_commands = set()
 
 HISTORY_FILE = os.path.expanduser('~/.banter_history')
 
@@ -39,14 +39,9 @@ def concrete2abstract(s: str, parser) -> Program:
         print("Syntax error in input")
         return None
 
-def process_input(input_string, from_history=False, filename=None):
+def process_input(input_string, filename=None):
     """Process the input and evaluate, maintaining program context."""
     if input_string.strip() == "" or input_string.strip().startswith('#'):
-        return
-
-    command_hash = hash(input_string)
-    
-    if from_history and command_hash in executed_commands:
         return
 
     try:
@@ -54,37 +49,30 @@ def process_input(input_string, from_history=False, filename=None):
         
         if ast is None:
             return False  # Indicate parsing failure
-            
-        # Try evaluating the new statement(s) in isolation first
-        temp_context = []
-        temp_vars = variables.copy()
         
         if isinstance(ast, list):
-            test_program = ast
+            program = ast
         else:
-            test_program = [ast]
+            program = [ast]
             
         try:
-            if filename is not None:
-                eval_program(test_program, temp_vars, temp_context, test=True)
-            
-            # If evaluation succeeded, add to program history
+                
+            # Update program context
+            if not context:
+                context.insert(0, program)
+                
+            # Now evaluate the full program
+            result = eval_program(program, variables, context)
+
+            if result is not None:
+                print(result)
+                # If evaluation succeeded, add to program history
+
             if isinstance(ast, list):
                 program_history.extend(ast)
             else:
                 program_history.append(ast)
-                
-            # Update actual program state
-            if not context or context[0] != program_history:
-                context.clear()
-                context.insert(0, program_history)
-                
-            # Now evaluate the full program
-            result = eval_program(program_history, variables, context)
-            if result is not None:
-                print(result)
-                
-            executed_commands.add(command_hash)
+
             return True
             
         except Exception as e:
@@ -142,7 +130,6 @@ def start_repl(first=True, filename=None):
                     program_history.clear()
                     context.clear()
                     variables.clear()
-                    executed_commands.clear()
                     print("Program context cleared.")
                     break
                 elif line.strip().lower() == 'history':
@@ -163,7 +150,6 @@ def start_repl(first=True, filename=None):
                     success = process_input(line)
                     if not success:
                         break
-                    break
 
                 input_lines.append(line)
             

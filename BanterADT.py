@@ -71,7 +71,7 @@ class IfStatement:
     do: 'Statement'
 
     def __repr__(self):
-        return f"if {self.expr}, then\n   {self.do}"
+        return f"if {self.expr}, then\n      {self.do}\n"
 
 @dataclass
 class IfElseStatement:
