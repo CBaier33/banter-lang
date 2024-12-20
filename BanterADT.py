@@ -71,13 +71,7 @@ class IfStatement:
     do: 'Statement'
 
     def __repr__(self):
-        if isinstance(self.do, list):
-            do = ''''''
-            for stmt in self.do:
-                do += stmt+'\n'
-        else:
-            do = self.do
-        return f"if {self.expr}, then\n   {do}"
+        return f"if {self.expr}, then\n   {self.do}"
 
 @dataclass
 class IfElseStatement:

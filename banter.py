@@ -257,6 +257,32 @@ class IndentLexer(object):
 
 lexer = IndentLexer()
 
+### sample='''
+### let x be 0
+### let n be 100
+### let a be 0 
+### let b be 1
+### 
+### @1
+### if x < n, then
+###    print a
+### 
+###    let temp be a + b
+###    let a be b
+###    let b be temp
+### 
+###    let x be x + 1
+### 
+###    goto instruction 1
+### '''
+### 
+### lexer.input(sample)
+### 
+### for tok in lexer.token_stream:
+###     print(tok)
+### 
+### exit()
+
 #################### BEGIN Grammar Pattern-Action Rules ####################
 
 # Define the precedence of operators
@@ -420,3 +446,5 @@ class BanterParser:
         return result
 
 parser = BanterParser(lexer)
+
+#print(parser.parse(sample))
