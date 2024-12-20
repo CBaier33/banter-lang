@@ -30,7 +30,7 @@ class Operation:
         """Determine if the operation is unary (e.g., negation)."""
         return self.operator in {'neg'}
 
-    def __str__(self):
+    def __repr__(self):
       if self.operator == '-' and self.is_unary():  # Unary operator
          return f"{self.operator}{self.operands[0]}"
       else:  # Binary operators
@@ -54,18 +54,30 @@ class Comparison:
         """Checks if the operator is a valid comparison operator."""
         return self.operator in {'==', '!=', '>', '<', '>=', '<='}
 
+    def __repr__(self):
+        return f"{self.operands[0]} {self.operator} {self.operands[1]}"
+
 @dataclass
 class LetStatement:
     mneumonic: str
     value: Union[Operation, int, float, bool, str]
+
+    def __repr__(self):
+        return f"let {self.mneumonic} be {self.value}"
 
 @dataclass
 class IfStatement:
     expr: Comparison
     do: 'Statement'
 
-    def __str__(self):
-        return f"if {self.expr}, then:\n  {self.do}"
+    def __repr__(self):
+        if isinstance(self.do, list):
+            do = ''''''
+            for stmt in self.do:
+                do += stmt+'\n'
+        else:
+            do = self.do
+        return f"if {self.expr}, then\n   {do}"
 
 @dataclass
 class IfElseStatement:
@@ -73,29 +85,29 @@ class IfElseStatement:
     do: 'Statement'       # Statement to execute if the condition is True
     alternate: Optional['Statement'] = None  # Statement to execute if False (optional)
 
-    def __str__(self):
+    def __repr__(self):
         alternate_part = f"else\n   {self.alternate}" if self.alternate else ""
-        return f"if {self.expr}, then:\n    {self.do}\n{alternate_part}"
+        return f"if {self.expr}, then\n   {self.do}\n{alternate_part}"
 
 @dataclass
 class ReturnStatement:
     value: Union[Operation, Mneumonic, int, float, bool, str]
 
-    def __str__(self):
+    def __repr__(self):
         return f"return {self.value}"
 
 @dataclass 
 class PrintStatement:
     value: Union[Operation, Mneumonic, int, float, bool, str]
 
-    def __str__(self):
+    def __repr__(self):
         return f"print {self.value}"
 
 @dataclass
 class GotoStatement:
     label: Union[int, float]
 
-    def __str__(self):
+    def __repr__(self):
         return f"goto instruction {self.label}"
 
 @dataclass

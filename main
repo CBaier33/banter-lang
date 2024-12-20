@@ -4,8 +4,8 @@ import re
 import readline
 import atexit
 import os
-from SudoLangADT import *
-import sudolang
+from BanterADT import *
+import banter
 from interpreter import eval_program
 
 # Global state
@@ -14,7 +14,7 @@ context = []
 program_history = []  # Store only valid commands
 executed_commands = set()
 
-HISTORY_FILE = os.path.expanduser('~/.sudolang_history')
+HISTORY_FILE = os.path.expanduser('~/.banter_history')
 
 def init_readline():
     if not os.path.exists(HISTORY_FILE):
@@ -34,12 +34,12 @@ def init_readline():
 def concrete2abstract(s: str, parser) -> Program:
     try:
         parser.parse(s)
-        return sudolang.global_ast
+        return banter.global_ast
     except Exception as e:
         print("Syntax error in input")
         return None
 
-def process_input(input_string, from_history=False):
+def process_input(input_string, from_history=False, filename=None):
     """Process the input and evaluate, maintaining program context."""
     if input_string.strip() == "" or input_string.strip().startswith('#'):
         return
@@ -50,7 +50,7 @@ def process_input(input_string, from_history=False):
         return
 
     try:
-        ast = concrete2abstract(input_string, sudolang.parser)
+        ast = concrete2abstract(input_string, banter.parser)
         
         if ast is None:
             return False  # Indicate parsing failure
@@ -65,7 +65,7 @@ def process_input(input_string, from_history=False):
             test_program = [ast]
             
         try:
-            if not filename:
+            if filename is not None:
                 eval_program(test_program, temp_vars, temp_context, test=True)
             
             # If evaluation succeeded, add to program history
@@ -99,7 +99,7 @@ def start_repl(first=True, filename=None):
     init_readline()
 
     if first:
-        print("Welcome to the SudoLang Interpreter!\n")
+        print("Welcome to the Banter Interpreter!\n")
         print("Type 'exit' to quit.")
         print("Type 'clear' to reset program context.")
         print("Type 'history' to view valid command history.\n")
@@ -108,7 +108,7 @@ def start_repl(first=True, filename=None):
         try:
             with open(filename, 'r') as file:
                 content = file.read()
-                process_input(content)
+                process_input(content, filename)
             if '-i' in sys.argv:
                 print()
                 start_repl(first=False)
@@ -131,12 +131,12 @@ def start_repl(first=True, filename=None):
                     if line.strip():
                         readline.add_history(line)
                 except EOFError:
-                    print("\n\nExiting SudoLang.")
+                    print("\n\nExiting Banter.")
                     exit()
                 
                 # Handle special commands
                 if line.strip().lower() == 'exit':
-                    print("\nExiting SudoLang.")
+                    print("\nExiting Banter.")
                     exit()
                 elif line.strip().lower() == 'clear':
                     program_history.clear()
@@ -175,7 +175,7 @@ def start_repl(first=True, filename=None):
             print()
             continue
         except EOFError:
-            print("\nExiting SudoLang.")
+            print("\nExiting Banter.")
             break
         except Exception as e:
             print(f"Error: {str(e)}")

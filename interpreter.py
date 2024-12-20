@@ -1,5 +1,5 @@
-import sudolang
-from SudoLangADT import *
+import banter
+from BanterADT import *
 from collections import deque
 
 def eval_program(program, variables=None, context=None, test=False):

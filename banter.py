@@ -1,7 +1,7 @@
 import ply.lex as lex
 from ply.lex import LexToken
 import ply.yacc as yacc
-from SudoLangADT import *
+from BanterADT import *
 
 #################### BEGIN Lexer/Scanner Specification ####################
 
@@ -406,7 +406,7 @@ def p_error(p):
         print("Syntax error at EOF")
     raise Exception
 
-class SudoLangParser:
+class BanterParser:
 
     def __init__(self, lexer=None):
         if lexer is None:
@@ -419,4 +419,4 @@ class SudoLangParser:
         result = self.parser.parse(lexer=self.lexer, debug=False)
         return result
 
-parser = SudoLangParser(lexer)
+parser = BanterParser(lexer)

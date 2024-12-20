@@ -1,20 +1,20 @@
-# SudoLang
+# Banter
 ## A language for absolute beginners
 
-Sudo is a language based off pseudocode, to help enforce basic programming concepts like assignment, conditionals, and repetition.
+Banter is a language based off pseudocode, to help enforce basic programming concepts like assignment, conditionals, and repetition.
 
 The language is structured off a [simple language](https://augustine.myusa.cloud/perugini/AveMaria/teaching/courses/csci151/LectureNotes/pseudocodeLanguage.html) designed by [Dr. Saverio Perugini](https://saverio.carrd.co/) to teach these concepts to introductory students.
 
 
 The reader may well say, "Just use Python, bro?"
 
-Well, bro, there a number of reasons why a student's learning experience could be tainted by a language like Python. The primary reason is that Python is a "hodgepodge of a language" and tries to be too many things at once. Students often will miss the entire point of an assignment designed to help them think algorithmically, focusing instead on some shiny and obscure "syntactic sugar", of which Python is chock-full. For instance, Sudo limits arithmetic operations to those between the same type, avoiding weird expressions like `"Hello" * 100` (This excludes of course floats and ints).
+Well, bro, there a number of reasons why a student's learning experience could be tainted by a language like Python. The primary reason is that Python is a "hodgepodge of a language" and tries to be too many things at once. Students often will miss the entire point of an assignment designed to help them think algorithmically, focusing instead on some shiny and obscure "syntactic sugar", of which Python is chock-full. For instance, Banter limits arithmetic operations to those between the same type, avoiding weird expressions like `"Hello" * 100` (This excludes of course floats and ints).
 
-Sudo removes this dangerous pitfall by providing a language stripped of any juicy language features, leaving a simple set of instructions to help new students formulate their ideas in to mechanical procedures.
+Banter removes this dangerous pitfall by providing a language stripped of any juicy language features, leaving a simple set of instructions to help new students formulate their ideas in to mechanical procedures.
 
 # Basic Syntax
 
-If you're already familar with programming, you might find Sudo mildly infuriating. There are no loops, no functions, and only primitive data types. The whole language can be broken down into five basic rules.
+If you're already familar with programming, you might find Banter mildly infuriating. There are no loops, no functions, and only primitive data types. The whole language can be broken down into five basic rules.
 
 ## 1. Let Statements
 
@@ -171,11 +171,11 @@ Unlike `return`, `print` statements can be null, which print a new line.
 
 Additionally, comments, can be written using the `#` symbol.
 
-# Using SudoLang
+# Using Banter
 
-The interpreter gives user the ability to interact with a sudolang program live in an "interactive" mode, as well as regular execution of a script. 
+The interpreter gives user the ability to interact with a banter program live in an "interactive" mode, as well as regular execution of a script. 
 
-Pass a file to the interpreter using `./main file.sudo` 
+Pass a file to the interpreter using `./main file.banter` 
 
 
-To remain in interactive mode, add the `-i` flag -> `./main -i file.sudo`
+To remain in interactive mode, add the `-i` flag -> `./main -i file.banter`
