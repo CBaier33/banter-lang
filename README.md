@@ -1,10 +1,9 @@
-<div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
-  <img src="./images/banter-logo.png" alt="Banter logo" width="250" />
-  <div>
-    <h1 style="margin: 0;">Banter</h1>
-    <h2 style="margin: 0; font-weight: normal; font-size: 1.5em;">A Way To Learn To Think Algorithmically</h2>
-  </div>
-</div>
+<p align="center">
+  <img src="./images/banter-logo.png" alt="Banter logo" width="150" style="vertical-align: middle;"/>
+  <span style="font-size: 4em; font-weight: bold; vertical-align: middle;">Banter</span>
+  <br/>
+  <span style="font-size: 2em; color: gray; vertical-align: middle;">A Way To Learn To Think Algorithmically</span>
+</p>
 
 ##
 
