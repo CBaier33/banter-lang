@@ -71,7 +71,15 @@ class IfStatement:
     do: 'Statement'
 
     def __repr__(self):
-        return f"if {self.expr}, then\n      {self.do}\n"
+
+        if isinstance(self.do, list):
+            do = ""
+            for stmt in self.do:
+                do += f"      {stmt}\n"
+        else:
+            do = f"      {self.do}"
+
+        return f"if {self.expr}, then\n{do}"
 
 @dataclass
 class IfElseStatement:
@@ -80,8 +88,25 @@ class IfElseStatement:
     alternate: Optional['Statement'] = None  # Statement to execute if False (optional)
 
     def __repr__(self):
-        alternate_part = f"else\n   {self.alternate}" if self.alternate else ""
-        return f"if {self.expr}, then\n   {self.do}\n{alternate_part}"
+
+        if isinstance(self.do, list):
+            do = ""
+            for stmt in self.do:
+                do += f"      {stmt}\n"
+        else:
+            do = f"      {self.do}"
+        if self.alternate:
+
+            if isinstance(self.alternate, list):
+                alt = ""
+                for stmt in self.alternate:
+                    alt += f"      {stmt}\n"
+            else:
+                stmt = f"      {self.alternate}\n"
+        else:
+            alt = ""
+        
+        return f"if {self.expr}, then\n{do}\n{alt}"
 
 @dataclass
 class ReturnStatement:

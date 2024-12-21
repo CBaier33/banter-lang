@@ -135,7 +135,7 @@ def start_repl(first=True, filename=None):
                 elif line.strip().lower() == 'history':
                     print("\nValid command history:")
                     for i, cmd in enumerate(program_history, 1):
-                        print(f"{i}. {cmd}")
+                        print(f"{i}.{(lambda x: "  " if x < 10 else " ")(i)}{cmd}")
                     break
                 
                 if line.strip() == "":
