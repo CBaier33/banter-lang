@@ -40,7 +40,10 @@ if isPrime == True, then
     let primesSeen be primesSeen + 1
 
 # Move to the next number
-let n be n + 1
+if n == 2, then
+   let n be 3
+else
+  let n be n + 2
 goto instruction 1  # Check the next number
 
 @10

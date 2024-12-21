@@ -1,20 +1,27 @@
 # <div align="center"> Banter</div>
-## A language for absolute beginners
+## <div align="center"> A Way To Learn To Think Algorithmically</div>
 
 Banter is a language based off pseudocode, to help enforce basic programming concepts like assignment, conditionals, and repetition.
 
-The language is structured off a [simple language](https://augustine.myusa.cloud/perugini/AveMaria/teaching/courses/csci151/LectureNotes/pseudocodeLanguage.html) designed by [Dr. Saverio Perugini](https://saverio.carrd.co/) to teach these concepts to introductory students.
+The language is structured off a [simple grammar](https://augustine.myusa.cloud/perugini/AveMaria/teaching/courses/csci151/LectureNotes/pseudocodeLanguage.html) designed by [Dr. Saverio Perugini](https://saverio.carrd.co/) to teach these concepts to introductory students.
 
 
 The reader may well say, "Just use Python, bro?"
 
-Well, bro, there a number of reasons why a student's learning experience could be tainted by a language like Python. The primary reason is that Python is a "hodgepodge of a language" and tries to be too many things at once. Students often will miss the entire point of an assignment designed to help them think algorithmically, focusing instead on some shiny and obscure "syntactic sugar", of which Python is chock-full. For instance, Banter limits arithmetic operations to those between the same type, avoiding weird expressions like `"Hello" * 100` (This excludes of course floats and ints).
+Well, bro, there a number of reasons why a student's learning experience could be tainted by a language like Python. 
 
-Banter removes this dangerous pitfall by providing a language stripped of any juicy language features, leaving a simple set of instructions to help new students formulate their ideas in to mechanical procedures.
+The primary reason is that Python is a "hodgepodge of a language" and tries to be too many things at once. 
+
+Students often will miss the entire point of an assignment designed to help them think algorithmically, focusing instead on some shiny and obscure "syntactic sugar", of which Python is chock-full. 
+
+For instance, Banter limits arithmetic operations to those between the same type, avoiding weird statements like \
+`"Hello" * 100`, or other confusing lines like `[y for x in [[1, 2], [3, 4]] for y in x]`. 
+
+Banter removes these dangerous pitfalls by providing a language stripped of any juicy language features, leaving a simple set of instructions to help new students formulate their ideas into mechanical procedures, which is "the core of computational thinking".
 
 # Basic Syntax
 
-If you're already familar with programming, you might find Banter mildly infuriating. There are no loops, no functions, and only primitive data types. The whole language can be broken down into five basic rules.
+If you're already familar with programming, you might find Banter mildly infuriating. There are no loops, no functions, and only primitive data types. The whole language can be broken down into five basic rules. While this may be limiting for building enterprise software, it is actually quite liberating for the mind of a student.
 
 ## 1. Let Statements
 
@@ -79,7 +86,7 @@ return score
 
 ## 4. Return Statement
 
-Return statements are used to simply return the value of a statement or expression and terminate the evalutation. Return statements cannot be null, you must return something.
+Return statements are used to simply return the value of a statement or expression and terminate the evalutation. These statements cannot be null, you must return something.
 
 
 Syntax -> `return <mneumonic>`
@@ -106,6 +113,28 @@ Marker Syntax -> `@ <digit>`
 Goto Syntax -> `goto instruction <digit>`
 
 Examples:
+
+```
+let x be 0
+let n be 100
+
+let a be 0 
+let b be 1
+
+@1 # Print Factorial Numbers
+if x < n, then
+   print a
+
+   let temp be a + b
+   let a be b
+   let b be temp
+
+   let x be x + 1
+
+   goto instruction 1
+```
+
+Here's an example that's a litte more complex (you can view more in the examples/ folder).
 
 ```
 ### Print Evens
@@ -143,12 +172,10 @@ goto instruction 1.1
 
 ## Additional Syntax
 
-As demonstrated in the previous example, variables and expressions can be printed to the screen using 
+As demonstrated in the previous example, variables and expressions can be printed to the screen using\
 `print <expression>`, which simple displays the value without terminating the program. 
 
-Unlike `return`, `print` statements can be null, which print a new line.
-
-
+Unlike `return`, `print` statements can be null, which print a new line.\
 Additionally, comments, can be written using the `#` symbol.
 
 # Using Banter
