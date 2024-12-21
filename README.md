@@ -187,7 +187,7 @@ Additionally, comments, can be written using the `#` symbol.
 
 The interpreter gives user the ability to interact with a banter program live in an "interactive" mode, as well as regular execution of a script. 
 
-Pass a file to the interpreter using `./main file.banter` 
+Pass a file to the interpreter using `./banter file.banter` 
 
 
-To remain in interactive mode, add the `-i` flag -> `./main -i file.banter`
+To remain in interactive mode, add the `-i` flag -> `./banter -i file.banter`

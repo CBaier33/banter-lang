@@ -1,4 +1,4 @@
-import banter
+import banterlang
 from BanterADT import *
 from collections import deque
 

@@ -6,7 +6,7 @@ import atexit
 import os
 
 from BanterADT import *
-import banter
+import banterlang
 from interpreter import eval_program
 
 # Global state
@@ -34,7 +34,7 @@ def init_readline():
 def concrete2abstract(s: str, parser) -> Program:
     try:
         parser.parse(s)
-        return banter.global_ast
+        return banterlang.global_ast
     except Exception as e:
         print("Syntax error in input")
         return None
@@ -45,7 +45,7 @@ def process_input(input_string, filename=None):
         return
 
     try:
-        ast = concrete2abstract(input_string, banter.parser)
+        ast = concrete2abstract(input_string, banterlang.parser)
         
         if ast is None:
             return False  # Indicate parsing failure
