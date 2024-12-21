@@ -1,5 +1,12 @@
-# <div align="center"> Banter</div>
-## <div align="center"> A Way To Learn To Think Algorithmically</div>
+<div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
+  <img src="./images/banter-logo.png" alt="Banter logo" width="250" />
+  <div>
+    <h1 style="margin: 0;">Banter</h1>
+    <h2 style="margin: 0; font-weight: normal; font-size: 1.5em;">A Way To Learn To Think Algorithmically</h2>
+  </div>
+</div>
+
+##
 
 Banter is a language based off pseudocode, to help enforce basic programming concepts like assignment, conditionals, and repetition.
 
@@ -84,7 +91,7 @@ return score
 ```
 
 
-## 4. Return Statement
+## 4. Return Statements
 
 Return statements are used to simply return the value of a statement or expression and terminate the evalutation. These statements cannot be null, you must return something.
 
