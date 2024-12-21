@@ -1,7 +1,7 @@
 <p align="center">
   <img src="./images/banter-logo.png" alt="Banter logo" width="150" style="vertical-align: middle;"/>
   <br/>
-  <span style="font-size: 2em; color: gray; vertical-align: middle;">A Way To Learn To Think Algorithmically</span>
+  <span style="font-size: 2em; color: gray; vertical-align: middle;">Learn Programming, not Syntax</span>
 </p>
 
 ##
@@ -22,7 +22,7 @@ Students often will miss the entire point of an assignment designed to help them
 For instance, Banter limits arithmetic operations to those between the same type, avoiding weird statements like \
 `"Hello" * 100`, or other confusing lines like `[y for x in [[1, 2], [3, 4]] for y in x]`. 
 
-Banter removes these dangerous pitfalls by providing a language stripped of any juicy language features, leaving a simple set of instructions to help new students formulate their ideas into mechanical procedures, which is "the core of computational thinking".
+Banter removes these dangerous pitfalls by providing a language stripped of any juicy language features, leaving a simple set of instructions to help new students formulate their ideas into mechanical procedures, which is "the core of computational thinking."
 
 # Basic Syntax
 
