@@ -1,4 +1,4 @@
-let maxPrimes be 50
+let maxPrimes be 1000000
 let primesSeen be 0
 let n be 2           # Start from the first prime
 let x be 2           # Divisor for checking primality

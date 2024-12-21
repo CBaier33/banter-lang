@@ -1,4 +1,4 @@
-# Banter
+# <div align="center"> Banter</div>
 ## A language for absolute beginners
 
 Banter is a language based off pseudocode, to help enforce basic programming concepts like assignment, conditionals, and repetition.
