@@ -1,6 +1,5 @@
 <p align="center">
   <img src="./images/banter-logo.png" alt="Banter logo" width="150" style="vertical-align: middle;"/>
-  <span style="font-size: 4em; font-weight: bold; vertical-align: middle;">Banter</span>
   <br/>
   <span style="font-size: 2em; color: gray; vertical-align: middle;">A Way To Learn To Think Algorithmically</span>
 </p>
