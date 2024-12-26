@@ -142,9 +142,9 @@ if x < n, then
 Here's an example that's a litte more complex (you can view more in the examples/ folder).
 
 ```
-### Print Evens
+# Print Even Numbers
 
-let x be 1
+let x be 1 
 
 @1 # Main Loop
 if x < 11, then
