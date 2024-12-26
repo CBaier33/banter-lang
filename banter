@@ -41,8 +41,6 @@ def concrete2abstract(s: str, parser) -> Program:
 
 def process_input(input_string, filename=None):
     """Process the input and evaluate, maintaining program context."""
-    if input_string.strip() == "" or input_string.strip().startswith('#'):
-        return
 
     try:
         ast = concrete2abstract(input_string, banterlang.parser)
