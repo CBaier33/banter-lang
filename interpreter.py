@@ -2,7 +2,13 @@ import banterlang
 from BanterADT import *
 from collections import deque
 
-def eval_program(program, variables=None, context=None):
+prints = False
+
+def eval_program(program, variables=None, context=None, returnPrints=False):
+
+    if returnPrints:
+        global prints
+        prints = True
 
     if variables is None:
         variables = {}
@@ -66,7 +72,11 @@ def eval_statement_iter(statement, variables, context, execution_queue):
     elif isinstance(statement, PrintStatement):
         if statement.value is not None:
             res = eval_expression(statement.value, variables)
-            print(res)
+            global prints
+            if prints:
+                return res
+            else:
+                print(res)
         else:
             print()
     
