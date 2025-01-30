@@ -5,45 +5,48 @@ from collections import deque
 prints = False
 
 def eval_program(program, variables=None, context=None, returnPrints=False):
-
     if returnPrints:
         global prints
         prints = True
 
+    # Setup for variables and context if not provided
     if variables is None:
         variables = {}
     if context is None:
         context = []
-    
+
     if not context or context[0] != program:
         context.insert(0, program)
-    
-    # Convert program to flat list of statements
+
+    # Convert program to a flat list of statements
     execution_queue = deque()
     if isinstance(program, list):
         execution_queue.extend(program)
     else:
         execution_queue.append(program)
-    
+
     result = None
+    captured_output = ""  # Variable to store captured prints
     while execution_queue:
         stmt = execution_queue.popleft()
-        result = eval_statement_iter(stmt, variables, context, execution_queue)
+        result = eval_statement_iter(stmt, variables, context, execution_queue, captured_output, returnPrints)
         if isinstance(result, ReturnValue):  # Special wrapper for return values
             return result.value
-    return result
+        elif isinstance(result, str):
+            captured_output += result  # Accumulate the printed output
+    return captured_output if returnPrints else result
 
 class ReturnValue:
     """Wrapper class to distinguish return values from regular evaluation results"""
     def __init__(self, value):
         self.value = value
 
-def eval_statement_iter(statement, variables, context, execution_queue):
+def eval_statement_iter(statement, variables, context, execution_queue, captured_output, returnPrints):
     if isinstance(statement, LetStatement):
         value = eval_expression(statement.value, variables)
         variables[statement.mneumonic] = value
         return None
-    
+
     elif isinstance(statement, IfStatement):
         if eval_comparison(statement.expr, variables):
             if isinstance(statement.do, list):
@@ -51,7 +54,7 @@ def eval_statement_iter(statement, variables, context, execution_queue):
             else:
                 execution_queue.appendleft(statement.do)
         return None
-    
+
     elif isinstance(statement, IfElseStatement):
         if eval_comparison(statement.expr, variables):
             if isinstance(statement.do, list):
@@ -64,22 +67,23 @@ def eval_statement_iter(statement, variables, context, execution_queue):
             else:
                 execution_queue.appendleft(statement.alternate)
         return None
-    
+
     elif isinstance(statement, ReturnStatement):
         value = eval_expression(statement.value, variables)
         return ReturnValue(value)  # Wrap return values
-    
+
     elif isinstance(statement, PrintStatement):
         if statement.value is not None:
             res = eval_expression(statement.value, variables)
             global prints
             if prints:
-                return res
+                return str(res)+"\n"  # Capture the print value instead of printing
             else:
-                print(res)
+                print(res)  # Directly print if not capturing
         else:
-            print()
-    
+            print()  # Empty print statement
+            return "\n"
+
     elif isinstance(statement, GotoStatement):
         program = context[0]
         marker_path = find_marker_position(program, statement.label)
@@ -97,13 +101,13 @@ def eval_statement_iter(statement, variables, context, execution_queue):
         else:
             raise ValueError(f"Marker {statement.label} not found")
         return None
-    
+
     elif isinstance(statement, MarkerStatement):
         return None
-    
+
     elif isinstance(statement, (Mneumonic, Operation, Comparison, bool, int, str)):
         return eval_expression(statement, variables)
-    
+
     elif isinstance(statement, list):
         execution_queue.extendleft(reversed(statement))
         return None
@@ -217,3 +221,4 @@ def eval_comparison(comparison, variables):
         return operand1 <= operand2
     else:
         raise ValueError(f"Unknown comparison operator: {comparison.operator}")
+
