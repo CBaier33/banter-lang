@@ -31,7 +31,7 @@ def eval_program(program, variables=None, context=None, returnPrints=False):
         stmt = execution_queue.popleft()
         result = eval_statement_iter(stmt, variables, context, execution_queue, captured_output, returnPrints)
         if isinstance(result, ReturnValue):  # Special wrapper for return values
-            captured_output += str(result)  # Accumulate the printed output
+            captured_output += str(result.value)  # Accumulate the printed output
             break
         elif isinstance(result, str):
             captured_output += result  # Accumulate the printed output
