@@ -1,7 +1,7 @@
 <p align="center">
   <img src="./images/banter-logo.png" alt="Banter logo" width="150" style="vertical-align: middle;"/>
   <br/>
-  <span style="font-size: 2em; color: gray; vertical-align: middle;">Learn Programming, not Syntax</span>
+  <span style="font-size: 2em; color: gray; vertical-align: middle;">computation in the common tongue.</span>
 </p>
 
 ##
